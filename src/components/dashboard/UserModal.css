@@ -1,0 +1,263 @@
+/* UserModal.css - Modal for adding/editing users */
+
+.admin-user-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.admin-user-modal {
+  background: var(--white);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border: 2px solid var(--border-color);
+}
+
+.admin-user-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--border-color);
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  border-radius: 10px 10px 0 0;
+}
+
+.admin-user-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.admin-user-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--white);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.admin-user-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-user-modal-form {
+  padding: 2rem;
+}
+
+.admin-user-form-row {
+  margin-bottom: 1.5rem;
+}
+
+.admin-user-form-row:last-of-type {
+  margin-bottom: 2rem;
+}
+
+.admin-user-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-user-form-group label {
+  font-weight: 600;
+  color: var(--navy-blue);
+  font-size: 0.95rem;
+}
+
+.admin-user-form-input {
+  padding: 12px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: var(--white);
+  direction: rtl;
+}
+
+.admin-user-form-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184, 146, 31, 0.1);
+}
+
+.admin-user-form-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.admin-user-checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-user-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--navy-blue);
+}
+
+.admin-user-checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.admin-user-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.admin-user-btn-secondary {
+  padding: 12px 24px;
+  background-color: var(--white);
+  color: var(--charcoal);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-user-btn-secondary:hover {
+  background-color: #f9f8f7;
+  border-color: var(--gold);
+}
+
+.admin-user-btn-primary {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.admin-user-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0f2a5a 0%, var(--navy-blue) 100%);
+  transform: translateY(-1px);
+}
+
+.admin-user-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Textarea specific styles */
+.admin-user-form-input[type="textarea"],
+textarea.admin-user-form-input {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* Password field help text */
+.admin-user-form-group small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Additional spacing for customer fields */
+.admin-user-form-row + .admin-user-form-row {
+  margin-top: 1rem;
+}
+
+/* Date input specific styling */
+.admin-user-form-input[type="date"] {
+  direction: rtl;
+}
+
+/* Select dropdown styling */
+.admin-user-form-input select,
+select.admin-user-form-input {
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="5"><path fill="%23666" d="m0 0 2 2 2-2z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: left 12px center;
+  background-size: 12px;
+  padding-left: 35px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-user-modal {
+    margin: 0.5rem;
+    max-width: none;
+  }
+
+  .admin-user-modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .admin-user-modal-form {
+    padding: 1.5rem;
+  }
+
+  .admin-user-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .admin-user-btn-secondary,
+  .admin-user-btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-user-modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .admin-user-modal-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .admin-user-modal-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .admin-user-modal-form {
+    padding: 1rem;
+  }
+
+  .admin-user-form-input {
+    padding: 10px 12px;
+  }
+}

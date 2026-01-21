@@ -1,0 +1,366 @@
+.appointments-timeline {
+  background: var(--navy-blue, #0a1f44);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ================= HEADER ================= */
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.timeline-date {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timeline-date i {
+  font-size: 24px;
+  color: var(--white, #ffffff);
+}
+
+.timeline-date h3 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--white, #ffffff);
+}
+
+.timeline-count {
+  background: var(--gold, #c9a227);
+  color: var(--navy-blue, #0a1f44);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ================= CONTAINER ================= */
+.timeline-container {
+  position: relative;
+  min-height: 400px;
+  margin: 20px 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+
+  /* أهم شغلة للريسبونسف */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ================= TIME AXIS ================= */
+.timeline-axis {
+  position: relative;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  direction: rtl;
+  height: 40px;
+
+  /* خلي التايملاين أعرض من الشاشة */
+  min-width: 1000px;
+}
+
+.timeline-time-slot {
+  position: absolute;
+  text-align: center;
+  transform: translateX(50%);
+}
+
+.time-label {
+  font-size: 12px;
+  color: var(--white, #ffffff);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.time-marker {
+  width: 2px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0 auto;
+}
+
+/* ================= TRACK ================= */
+.timeline-track {
+  position: relative;
+  min-height: 80px;
+  width: 100%;
+  direction: rtl;
+  padding-bottom: 10px;
+
+  /* خلي نفس عرض المحور */
+  min-width: 1000px;
+}
+
+/* ================= APPOINTMENT CARDS ================= */
+.timeline-appointment {
+  background: linear-gradient(
+    135deg,
+    rgba(201, 162, 39, 0.1) 0%,
+    rgba(10, 31, 68, 0.5) 100%
+  );
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-right: 4px solid var(--gold, #c9a227);
+  position: absolute;
+  direction: rtl;
+  text-align: right;
+
+  /* 🔥 لا min-width ولا min-height */
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+}
+
+.timeline-appointment:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(201, 162, 39, 0.25);
+}
+
+/* ===== محتوى الكارد ===== */
+.appointment-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--white, #ffffff);
+}
+
+.appointment-time-compact {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--gold, #c9a227);
+  white-space: nowrap;
+}
+
+.appointment-name-compact {
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--white, #ffffff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appointment-status-compact {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+/* ================= STATUS COLORS ================= */
+.timeline-pending {
+  border-right-color: #c9a227;
+}
+.timeline-pending .appointment-status-compact {
+  background: rgba(201, 162, 39, 0.2);
+  color: #c9a227;
+}
+
+.timeline-confirmed {
+  border-right-color: #3b82f6;
+}
+.timeline-confirmed .appointment-status-compact {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.timeline-completed {
+  border-right-color: #10b981;
+}
+.timeline-completed .appointment-status-compact {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.timeline-cancelled {
+  border-right-color: #ef4444;
+  opacity: 0.8;
+}
+.timeline-cancelled .appointment-status-compact {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* ================= EMPTY ================= */
+.timeline-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.timeline-empty i {
+  font-size: 64px;
+  margin-bottom: 20px;
+  color: var(--white, #ffffff);
+  display: block;
+}
+
+.timeline-empty p {
+  font-size: 16px;
+  margin: 0;
+  color: var(--white, #ffffff);
+}
+
+/* ================= LEGEND ================= */
+.timeline-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--white, #ffffff);
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.legend-color.timeline-pending {
+  background: #c9a227;
+}
+.legend-color.timeline-confirmed {
+  background: #3b82f6;
+}
+.legend-color.timeline-completed {
+  background: #10b981;
+}
+.legend-color.timeline-cancelled {
+  background: #ef4444;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet / iPad (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .appointments-timeline {
+    padding: 18px;
+  }
+
+  .timeline-container {
+    padding: 15px;
+  }
+
+  .timeline-axis,
+  .timeline-track {
+    min-width: 1050px;
+  }
+
+  .timeline-appointment {
+    padding: 7px 9px;
+  }
+
+  .appointment-time-compact {
+    font-size: 12px;
+  }
+
+  .appointment-name-compact {
+    font-size: 10px;
+  }
+
+  .appointment-status-compact {
+    font-size: 9px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .appointments-timeline {
+    padding: 15px;
+  }
+
+  .timeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .timeline-date h3 {
+    font-size: 18px;
+  }
+
+  .timeline-container {
+    padding: 12px;
+    max-height: 420px;
+  }
+
+  /* خلي التايملاين أعرض عشان تظهر 15 دقيقة */
+  .timeline-axis,
+  .timeline-track {
+    min-width: 1100px;
+  }
+
+  /* على الموبايل: اعرض كل التفاصيل بشكل أصغر */
+  .timeline-appointment {
+    padding: 6px 8px;
+  }
+
+  .appointment-compact {
+    gap: 3px;
+  }
+
+  .appointment-time-compact {
+    font-size: 11px;
+  }
+
+  .appointment-name-compact {
+    font-size: 10px;
+    display: block;
+  }
+
+  .appointment-status-compact {
+    font-size: 8px;
+    padding: 2px 4px;
+    display: block;
+  }
+}
+
+/* ================= SCROLLBAR ================= */
+.timeline-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+  background: rgba(201, 162, 39, 0.5);
+  border-radius: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+  background: var(--gold, #c9a227);
+}

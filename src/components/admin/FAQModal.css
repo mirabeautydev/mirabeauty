@@ -1,0 +1,201 @@
+/* Admin FAQ Modal - Matching AdminDashboard Modal Style */
+.admin-faq-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.admin-faq-modal {
+  background: var(--white);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border: 2px solid var(--border-color);
+}
+
+.admin-faq-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--border-color);
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  border-radius: 10px 10px 0 0;
+}
+
+.admin-faq-modal .modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.admin-faq-modal .modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--white);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.admin-faq-modal .modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-faq-modal-form {
+  padding: 2rem;
+}
+
+.admin-faq-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-faq-form-label {
+  font-weight: 600;
+  color: var(--navy-blue);
+  font-size: 0.95rem;
+}
+
+.admin-faq-form-label .admin-faq-required {
+  color: #ef4444;
+  margin-right: 0.25rem;
+}
+
+.admin-faq-input,
+.admin-faq-textarea,
+.admin-faq-select {
+  padding: 12px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: var(--white);
+  direction: rtl;
+  font-family: inherit;
+  width: 100%;
+}
+
+.admin-faq-textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.admin-faq-input:focus,
+.admin-faq-textarea:focus,
+.admin-faq-select:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184, 146, 31, 0.1);
+}
+
+.admin-faq-input.admin-faq-error,
+.admin-faq-textarea.admin-faq-error,
+.admin-faq-select.admin-faq-error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.admin-faq-error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.admin-faq-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--border-color);
+  margin-top: 1rem;
+}
+
+.admin-faq-modal-actions .btn-secondary {
+  padding: 12px 24px;
+  background-color: var(--light-gray);
+  color: var(--text-dark);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.admin-faq-modal-actions .btn-secondary:hover {
+  background-color: var(--border-color);
+  transform: translateY(-2px);
+}
+
+.admin-faq-modal-actions .btn-primary {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--gold) 0%, #b8921f 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  box-shadow: 0 4px 10px rgba(184, 146, 31, 0.2);
+}
+
+.admin-faq-modal-actions .btn-primary:hover {
+  background: linear-gradient(135deg, #b8921f 0%, #9a7a1a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(184, 146, 31, 0.3);
+}
+
+.admin-faq-modal-actions .btn-primary:disabled,
+.admin-faq-modal-actions .btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-faq-modal {
+    max-width: 95%;
+    margin: 1rem;
+  }
+
+  .admin-faq-modal .modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .admin-faq-modal-form {
+    padding: 1.5rem;
+  }
+
+  .admin-faq-modal-actions {
+    flex-direction: column;
+  }
+
+  .admin-faq-modal-actions button {
+    width: 100%;
+  }
+}

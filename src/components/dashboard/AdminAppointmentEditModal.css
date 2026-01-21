@@ -1,0 +1,379 @@
+/* AdminAppointmentEditModal.css - Modal for admin appointment editing with staff assignment */
+
+.admin-appointment-edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.admin-appointment-edit-modal {
+  background: var(--white);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border: 2px solid var(--border-color);
+}
+
+.admin-appointment-edit-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--border-color);
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  border-radius: 10px 10px 0 0;
+}
+
+.admin-appointment-edit-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.admin-appointment-edit-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--white);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.admin-appointment-edit-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-appointment-edit-modal-form {
+  padding: 2rem;
+}
+
+.admin-appointment-edit-info-section {
+  background: linear-gradient(135deg, rgba(184, 146, 31, 0.1) 0%, rgba(184, 146, 31, 0.05) 100%);
+  padding: 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(184, 146, 31, 0.2);
+}
+
+.admin-appointment-edit-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.admin-appointment-edit-info-item:last-child {
+  margin-bottom: 0;
+}
+
+.admin-appointment-edit-info-item .label {
+  font-weight: 600;
+  color: var(--navy-blue);
+}
+
+.admin-appointment-edit-info-item .value {
+  color: var(--charcoal);
+  font-weight: 500;
+}
+
+.admin-appointment-edit-form-row {
+  margin-bottom: 1.5rem;
+}
+
+.admin-appointment-edit-form-row:last-of-type {
+  margin-bottom: 2rem;
+}
+
+.admin-appointment-edit-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-appointment-edit-form-group label {
+  font-weight: 600;
+  color: var(--navy-blue);
+  font-size: 0.95rem;
+}
+
+.admin-appointment-edit-form-input,
+.admin-appointment-edit-form-textarea {
+  padding: 12px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: var(--white);
+  direction: rtl;
+  font-family: inherit;
+}
+
+.admin-appointment-edit-form-input:focus,
+.admin-appointment-edit-form-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184, 146, 31, 0.1);
+}
+
+.admin-appointment-edit-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.admin-appointment-edit-notice {
+  background: linear-gradient(135deg, #e8f4f8 0%, #f0f9fc 100%);
+  border: 1px solid #17a2b8;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.admin-appointment-edit-notice i {
+  color: #17a2b8;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.admin-appointment-edit-notice p {
+  color: #0c5460;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.admin-appointment-edit-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.admin-appointment-edit-btn-secondary {
+  padding: 12px 24px;
+  background-color: var(--white);
+  color: var(--charcoal);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.admin-appointment-edit-btn-secondary:hover {
+  background-color: #f9f8f7;
+  border-color: var(--gold);
+}
+
+.admin-appointment-edit-btn-primary {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  font-family: inherit;
+}
+
+.admin-appointment-edit-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0f2a5a 0%, var(--navy-blue) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(21, 47, 88, 0.3);
+}
+
+.admin-appointment-edit-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Enhanced styling for staff selection */
+.admin-appointment-edit-form-group select[name="staffId"] {
+  padding-left: 2.5rem;
+}
+
+/* Status selection styling */
+.admin-appointment-edit-form-group select[name="status"] {
+  font-weight: 600;
+}
+
+.admin-appointment-edit-form-group select[name="status"] option {
+  padding: 8px;
+}
+
+/* Staff Availability Warning Styles */
+.staff-availability-checking {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+  border: 1px solid #2196F3;
+  border-radius: 6px;
+  color: #1565c0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.staff-availability-checking i {
+  color: #2196F3;
+}
+
+.staff-availability-warning {
+  margin-top: 0.75rem;
+  background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.15);
+}
+
+.staff-availability-warning .warning-header {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #663c00;
+}
+
+.staff-availability-warning .warning-header i {
+  font-size: 1.1rem;
+}
+
+.staff-availability-warning .warning-header strong {
+  font-size: 0.95rem;
+}
+
+.staff-availability-warning .warning-content {
+  padding: 1rem;
+}
+
+.staff-availability-warning .warning-content p {
+  margin: 0 0 0.75rem 0;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.staff-availability-warning .conflict-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+.staff-availability-warning .conflict-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+  color: #663c00;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.staff-availability-warning .conflict-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.staff-availability-warning .warning-note {
+  margin: 0.75rem 0 0 0;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  border-left: 3px solid #ffc107;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #856404;
+}
+
+.staff-availability-warning .warning-note i {
+  color: #ffc107;
+  flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-appointment-edit-modal {
+    margin: 0.5rem;
+    max-width: none;
+  }
+
+  .admin-appointment-edit-modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .admin-appointment-edit-modal-form {
+    padding: 1.5rem;
+  }
+
+  .admin-appointment-edit-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .admin-appointment-edit-btn-secondary,
+  .admin-appointment-edit-btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-appointment-edit-modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .admin-appointment-edit-modal-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .admin-appointment-edit-modal-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .admin-appointment-edit-modal-form {
+    padding: 1rem;
+  }
+
+  .admin-appointment-edit-form-input,
+  .admin-appointment-edit-form-textarea {
+    padding: 10px 12px;
+  }
+
+  .admin-appointment-edit-notice {
+    padding: 0.75rem;
+  }
+
+  .admin-appointment-edit-notice p {
+    font-size: 0.85rem;
+  }
+}

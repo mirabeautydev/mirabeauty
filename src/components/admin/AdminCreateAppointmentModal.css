@@ -1,0 +1,333 @@
+/* Admin Create Appointment Modal */
+.admin-create-appointment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.admin-create-appointment-modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.admin-create-appointment-modal .modal-header {
+  padding: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.admin-create-appointment-modal .modal-header h2 {
+  margin: 0;
+  color: var(--navy-blue);
+  font-size: 1.5rem;
+}
+
+.admin-create-appointment-modal .close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.admin-create-appointment-modal .close-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.admin-create-appointment-modal .modal-body {
+  padding: 1.5rem;
+}
+
+.admin-create-appointment-modal .form-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.admin-create-appointment-modal .form-section:last-of-type {
+  border-bottom: none;
+}
+
+.admin-create-appointment-modal .form-section h3 {
+  color: var(--navy-blue);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.admin-create-appointment-modal .form-group {
+  margin-bottom: 1rem;
+}
+
+.admin-create-appointment-modal .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.admin-create-appointment-modal .form-group input,
+.admin-create-appointment-modal .form-group select,
+.admin-create-appointment-modal .form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.admin-create-appointment-modal .form-group input:focus,
+.admin-create-appointment-modal .form-group select:focus,
+.admin-create-appointment-modal .form-group textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.admin-create-appointment-modal .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.admin-create-appointment-modal .form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.admin-create-appointment-modal .time-preview {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border-left: 4px solid var(--gold);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.admin-create-appointment-modal .custom-time-section {
+  background-color: #fff3cd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.admin-create-appointment-modal .custom-time-section > label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #856404;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.admin-create-appointment-modal .custom-time-section input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.admin-create-appointment-modal .error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid #dc3545;
+}
+
+.admin-create-appointment-modal .modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 2px solid #f0f0f0;
+  margin-top: 1.5rem;
+}
+
+.admin-create-appointment-modal .cr-btn-primary,
+.admin-create-appointment-modal .cr-btn-secondary {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-create-appointment-modal .cr-btn-primary {
+  background-color: var(--gold);
+  color: var(--white);
+}
+
+.admin-create-appointment-modal .cr-btn-primary:hover:not(:disabled) {
+  background-color: #c4a000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.admin-create-appointment-modal .cr-btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.admin-create-appointment-modal .cr-btn-secondary:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+.admin-create-appointment-modal button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Staff Availability Warning Styles */
+.admin-create-appointment-modal .staff-availability-checking {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+  border: 1px solid #2196F3;
+  border-radius: 6px;
+  color: #1565c0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-create-appointment-modal .staff-availability-checking i {
+  color: #2196F3;
+}
+
+.admin-create-appointment-modal .staff-availability-warning {
+  margin-top: 0.75rem;
+  background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.15);
+}
+
+.admin-create-appointment-modal .staff-availability-warning .warning-header {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #663c00;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .warning-header i {
+  font-size: 1.1rem;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .warning-header strong {
+  font-size: 0.95rem;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .warning-content {
+  padding: 1rem;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .warning-content p {
+  margin: 0 0 0.75rem 0;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .conflict-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .conflict-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+  color: #663c00;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .conflict-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .warning-note {
+  margin: 0.75rem 0 0 0;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  border-left: 3px solid #ffc107;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #856404;
+}
+
+.admin-create-appointment-modal .staff-availability-warning .warning-note i {
+  color: #ffc107;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .admin-create-appointment-modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .admin-create-appointment-modal .form-grid,
+  .admin-create-appointment-modal .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-create-appointment-modal .modal-actions {
+    flex-direction: column;
+  }
+
+  .admin-create-appointment-modal .cr-btn-primary,
+  .admin-create-appointment-modal .cr-btn-secondary {
+    width: 100%;
+  }
+}

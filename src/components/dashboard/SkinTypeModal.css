@@ -1,0 +1,213 @@
+/* Skin Type Modal Styles */
+.skin-type-modal-content {
+  background: var(--white);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.skin-type-modal-content .modal-header {
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  padding: 1.5rem;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skin-type-modal-content .modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.skin-type-modal-content .modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: var(--white);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skin-type-modal-content .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.skin-type-form {
+  padding: 2rem;
+}
+
+.skin-type-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.skin-type-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--charcoal);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.skin-type-form label small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--gold);
+  margin-top: 0.25rem;
+}
+
+.skin-type-form input,
+.skin-type-form select,
+.skin-type-form textarea {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.skin-type-form input:focus,
+.skin-type-form select:focus,
+.skin-type-form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.skin-type-form input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.skin-type-form input.error,
+.skin-type-form select.error {
+  border-color: #dc3545;
+}
+
+.field-error {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.field-hint {
+  display: block;
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.875rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.modal-actions button {
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-actions .btn-secondary {
+  background-color: #6c757d;
+  color: var(--white);
+}
+
+.modal-actions .btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+.modal-actions .btn-primary {
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+}
+
+.modal-actions .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(218, 165, 32, 0.3);
+}
+
+.modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.modal-actions button i.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .skin-type-modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .skin-type-form {
+    padding: 1.5rem;
+  }
+
+  .skin-type-modal-content .modal-header {
+    padding: 1.25rem;
+  }
+
+  .skin-type-modal-content .modal-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+}

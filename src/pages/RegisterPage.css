@@ -1,0 +1,398 @@
+/* RegisterPage.css - Register Page Specific Styles */
+
+/* Page Header */
+.register-page .page-header {
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  padding: 4rem 0;
+}
+
+.register-page .page-header h1 {
+  color: var(--white);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.register-page .page-header p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+/* Register Layout */
+.register-layout {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Register Form Container */
+.register-form-container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.register-form-container .form-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.register-form-container .form-header h2 {
+  color: var(--navy-blue);
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+}
+
+.register-form-container .form-header p {
+  color: var(--charcoal);
+  opacity: 0.8;
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background-color: var(--white);
+  border: 2px solid var(--border-color);
+}
+
+.form-section h3 {
+  color: var(--navy-blue);
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  text-align: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--gold);
+}
+
+/* Form Row */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Form Group */
+.register-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.register-form .form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--navy-blue);
+}
+
+.register-form .form-input,
+.register-form .form-select,
+.register-form .form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border-color);
+  background-color: var(--white);
+  font-size: 1rem;
+  color: var(--charcoal);
+  direction: rtl;
+  transition: all 0.3s ease;
+}
+
+.register-form .form-input:focus,
+.register-form .form-select:focus,
+.register-form .form-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  background-color: #f9f8f7;
+}
+
+.register-form .form-input.error,
+.register-form .form-select.error,
+.register-form .form-textarea.error {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+.register-form .form-input:disabled,
+.register-form .form-select:disabled,
+.register-form .form-textarea:disabled {
+  background-color: var(--light-gray);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.register-form .field-error {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+.register-form .field-hint {
+  display: block;
+  color: #6c757d;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Terms Checkbox */
+.terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  position: relative;
+  padding-right: 2rem;
+}
+
+.terms-checkbox.error {
+  color: #dc3545;
+}
+
+.terms-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  right: 0;
+  top: 2px;
+  height: 20px;
+  width: 20px;
+  background-color: var(--white);
+  border: 2px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.terms-checkbox input:checked ~ .checkmark {
+  background-color: var(--gold);
+  border-color: var(--gold);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.terms-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.terms-checkbox .checkmark:after {
+  right: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--white);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.terms-text {
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.terms-link {
+  background: none;
+  border: none;
+  color: var(--gold);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+  margin: 0 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.terms-link:hover {
+  color: var(--navy-blue);
+}
+
+/* Register Button */
+.register-btn-form {
+  width: 50%;
+  padding: 15px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  background-color: var(--navy-blue);
+  color: var(--white);
+  border: 2px solid var(--navy-blue);
+  margin: 0 auto;
+  display: block;
+}
+
+.register-btn-form:hover:not(:disabled):not(.loading) {
+  background-color: transparent;
+  color: var(--navy-blue);
+  border-color: var(--navy-blue);
+}
+
+.register-btn-form.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.register-btn-form:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Form Footer */
+.register-form-container .form-footer {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.register-form-container .form-footer p {
+  color: var(--charcoal);
+  margin-bottom: 1rem;
+}
+
+.login-link {
+  background: none;
+  border: none;
+  color: var(--gold);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: var(--gold);
+}
+
+/* Register Benefits */
+.register-benefits {
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  position: relative;
+}
+
+.register-benefits::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold) 20%,
+    var(--gold) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 2px 8px rgba(184, 146, 31, 0.3);
+}
+
+.register-benefits .why-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.register-benefits .why-heading h2 {
+  color: var(--white);
+  margin-bottom: 0.75rem;
+}
+
+.register-benefits .why-heading p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.register-benefits .why-points ul {
+  margin: 0;
+  padding: 0 1rem 0 0;
+  list-style: none;
+}
+
+.register-benefits .why-points li {
+  position: relative;
+  padding: 0.5rem 2rem 0.5rem 0;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.register-benefits .why-points li::before {
+  content: "✓";
+  position: absolute;
+  right: 0;
+  top: 0.2rem;
+  font-size: 1.25rem;
+  color: var(--gold);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .register-layout {
+    padding: 0 1rem;
+  }
+
+  .register-benefits .why-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-page .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .register-page .page-header p {
+    font-size: 1.125rem;
+  }
+
+  .register-form-container {
+    max-width: 700px;
+  }
+
+  .form-section {
+    padding: 1.25rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-form-container {
+    max-width: 100%;
+  }
+
+  .form-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section h3 {
+    font-size: 1.125rem;
+  }
+
+  .register-form-container .form-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .terms-checkbox {
+    padding-right: 1.5rem;
+  }
+
+  .terms-text {
+    font-size: 0.85rem;
+  }
+}

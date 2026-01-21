@@ -1,0 +1,235 @@
+.consultation-details-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.consultation-details-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.consultation-details-header {
+  padding: 20px 30px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: white;
+}
+
+.consultation-details-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.consultation-details-header .close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.consultation-details-header .close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.consultation-details-body {
+  padding: 30px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.details-section {
+  margin-bottom: 30px;
+}
+
+.details-section:last-child {
+  margin-bottom: 0;
+}
+
+.details-section h4 {
+  margin: 0 0 15px 0;
+  color: #071626;
+  font-size: 1.1rem;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detail-item label {
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.detail-item span {
+  color: #333;
+  font-size: 1rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.status-badge.في.الانتظار,
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.مؤكد,
+.status-badge.confirmed {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge.مكتمل,
+.status-badge.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.ملغي,
+.status-badge.cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.skin-concerns-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skin-concerns-list li {
+  background: #f8f9fa;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.notes-text {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-right: 3px solid #071626;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.consultation-details-footer {
+  padding: 20px 30px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: #f8f9fa;
+}
+
+.btn-secondary {
+  padding: 10px 24px;
+  border: 1px solid #071626;
+  background: white;
+  color: #071626;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: white;
+}
+
+/* RTL Support */
+[dir="rtl"] .consultation-details-modal {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Scrollbar Styling */
+.consultation-details-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.consultation-details-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.consultation-details-body::-webkit-scrollbar-thumb {
+  background: #071626;
+  border-radius: 10px;
+}
+
+.consultation-details-body::-webkit-scrollbar-thumb:hover {
+  background: #0f2a5a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .consultation-details-modal {
+    max-width: 100%;
+    /* max-height: 100vh; */
+    border-radius: 0;
+  }
+
+  .consultation-details-header,
+  .consultation-details-body,
+  .consultation-details-footer {
+    padding: 15px 20px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+}

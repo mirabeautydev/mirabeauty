@@ -1,0 +1,229 @@
+/* WhatsAppMessageModal.css */
+
+.whatsapp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+}
+
+.whatsapp-modal-content {
+  background: var(--white);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.whatsapp-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: white;
+  border-radius: 14px 14px 0 0;
+}
+
+.whatsapp-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.whatsapp-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  color: white;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.whatsapp-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.whatsapp-modal-body {
+  padding: 1.5rem;
+}
+
+.whatsapp-message-preview {
+  background: linear-gradient(135deg, #dcf8c6 0%, #d4f1c5 100%);
+  border: 2px solid #25d366;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.whatsapp-message-preview i {
+  color: #25d366;
+  font-size: 1.5rem;
+}
+
+.whatsapp-message-preview p {
+  margin: 0;
+  color: #075e54;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.whatsapp-message-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 200px;
+  transition: border-color 0.3s ease;
+  direction: rtl;
+  line-height: 1.6;
+}
+
+.whatsapp-message-textarea:focus {
+  outline: none;
+  border-color: #25d366;
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+}
+
+.whatsapp-message-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.character-count {
+  font-weight: 600;
+  color: #075e54;
+}
+
+.whatsapp-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.whatsapp-hint i {
+  color: #25d366;
+}
+
+.whatsapp-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.mowhatsapp-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.whatsapp-btn-cancel {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.whatsapp-btn-cancel:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.whatsapp-btn-send {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: white;
+}
+
+.whatsapp-btn-send:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp-btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.whatsapp-btn-send i {
+  font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .whatsapp-modal-content {
+    max-width: 95%;
+    margin: 0.5rem;
+  }
+
+  .whatsapp-modal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .whatsapp-modal-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .whatsapp-modal-body {
+    padding: 1.25rem;
+  }
+
+  .whatsapp-modal-actions {
+    flex-direction: column-reverse;
+    padding: 1.25rem;
+  }
+
+  .mowhatsapp-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

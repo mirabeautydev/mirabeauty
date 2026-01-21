@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and staff areas
+Disallow: /admin
+Disallow: /staff
+Disallow: /profile
+
+# Disallow authentication pages from indexing
+Disallow: /login
+Disallow: /register
+Disallow: /reset-password
+
+# Disallow cart
+Disallow: /cart
+
+# Sitemap location
+Sitemap: https://mirabeauty.com/sitemap.xml

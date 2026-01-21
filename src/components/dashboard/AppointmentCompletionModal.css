@@ -1,0 +1,288 @@
+/* Appointment Completion Modal Styles */
+.appointment-completion-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.appointment-completion-modal {
+  background: var(--white);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--border-color);
+}
+
+.appointment-completion-modal-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--border-color);
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.appointment-completion-modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.appointment-completion-modal-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--white);
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.appointment-completion-modal-close:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.appointment-completion-modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* input with id =actualPaidAmount */
+#actualPaidAmount {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: var(--white);
+  color: var(--text-color);
+}
+
+
+.appointment-completion-info {
+  padding: 1.5rem 2rem;
+  background-color: var(--light-gray);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.completion-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.completion-info-item:last-child {
+  margin-bottom: 0;
+}
+
+.completion-info-item .label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.completion-info-item .value {
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.appointment-completion-form {
+  padding: 2rem;
+}
+
+.completion-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.completion-form-group:last-of-type {
+  margin-bottom: 2rem;
+}
+
+.completion-form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.completion-form-group label i {
+  margin-left: 0.5rem;
+  color: var(--primary-color);
+}
+
+.note-description {
+  display: block;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--muted-text);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.completion-form-group textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.3s ease;
+  background-color: var(--white);
+  color: var(--text-color);
+}
+
+.completion-form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.completion-form-group textarea:disabled {
+  background-color: var(--light-gray);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.completion-form-group textarea::placeholder {
+  color: var(--muted-text);
+  font-style: italic;
+}
+
+.completion-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.completion-modal-actions .btn-secondary,
+.completion-modal-actions .btn-primary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.completion-modal-actions .btn-secondary {
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+}
+
+.completion-modal-actions .btn-secondary:hover:not(:disabled) {
+  background-color: var(--border-color);
+  transform: translateY(-2px);
+}
+
+.completion-modal-actions .btn-primary {
+  background: linear-gradient(135deg, var(--navy-blue) 0%, #0f2a5a 100%);
+  color: var(--white);
+  border: 2px solid transparent;
+}
+
+.completion-modal-actions .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.completion-modal-actions .btn-secondary:disabled,
+.completion-modal-actions .btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.completion-modal-actions .fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .appointment-completion-modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .appointment-completion-modal {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+
+  .appointment-completion-modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .appointment-completion-modal-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .appointment-completion-info {
+    padding: 1rem 1.5rem;
+  }
+
+  .completion-info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .appointment-completion-form {
+    padding: 1.5rem;
+  }
+
+  .completion-modal-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .completion-modal-actions .btn-secondary,
+  .completion-modal-actions .btn-primary {
+    width: 100%;
+  }
+}
