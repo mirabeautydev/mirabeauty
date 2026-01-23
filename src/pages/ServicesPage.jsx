@@ -240,24 +240,25 @@ const ServicesPage = () => {
                   top: "80px",
                   left: "0",
                   right: "0",
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  backdropFilter: "blur(10px)",
                   zIndex: "100",
-                  padding: "1.5rem 0",
-                  marginBottom: "2rem",
-                  borderBottom: "3px solid #d4af37",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  padding: "0.75rem 0",
+                  marginBottom: "1.5rem",
+                  borderBottom: "1px solid rgba(212, 175, 55, 0.2)",
                   WebkitBackfaceVisibility: "hidden",
                   backfaceVisibility: "hidden",
+                  transition: "all 0.3s ease",
                 }}
               >
                 <h2
                   style={{
                     margin: "0",
-                    fontSize: "1.75rem",
-                    color: "#d4af37",
+                    fontSize: "1.1rem",
+                    color: "#b8921f",
                     textAlign: "center",
-                    fontWeight: "bold",
-                    letterSpacing: "0.5px",
+                    fontWeight: "600",
+                    letterSpacing: "0.3px",
                     lineHeight: "1.2",
                   }}
                 >

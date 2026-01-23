@@ -97,9 +97,7 @@ const SkinTypeModal = ({ isOpen, onClose, onSubmit, skinType = null }) => {
               className={errors.name ? "error" : ""}
             />
             {errors.name && <span className="field-error">{errors.name}</span>}
-            <small className="field-hint">
-              أدخل اسم نوع البشرة (سيتم استخدام معرف فريد تلقائياً)
-            </small>
+            
           </div>
 
           {errors.submit && (
@@ -126,10 +124,7 @@ const SkinTypeModal = ({ isOpen, onClose, onSubmit, skinType = null }) => {
                 </>
               ) : (
                 <>
-                  <i
-                    className="fas fa-save"
-                    style={{ color: "var(--white)" }}
-                  ></i>
+
                   {skinType ? "حفظ التعديلات" : "إضافة"}
                 </>
               )}

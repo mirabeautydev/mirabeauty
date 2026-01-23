@@ -546,6 +546,8 @@
 
   .cart-summary {
     padding: 1.5rem;
+    /* iOS Safari fix: Add bottom padding for safe area */
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
   }
 
   .promo-code {
@@ -555,6 +557,11 @@
   .promo-code input,
   .promo-code button {
     width: 100%;
+  }
+
+  /* iOS Safari fix: Add extra bottom padding to page for scrolling */
+  .cart-page .section {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
   }
 }
 

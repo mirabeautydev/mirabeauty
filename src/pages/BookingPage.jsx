@@ -1439,36 +1439,37 @@ const BookingPage = ({ currentUser, userData }) => {
               <div className="booking-step" style={{ position: "relative" }}>
                 {/* Sticky Header */}
                 <div
+                style={{
+                  position: "-webkit-sticky",
+                  position: "sticky",
+                  top: "80px",
+                  left: "0",
+                  right: "0",
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  backdropFilter: "blur(10px)",
+                  zIndex: "100",
+                  padding: "0.75rem 0",
+                  marginBottom: "1.5rem",
+                  borderBottom: "1px solid rgba(212, 175, 55, 0.2)",
+                  WebkitBackfaceVisibility: "hidden",
+                  backfaceVisibility: "hidden",
+                  transition: "all 0.3s ease",
+                }}
+              >
+                <h2
                   style={{
-                    position: "-webkit-sticky",
-                    position: "sticky",
-                    top: "80px",
-                    left: "0",
-                    right: "0",
-                    backgroundColor: "#ffffff",
-                    zIndex: "100",
-                    padding: "1.5rem 0",
-                    marginBottom: "2rem",
-                    borderBottom: "3px solid #d4af37",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                    WebkitBackfaceVisibility: "hidden",
-                    backfaceVisibility: "hidden",
+                    margin: "0",
+                    fontSize: "1.1rem",
+                    color: "#b8921f",
+                    textAlign: "center",
+                    fontWeight: "600",
+                    letterSpacing: "0.3px",
+                    lineHeight: "1.2",
                   }}
                 >
-                  <h2
-                    style={{
-                      margin: "0",
-                      fontSize: "1.75rem",
-                      color: "#d4af37",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      letterSpacing: "0.5px",
-                      lineHeight: "1.2",
-                    }}
-                  >
-                    اختاري خدمة
-                  </h2>
-                </div>
+                  اختاري خدمة
+                </h2>
+              </div>
                 <div className="step-header">
                   <button
                     className="back-btn"
@@ -1532,9 +1533,9 @@ const BookingPage = ({ currentUser, userData }) => {
                             <span className="duration">
                               المدة: {service.duration} دقيقة
                             </span>
-                            {/* <span className="price">
+                            <span className="price">
                               السعر: {service.price}
-                            </span> */}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -2483,8 +2484,14 @@ const BookingPage = ({ currentUser, userData }) => {
                           },
                         );
 
+                        //if has recent appointments and the selected service category is laser
+                        const selectedService = services.find(s => s.id === bookingData.serviceId);
+                        const categoryName = selectedService?.categoryName || selectedService?.category || "";
+                        const isLaser = categoryName.toLowerCase().includes("laser") || 
+                                       categoryName.toLowerCase().includes("ليزر");
+                        
                         return (
-                          hasRecentAppointments && (
+                          hasRecentAppointments && isLaser && (
                             <p className="summary-note-info">
                               <i className="fas fa-info-circle"></i>
                               <strong>ملاحظة:</strong> اذا كنت تفضلين أخصائية

@@ -298,7 +298,7 @@ const AdminDashboardPage = ({ currentUser }) => {
   const totalStaff = staff.length;
   const totalAppointments = appointments.length;
   const completedAppointments = appointments.filter(
-    (apt) => apt.status === "مكتمل"
+    (apt) => apt.status === "مكتمل",
   ).length;
   const totalRevenue = appointments
     .filter((apt) => apt.status === "مكتمل")
@@ -313,7 +313,7 @@ const AdminDashboardPage = ({ currentUser }) => {
   });
 
   const upcomingAppointments = appointments.filter(
-    (apt) => apt.status === "مؤكد" || apt.status === "في الانتظار"
+    (apt) => apt.status === "مؤكد" || apt.status === "في الانتظار",
   );
 
   // Filter function for appointments
@@ -582,7 +582,7 @@ const AdminDashboardPage = ({ currentUser }) => {
         }
         const uploadResult = await uploadSingleImage(
           bannerImageFile,
-          "banners"
+          "banners",
         );
         imageUrl = uploadResult.url; // Extract just the URL string
         setBannerImageUploading(false);
@@ -611,7 +611,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       await toggleBannerStatus(newStatus);
       setBanner((prev) => ({ ...prev, isActive: newStatus }));
       showSuccess(
-        newStatus ? "تم تفعيل البانر بنجاح" : "تم إيقاف البانر بنجاح"
+        newStatus ? "تم تفعيل البانر بنجاح" : "تم إيقاف البانر بنجاح",
       );
     } catch (err) {
       console.error("Error toggling banner status:", err);
@@ -658,7 +658,7 @@ const AdminDashboardPage = ({ currentUser }) => {
     } catch (err) {
       console.error("Error submitting coupon:", err);
       showError(
-        editingCoupon ? "فشل في تحديث الكوبون" : "فشل في إضافة الكوبون"
+        editingCoupon ? "فشل في تحديث الكوبون" : "فشل في إضافة الكوبون",
       );
     }
   };
@@ -668,7 +668,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       `هل أنت متأكد من حذف الكوبون "${couponCode}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`,
       "حذف الكوبون",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
 
     if (confirmed) {
@@ -689,7 +689,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       await toggleCouponStatus(couponId, newStatus);
       await loadCoupons();
       showSuccess(
-        newStatus ? "تم تفعيل الكوبون بنجاح" : "تم إيقاف الكوبون بنجاح"
+        newStatus ? "تم تفعيل الكوبون بنجاح" : "تم إيقاف الكوبون بنجاح",
       );
     } catch (err) {
       console.error("Error toggling coupon status:", err);
@@ -735,7 +735,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف الموعد",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -771,7 +771,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف الاستشارة",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -810,8 +810,8 @@ const AdminDashboardPage = ({ currentUser }) => {
           product.quantity !== undefined
             ? product.quantity
             : product.inStock
-            ? 999
-            : 0;
+              ? 999
+              : 0;
         if (productStatusFilter === "available" && quantity < 1) {
           return false;
         }
@@ -1155,7 +1155,7 @@ const AdminDashboardPage = ({ currentUser }) => {
   const serviceStats = services
     .map((service) => {
       const serviceAppointments = appointments.filter(
-        (apt) => apt.serviceId === service.id
+        (apt) => apt.serviceId === service.id,
       );
       const revenue = serviceAppointments.reduce((sum, apt) => {
         const price = parsePrice(apt.servicePrice || apt.price);
@@ -1173,10 +1173,10 @@ const AdminDashboardPage = ({ currentUser }) => {
   const staffStats = staff
     .map((staffMember) => {
       const staffAppointments = appointments.filter(
-        (apt) => apt.staffId === staffMember.id
+        (apt) => apt.staffId === staffMember.id,
       );
       const completedAppts = staffAppointments.filter(
-        (apt) => apt.status === "مكتمل"
+        (apt) => apt.status === "مكتمل",
       );
       const revenue = completedAppts.reduce((sum, apt) => {
         const price = parsePrice(apt.servicePrice || apt.price);
@@ -1233,7 +1233,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف الخدمة",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1279,7 +1279,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف المنتج",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1350,7 +1350,7 @@ const AdminDashboardPage = ({ currentUser }) => {
           console.error("Error deleting category:", error);
           if (error.message.includes("in use")) {
             showError(
-              "لا يمكن حذف هذا التصنيف لأنه مستخدم في منتجات أو خدمات موجودة"
+              "لا يمكن حذف هذا التصنيف لأنه مستخدم في منتجات أو خدمات موجودة",
             );
           } else {
             showError("حدث خطأ أثناء حذف التصنيف");
@@ -1359,7 +1359,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف التصنيف",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1408,7 +1408,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف السؤال",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1457,7 +1457,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف نوع الأسئلة",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1506,7 +1506,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف نوع البشرة",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1526,7 +1526,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       if (editingSpecialization) {
         await updateSpecialization(
           editingSpecialization.id,
-          specializationData
+          specializationData,
         );
         showSuccess("تم تحديث التخصص بنجاح");
       } else {
@@ -1558,7 +1558,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       "تأكيد حذف التخصص",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1628,7 +1628,7 @@ const AdminDashboardPage = ({ currentUser }) => {
       },
       `تأكيد حذف ${userType === "customer" ? "العميل" : "الموظف"}`,
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -1660,7 +1660,7 @@ const AdminDashboardPage = ({ currentUser }) => {
         const tempPassword =
           result.tempPassword || userData.password || "TempPassword123!";
         showSuccess(
-          `تم إنشاء الحساب بنجاح!\nكلمة المرور المؤقتة: ${tempPassword}\nيُرجى إعلام المستخدم بضرورة تغيير كلمة المرور عند أول تسجيل دخول.`
+          `تم إنشاء الحساب بنجاح!\nكلمة المرور المؤقتة: ${tempPassword}\nيُرجى إعلام المستخدم بضرورة تغيير كلمة المرور عند أول تسجيل دخول.`,
         );
       }
 
@@ -1771,15 +1771,14 @@ const AdminDashboardPage = ({ currentUser }) => {
       ) {
         try {
           await deleteImage(completeUserData.avatar);
-        } catch (deleteError) {
-        }
+        } catch (deleteError) {}
       }
 
       // Upload new avatar
       const avatarData = await uploadSingleImage(
         file,
         "avatars",
-        currentUser.uid
+        currentUser.uid,
       );
 
       // Update user data with new avatar
@@ -2078,13 +2077,13 @@ const AdminDashboardPage = ({ currentUser }) => {
                             <span className="activity-time">
                               {formatFirestoreDate(
                                 appointment.updatedAt,
-                                "en-GB"
+                                "en-GB",
                               )}
                             </span>
                           </div>
                           <span
                             className={`activity-status ${getStatusColor(
-                              appointment.status
+                              appointment.status,
                             )}`}
                             style={{ color: "var(--white)" }}
                           >
@@ -2222,7 +2221,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                               <td>
                                 <span
                                   className={`status ${getStatusColor(
-                                    appointment.status
+                                    appointment.status,
                                   )}`}
                                 >
                                   {appointment.status}
@@ -2235,7 +2234,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                       {appointment.notes.length > 30
                                         ? `${appointment.notes.substring(
                                             0,
-                                            30
+                                            30,
                                           )}...`
                                         : appointment.notes}
                                     </span>
@@ -2251,7 +2250,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                       {appointment.staffInternalNote.length > 30
                                         ? `${appointment.staffInternalNote.substring(
                                             0,
-                                            30
+                                            30,
                                           )}...`
                                         : appointment.staffInternalNote}
                                     </span>
@@ -2276,7 +2275,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                     onClick={() =>
                                       handleDeleteAppointment(
                                         appointment.id,
-                                        appointment.customerName
+                                        appointment.customerName,
                                       )
                                     }
                                     title="حذف الموعد"
@@ -2483,7 +2482,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                   <button
                     onClick={() =>
                       setCurrentConsultationPage((prev) =>
-                        Math.max(prev - 1, 1)
+                        Math.max(prev - 1, 1),
                       )
                     }
                     disabled={currentConsultationPage === 1}
@@ -2498,7 +2497,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                   <button
                     onClick={() =>
                       setCurrentConsultationPage((prev) =>
-                        Math.min(prev + 1, getTotalConsultationPages())
+                        Math.min(prev + 1, getTotalConsultationPages()),
                       )
                     }
                     disabled={
@@ -2661,7 +2660,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                   onClick={() =>
                                     handleDeleteService(
                                       service.id,
-                                      service.name
+                                      service.name,
                                     )
                                   }
                                 >
@@ -2828,8 +2827,8 @@ const AdminDashboardPage = ({ currentUser }) => {
                                     product.quantity !== undefined
                                       ? Number(product.quantity)
                                       : product.inStock
-                                      ? "∞"
-                                      : 0;
+                                        ? "∞"
+                                        : 0;
                                   return (
                                     <span
                                       className={`status ${
@@ -2867,7 +2866,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                     onClick={() =>
                                       handleDeleteProduct(
                                         product.id,
-                                        product.name
+                                        product.name,
                                       )
                                     }
                                   >
@@ -3000,7 +2999,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                       handleDeleteCategory(
                                         category.id,
                                         category.name,
-                                        "product"
+                                        "product",
                                       )
                                     }
                                     title="حذف"
@@ -3019,7 +3018,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                   تم الإنشاء:{" "}
                                   {formatFirestoreDate(
                                     category.createdAt,
-                                    "en-GB"
+                                    "en-GB",
                                   )}
                                 </span>
                               </div>
@@ -3082,7 +3081,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                       handleDeleteCategory(
                                         category.id,
                                         category.name,
-                                        "service"
+                                        "service",
                                       )
                                     }
                                     title="حذف"
@@ -3122,7 +3121,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                   تم الإنشاء:{" "}
                                   {formatFirestoreDate(
                                     category.createdAt,
-                                    "en-GB"
+                                    "en-GB",
                                   )}
                                 </span>
                               </div>
@@ -3271,7 +3270,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                               onClick={() =>
                                 handleDeleteSpecialization(
                                   specialization.id,
-                                  specialization.name
+                                  specialization.name,
                                 )
                               }
                               title="حذف"
@@ -3342,8 +3341,8 @@ const AdminDashboardPage = ({ currentUser }) => {
                                 bannerImageFile
                                   ? URL.createObjectURL(bannerImageFile)
                                   : typeof banner.imageUrl === "object"
-                                  ? banner.imageUrl?.url
-                                  : banner.imageUrl
+                                    ? banner.imageUrl?.url
+                                    : banner.imageUrl
                               }
                               alt="Banner Preview"
                               style={{
@@ -3498,6 +3497,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                       <option value="">جميع الأنواع</option>
                       <option value="products">منتجات</option>
                       <option value="services">خدمات</option>
+                      <option value="both">منتجات وخدمات</option>
                     </select>
                     <select
                       value={couponStatusFilter}
@@ -3556,7 +3556,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                 coupons.filter(
                                   (c) =>
                                     c.active !== false &&
-                                    new Date(c.expiryDate) > new Date()
+                                    new Date(c.expiryDate) > new Date(),
                                 ).length
                               }
                             </h3>
@@ -3671,7 +3671,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                               const endIndex = startIndex + couponsPerPage;
                               const paginatedCoupons = filtered.slice(
                                 startIndex,
-                                endIndex
+                                endIndex,
                               );
 
                               if (paginatedCoupons.length === 0) {
@@ -3701,12 +3701,16 @@ const AdminDashboardPage = ({ currentUser }) => {
                                         className={`ct-badge ${
                                           coupon.type === "products"
                                             ? "ct-badge-warning"
-                                            : "ct-badge-info"
+                                            : coupon.type === "services"
+                                            ? "ct-badge-info"
+                                            : "ct-badge-success"
                                         }`}
                                       >
                                         {coupon.type === "products"
                                           ? "منتجات"
-                                          : "خدمات"}
+                                          : coupon.type === "services"
+                                          ? "خدمات"
+                                          : "منتجات وخدمات"}
                                       </span>
                                     </td>
                                     <td>
@@ -3716,13 +3720,15 @@ const AdminDashboardPage = ({ currentUser }) => {
                                       {coupon.type === "services" &&
                                       coupon.categories?.length > 0
                                         ? `${coupon.categories.length} فئات`
+                                        : coupon.type === "both"
+                                        ? "جميع المنتجات والخدمات"
                                         : "جميع " +
                                           (coupon.type === "products"
                                             ? "المنتجات"
                                             : "الخدمات")}
                                     </td>
                                     <td>
-                                      {expiryDate.toLocaleDateString("ar-EG", {
+                                      {expiryDate.toLocaleDateString("en-US", {
                                         year: "numeric",
                                         month: "long",
                                         day: "numeric",
@@ -3734,15 +3740,15 @@ const AdminDashboardPage = ({ currentUser }) => {
                                           isExpired
                                             ? "ct-status-cancelled"
                                             : isActive
-                                            ? "ct-status-confirmed"
-                                            : "ct-status-pending"
+                                              ? "ct-status-confirmed"
+                                              : "ct-status-pending"
                                         }`}
                                       >
                                         {isExpired
                                           ? "منتهي"
                                           : isActive
-                                          ? "نشط"
-                                          : "غير نشط"}
+                                            ? "نشط"
+                                            : "غير نشط"}
                                       </span>
                                     </td>
                                     <td>
@@ -3753,7 +3759,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                             onClick={() =>
                                               handleToggleCouponStatus(
                                                 coupon.id,
-                                                coupon.active !== false
+                                                coupon.active !== false,
                                               )
                                             }
                                             title={isActive ? "إيقاف" : "تفعيل"}
@@ -3779,7 +3785,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                           onClick={() =>
                                             handleDeleteCoupon(
                                               coupon.id,
-                                              coupon.code
+                                              coupon.code,
                                             )
                                           }
                                           title="حذف"
@@ -3831,7 +3837,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                           return true;
                         });
                         const totalPages = Math.ceil(
-                          filtered.length / couponsPerPage
+                          filtered.length / couponsPerPage,
                         );
 
                         if (totalPages > 1) {
@@ -3840,7 +3846,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                               <button
                                 onClick={() =>
                                   setCurrentCouponPage((prev) =>
-                                    Math.max(prev - 1, 1)
+                                    Math.max(prev - 1, 1),
                                   )
                                 }
                                 disabled={currentCouponPage === 1}
@@ -3854,7 +3860,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                               <button
                                 onClick={() =>
                                   setCurrentCouponPage((prev) =>
-                                    Math.min(prev + 1, totalPages)
+                                    Math.min(prev + 1, totalPages),
                                   )
                                 }
                                 disabled={currentCouponPage === totalPages}
@@ -4232,10 +4238,9 @@ const AdminDashboardPage = ({ currentUser }) => {
                                 >
                                   {(() => {
                                     const foundType = faqTypes.find(
-                                      (t) => t.id === faq.category
+                                      (t) => t.id === faq.category,
                                     );
                                     if (!foundType) {
-                                      
                                       // Show the raw category value for debugging
                                       return `غير محدد (${
                                         faq.category || "فارغ"

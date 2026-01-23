@@ -361,21 +361,21 @@
   .nav-menu {
     position: fixed;
     top: 80px;
+    bottom: 0;
     right: 0;
     width: 300px;
-    height: calc(100vh - 80px);
     background-color: var(--white);
     border-left: 2px solid var(--border-color);
     flex-direction: column;
-    padding: 0;
     gap: 0;
-    /* Use transform for smoother, GPU-accelerated animation and to match nav-actions */
     transform: translateX(100%);
     transition: transform 0.3s ease;
     z-index: 1000;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
+    min-height: 0;
   }
 
   .nav-menu.active {

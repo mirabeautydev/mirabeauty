@@ -109,19 +109,24 @@ export const validateCoupon = async (code, type, categoryIds = []) => {
       return { valid: false, error: "انتهت صلاحية الكوبون" };
     }
 
-    // Check type match
-    if (coupon.type !== type) {
+    // Check type match - allow 'both' type to work for both products and services
+    if (coupon.type !== type && coupon.type !== "both") {
       return {
         valid: false,
         error: `هذا الكوبون خاص بـ ${
-          coupon.type === "products" ? "المنتجات" : "الخدمات"
+          coupon.type === "products" 
+            ? "المنتجات" 
+            : coupon.type === "services"
+            ? "الخدمات"
+            : "المنتجات والخدمات"
         } فقط`,
       };
     }
 
-    // For service coupons, check if any category matches
+    // For service coupons (not 'both' type), check if any category matches
     if (
       type === "services" &&
+      coupon.type === "services" &&
       coupon.categories &&
       coupon.categories.length > 0
     ) {

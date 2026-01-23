@@ -126,7 +126,7 @@ const AdminAnalyticsPage = () => {
         getUsersStatsByPeriod(startDate, endDate),
         getVisitorsStatsByPeriod(
           startDate || new Date(0),
-          endDate || new Date()
+          endDate || new Date(),
         ),
       ]);
 
@@ -170,7 +170,7 @@ const AdminAnalyticsPage = () => {
       const unsubscribeAnonymousUsers = getActiveAnonymousUsersCount(
         (count) => {
           setStats((prev) => ({ ...prev, activeAnonymousUsers: count }));
-        }
+        },
       );
 
       const unsubscribeTotalActiveUsers = getTotalActiveUsersCount((count) => {
@@ -218,7 +218,7 @@ const AdminAnalyticsPage = () => {
       "⚠️ تحذير: سيتم مسح جميع بيانات الزوار والتواجد.\n\n" +
         "هذه العملية لا يمكن التراجع عنها!\n\n" +
         "ملاحظة: لن يتم مسح الطلبات والمواعيد والمستخدمين.\n\n" +
-        "هل أنت متأكد من المتابعة؟"
+        "هل أنت متأكد من المتابعة؟",
     );
 
     if (!confirmed) return;
@@ -265,7 +265,7 @@ const AdminAnalyticsPage = () => {
   const formatDate = (timestamp) => {
     if (!timestamp) return "غير محدد";
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString("ar-EG", {
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",

@@ -102,9 +102,7 @@ const SpecializationModal = ({
               className={errors.name ? "error" : ""}
             />
             {errors.name && <span className="field-error">{errors.name}</span>}
-            <small className="field-hint">
-              أدخل اسم التخصص (سيتم استخدام معرف فريد تلقائياً)
-            </small>
+            
           </div>
 
           {errors.submit && (
@@ -131,10 +129,7 @@ const SpecializationModal = ({
                 </>
               ) : (
                 <>
-                  <i
-                    className="fas fa-save"
-                    style={{ color: "var(--white)" }}
-                  ></i>
+
                   {specialization ? "حفظ التعديلات" : "إضافة"}
                 </>
               )}

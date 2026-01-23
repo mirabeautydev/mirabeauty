@@ -224,6 +224,11 @@
   color: #0c5460;
 }
 
+.ct-badge-success {
+  background: #d4edda;
+  color: #155724;
+}
+
 /* Status Badge */
 .ct-status-badge {
   display: inline-block;
@@ -339,7 +344,7 @@
   font-size: 0.95rem;
 }
 
-/* Responsive Design */
+/* Responsive Design - Matches AdminDashboardPage.css patterns */
 @media (max-width: 1024px) {
   .ct-stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -348,11 +353,15 @@
   .ct-filters-section {
     grid-template-columns: 1fr;
   }
+
+  .ct-tab-header h2 {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
   .ct-tab-content {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .ct-tab-header {
@@ -361,25 +370,90 @@
     align-items: stretch;
   }
 
+  .ct-tab-header h2 {
+    font-size: 1.3rem;
+  }
+
   .ct-btn-primary {
     width: 100%;
     justify-content: center;
   }
 
-  .ct-stats-grid {
-    grid-template-columns: 1fr;
+  .ct-filters-section {
+    flex-direction: column;
   }
 
+  .ct-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Responsive Tables - Mobile Card Layout (matching AdminDashboardPage pattern) */
   .ct-table-container {
-    overflow-x: scroll;
+    border: none;
+    overflow-x: visible;
   }
 
   .ct-data-table {
-    min-width: 800px;
+    border: none;
   }
 
+  /* Hide table headers */
+  .ct-data-table thead {
+    display: none;
+  }
+
+  /* Display table body as blocks */
+  .ct-data-table tbody,
+  .ct-data-table tr {
+    display: block;
+  }
+
+  /* Style each row as a card */
+  .ct-data-table tr {
+    margin-bottom: 1rem;
+    border: 2px solid var(--border-color);
+    background-color: var(--white);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .ct-data-table tr:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Display cells as flex items with labels */
+  .ct-data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    text-align: right;
+  }
+
+  .ct-data-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* Add labels to cells using data attributes */
+  .ct-data-table td::before {
+    font-weight: 600;
+    color: var(--navy-blue);
+    margin-left: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* Adjust specific cell content alignment */
+  .ct-data-table td > * {
+    text-align: left;
+  }
+
+  /* Make action buttons stack better on mobile */
   .ct-table-actions {
+    flex-direction: row;
+    justify-content: flex-start;
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .ct-pagination {
@@ -389,5 +463,30 @@
 
   .ct-pagination-btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .ct-tab-content {
+    padding: 1rem;
+  }
+
+  .ct-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ct-stat-card {
+    padding: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .ct-data-table {
+    font-size: 0.875rem;
+  }
+
+  .ct-data-table td {
+    padding: 0.75rem 0;
   }
 }

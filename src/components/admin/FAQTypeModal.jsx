@@ -97,9 +97,7 @@ const FAQTypeModal = ({ isOpen, onClose, onSubmit, faqType }) => {
             {errors.name && (
               <span className="faq-type-error-message">{errors.name}</span>
             )}
-            <small className="faq-type-hint">
-              أدخل اسم التصنيف (سيتم استخدام معرف فريد تلقائياً)
-            </small>
+            
           </div>
 
           {errors.submit && (

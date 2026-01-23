@@ -102,6 +102,7 @@ const CouponModal = ({
       }
 
       // For services, at least one category should be selected
+      // Skip this requirement for "both" type as it applies to all products and services
       if (formData.type === "services" && formData.categories.length === 0) {
         showError("يرجى اختيار فئة واحدة على الأقل للخدمات");
         setLoading(false);
@@ -182,6 +183,7 @@ const CouponModal = ({
                 >
                   <option value="products">منتجات</option>
                   <option value="services">خدمات</option>
+                  <option value="both">منتجات وخدمات معاً</option>
                 </select>
               </div>
 
