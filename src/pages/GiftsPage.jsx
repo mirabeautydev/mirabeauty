@@ -29,18 +29,18 @@ const GiftsPage = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="gifts-page">
-        <div className="container">
-          <div className="loading-spinner">
-            <i className="fas fa-spinner fa-spin"></i>
-            <p>جاري التحميل...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="gifts-page">
+  //       <div className="container">
+  //         <div className="loading-spinner">
+  //           <i className="fas fa-spinner fa-spin"></i>
+  //           <p>جاري التحميل...</p>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="gifts-page">

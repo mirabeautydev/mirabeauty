@@ -529,7 +529,7 @@
 }
 
 /* Show full scrolling text on hover only */
-.product-card:hover .product-info h3 {
+/* .product-card:hover .product-info h3 {
   overflow: visible;
   text-overflow: clip;
 }
@@ -547,7 +547,7 @@
   100% {
     transform: translateX(-100%);
   }
-}
+} */
 
 .product-description {
   color: var(--charcoal);

@@ -1569,6 +1569,12 @@ const BookingPage = ({ currentUser, userData }) => {
                     <strong>الخدمة:</strong> {selectedService?.name}
                   </div>
                   <div className="info-item">
+                    <strong>الوصف:</strong> {selectedService?.description}
+                  </div>
+                  <div className="info-item">
+                    <strong>السعر:</strong> {selectedService?.price} شيكل
+                  </div>
+                  <div className="info-item">
                     <strong>المدة:</strong>{" "}
                     {selectedService?.duration || "غير محددة"} دقيقة
                   </div>
@@ -2474,24 +2480,34 @@ const BookingPage = ({ currentUser, userData }) => {
                     <div className="summary-note">
                       {(() => {
                         // Check if user has appointments in the last 6 months
-                        const sixMonthsAgo = new Date();
-                        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                        // const sixMonthsAgo = new Date();
+                        // sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-                        const hasRecentAppointments = userAppointments.some(
-                          (apt) => {
-                            const aptDate = new Date(apt.date);
-                            return aptDate >= sixMonthsAgo;
-                          },
-                        );
+                        // const hasRecentAppointments = userAppointments.some(
+                        //   (apt) => {
+                        //     const aptDate = new Date(apt.date);
+                        //     return aptDate >= sixMonthsAgo;
+                        //   },
+                        // );
 
-                        //if has recent appointments and the selected service category is laser
+                        // Show note for laser services
                         const selectedService = services.find(s => s.id === bookingData.serviceId);
+                        
+                        // Get category name from multiple possible sources
                         const categoryName = selectedService?.categoryName || selectedService?.category || "";
-                        const isLaser = categoryName.toLowerCase().includes("laser") || 
-                                       categoryName.toLowerCase().includes("ليزر");
+                        
+                        // Also check if categoryId matches the laser category
+                        const categoryId = selectedService?.categoryId || "";
+                        const laserCategoryId = "7ZhY0VUvQE7h8NsztTOW"; // قسم الليزر
+                        
+                        // Check if it's laser category by name or ID
+                        const categoryNameLower = categoryName.toLowerCase();
+                        const isLaserByName = categoryNameLower.includes("ليزر");
+                        const isLaserById = categoryId === laserCategoryId;
+                        const isLaser = isLaserByName || isLaserById;
                         
                         return (
-                          hasRecentAppointments && isLaser && (
+                          isLaser && (
                             <p className="summary-note-info">
                               <i className="fas fa-info-circle"></i>
                               <strong>ملاحظة:</strong> اذا كنت تفضلين أخصائية

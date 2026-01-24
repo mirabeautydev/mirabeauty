@@ -532,9 +532,14 @@ const ProductDetailsPage = () => {
                   <p>{product.fullDescription}</p>
                   <h4>الفوائد:</h4>
                   <ul>
-                    {product.benefits.map((benefit, index) => (
-                      <li key={index}>{benefit}</li>
-                    ))}
+                    {product.benefits && product.benefits.length > 0 ? (
+                      product.benefits.map((benefit, index) => (
+                        <li key={index}>{benefit}</li>
+                      ))
+                    ) : (
+                      <li>لا يوجد فوائد</li>
+                    )}
+                    
                   </ul>
                 </div>
               )}
@@ -543,9 +548,14 @@ const ProductDetailsPage = () => {
                 <div className="product-details-tab-content">
                   <h3>المكونات الفعالة</h3>
                   <ul className="product-details-ingredients-list">
-                    {product.ingredients.map((ingredient, index) => (
-                      <li key={index}>{ingredient}</li>
-                    ))}
+                    {product.ingredients && product.ingredients.length > 0 ? (
+                      product.ingredients.map((ingredient, index) => (
+                        <li key={index}>{ingredient}</li>
+                      ))
+                    ) : (
+                      <li>لا يوجد مكونات</li>
+                    )}
+                      
                   </ul>
                 </div>
               )}
@@ -553,7 +563,11 @@ const ProductDetailsPage = () => {
               {activeTab === "howToUse" && (
                 <div className="product-details-tab-content">
                   <h3>طريقة الاستخدام</h3>
-                  <p>{product.howToUse}</p>
+                  {product.howToUse && product.howToUse.length > 0 ? (
+                    <p>{product.howToUse}</p>
+                  ) : (
+                    <p>لا يوجد طريقة الاستخدام</p>
+                  )}
                 </div>
               )}
 
