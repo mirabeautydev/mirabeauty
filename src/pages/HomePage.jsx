@@ -605,14 +605,14 @@ const HomePage = () => {
               <p style={{ color: "var(--charcoal)", fontSize: "1.1rem" }}>
                 كوني أول من يشارك رأيها!
               </p>
-              <button
+              {/* <button
                 className="btn-primary"
                 onClick={() => setIsFeedbackModalOpen(true)}
                 style={{ marginTop: "1rem" }}
               >
                 <i className="fas fa-star"></i>
                 شاركي رأيك الآن
-              </button>
+              </button> */}
             </div>
           ) : (
             <div className="testimonials-grid grid-3">

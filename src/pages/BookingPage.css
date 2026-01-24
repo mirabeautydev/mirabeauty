@@ -663,6 +663,17 @@
   color: var(--charcoal);
 }
 
+.booking-price {
+  background-color: var(--white);
+  width: fit-content;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  font-size: 0.875rem;
+  color: var(--charcoal);
+  opacity: 0.8;
+}
+
 .service-meta {
   display: flex;
   gap: 10px;
@@ -674,11 +685,7 @@
   font-size: 0.9rem;
 }
 
-.price {
-  color: var(--gold);
-  font-size: 1.25rem;
-  font-weight: 700;
-}
+
 
 /* Selected Service Info */
 .selected-service-info {

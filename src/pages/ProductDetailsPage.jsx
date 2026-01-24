@@ -365,7 +365,7 @@ const ProductDetailsPage = () => {
             <div className="product-details-info">
               <h1 className="product-details-title">{product.name}</h1>
 
-              <div className="product-details-rating">
+              {/* <div className="product-details-rating">
                 <div className="product-details-stars">
                   {Array.from(
                     { length: Math.floor(product.rating) },
@@ -377,7 +377,7 @@ const ProductDetailsPage = () => {
                 <span className="product-details-rating-text">
                   {product.rating}&nbsp;({product.reviewsCount} تقييمات)
                 </span>
-              </div>
+              </div> */}
 
               <div className="product-details-price">
                 <span className="product-details-current-price">
@@ -515,14 +515,14 @@ const ProductDetailsPage = () => {
               >
                 طريقة الاستخدام
               </button>
-              <button
+              {/* <button
                 className={`product-details-tab-btn ${
                   activeTab === "reviews" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("reviews")}
               >
                 التقييمات ({product.reviewsCount})
-              </button>
+              </button> */}
             </div>
 
             <div className="product-details-tabs-content">
@@ -571,7 +571,7 @@ const ProductDetailsPage = () => {
                 </div>
               )}
 
-              {activeTab === "reviews" && (
+              {/* {activeTab === "reviews" && (
                 <div className="product-details-tab-content">
                   <div
                     style={{
@@ -668,7 +668,7 @@ const ProductDetailsPage = () => {
                     </>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

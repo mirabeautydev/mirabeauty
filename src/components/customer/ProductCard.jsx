@@ -98,14 +98,14 @@ const ProductCard = ({ product, onAddToCart }) => {
         </h3>
         {/* <p className="product-card-description">{product.description}</p> */}
 
-        <div className="product-card-rating">
+        {/* <div className="product-card-rating">
           <span className="product-card-rating-stars">
             {"⭐".repeat(Math.floor(product.rating))}
           </span>
           <span className="product-card-rating-text">
             {product.rating} ({product.reviewsCount} تقييمات)
           </span>
-        </div>
+        </div> */}
 
         <div className="product-card-pricing">
           <span className="product-card-current-price">

@@ -1533,7 +1533,7 @@ const BookingPage = ({ currentUser, userData }) => {
                             <span className="duration">
                               المدة: {service.duration} دقيقة
                             </span>
-                            <span className="price">
+                            <span className="booking-price">
                               السعر: {service.price}
                             </span>
                           </div>

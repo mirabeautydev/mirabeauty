@@ -416,7 +416,7 @@ const ProductsPage = ({ setCurrentPage }) => {
                         {product.description}
                       </p> */}
 
-                        <div className="product-rating">
+                        {/* <div className="product-rating">
                           <div className="stars">
                             {Array.from({ length: product.rating }, (_, i) => (
                               <i
@@ -429,7 +429,7 @@ const ProductsPage = ({ setCurrentPage }) => {
                           <span className="rating-text">
                             {product.rating} ({product.reviewsCount} تقييمات)
                           </span>
-                        </div>
+                        </div> */}
 
                         <div className="product-price">
                           <span className="current-price">
