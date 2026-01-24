@@ -1,0 +1,455 @@
+/* Promo Welcome Modal Styles */
+.promo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+  pointer-events: none;
+}
+
+.promo-modal-overlay.visible {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+  pointer-events: all;
+}
+
+.promo-modal-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90dvh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transform: scale(0.7) translateY(-50px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.promo-modal-content.show {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Custom Scrollbar */
+.promo-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.promo-modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.promo-modal-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--gold) 0%, #d4af37 100%);
+  border-radius: 10px;
+}
+
+.promo-modal-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+}
+
+/* Firefox Scrollbar */
+.promo-modal-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) #f1f1f1;
+}
+
+/* Close Button */
+.promo-close-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.promo-close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: rotate(90deg);
+}
+
+.promo-close-btn i {
+  font-size: 1.2rem;
+  color: var(--charcoal);
+}
+
+/* Icon */
+.promo-icon {
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: icon-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+  opacity: 0;
+}
+
+@keyframes icon-bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.promo-icon-circle {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold) 0%, #d4af37 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+  }
+}
+
+.promo-icon i {
+  font-size: 2.5rem;
+  color: white;
+}
+
+/* Content */
+.promo-content {
+  text-align: center;
+}
+
+.promo-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--charcoal);
+  margin-bottom: 0.5rem;
+  animation: slide-up 0.5s ease 0.4s forwards;
+  opacity: 0;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.promo-message {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+  animation: slide-up 0.5s ease 0.5s forwards;
+  opacity: 0;
+}
+
+.promo-amount {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(212, 175, 55, 0.2);
+  animation: slide-up 0.5s ease 0.6s forwards;
+  opacity: 0;
+}
+
+/* Promo Code Card */
+.promo-code-card {
+  background: white;
+  border: 2px dashed var(--gold);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  animation: slide-up 0.5s ease 0.7s forwards;
+  opacity: 0;
+}
+
+.promo-code-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.promo-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #f8f9fa;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+}
+
+.promo-code-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--charcoal);
+  letter-spacing: 2px;
+  font-family: 'Courier New', monospace;
+}
+
+.promo-copy-btn {
+  background: var(--gold);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.promo-copy-btn:hover {
+  background: #d4af37;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.promo-copy-btn:active {
+  transform: translateY(0);
+}
+
+.promo-copy-btn.copied {
+  background: #28a745;
+}
+
+.promo-copy-btn i {
+  font-size: 1rem;
+}
+
+/* Countdown Timer */
+.promo-timer {
+  margin: 1rem 0 0.75rem 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fff8e1 0%, #ffe082 100%);
+  border-radius: 12px;
+  animation: slide-up 0.5s ease 0.8s forwards;
+  opacity: 0;
+}
+
+.promo-timer-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.promo-timer-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.promo-timer-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 55px;
+}
+
+.promo-timer-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--charcoal);
+  line-height: 1;
+}
+
+.promo-timer-label-small {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.promo-timer-separator {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--gold);
+  line-height: 1;
+}
+
+/* Instructions */
+.promo-instructions {
+  font-size: 0.9rem;
+  color: #888;
+  line-height: 1.5;
+  margin-top: 0.75rem;
+  animation: slide-up 0.5s ease 0.9s forwards;
+  opacity: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .promo-modal-content {
+    padding: 1.75rem 1.25rem;
+    max-width: 95%;
+  }
+
+  .promo-icon-circle {
+    width: 70px;
+    height: 70px;
+  }
+
+  .promo-icon i {
+    font-size: 2rem;
+  }
+
+  .promo-title {
+    font-size: 1.8rem;
+  }
+
+  .promo-message {
+    font-size: 1rem;
+  }
+
+  .promo-amount {
+    font-size: 2rem;
+  }
+
+  .promo-code-text {
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+  }
+
+  .promo-code-display {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .promo-copy-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .promo-timer {
+    padding: 0.85rem;
+  }
+
+  .promo-timer-display {
+    gap: 0.25rem;
+  }
+
+  .promo-timer-unit {
+    min-width: 48px;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .promo-timer-value {
+    font-size: 1.15rem;
+  }
+
+  .promo-timer-label-small {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .promo-modal-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .promo-icon-circle {
+    width: 65px;
+    height: 65px;
+  }
+
+  .promo-icon i {
+    font-size: 1.8rem;
+  }
+
+  .promo-title {
+    font-size: 1.6rem;
+  }
+
+  .promo-message {
+    font-size: 0.95rem;
+  }
+
+  .promo-amount {
+    font-size: 1.8rem;
+  }
+
+  .promo-code-card {
+    padding: 1rem;
+  }
+
+  .promo-code-text {
+    font-size: 1.15rem;
+  }
+
+  .promo-timer {
+    padding: 0.75rem;
+  }
+
+  .promo-timer-display {
+    gap: 0.2rem;
+  }
+
+  .promo-timer-unit {
+    min-width: 43px;
+    padding: 0.3rem 0.35rem;
+  }
+
+  .promo-timer-value {
+    font-size: 1.05rem;
+  }
+
+  .promo-timer-label-small {
+    font-size: 0.65rem;
+  }
+
+  .promo-timer-separator {
+    font-size: 1.1rem;
+  }
+
+  .promo-instructions {
+    font-size: 0.85rem;
+  }
+}

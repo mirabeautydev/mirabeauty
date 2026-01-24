@@ -11,6 +11,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { isExpiredInPalestine } from "../utils/palestineTime";
 
 const COUPONS_COLLECTION = "coupons";
 
@@ -34,11 +35,10 @@ export const getAllCoupons = async () => {
 };
 
 /**
- * Get active coupons only (not expired)
+ * Get active coupons only (not expired) - using Palestine timezone
  */
 export const getActiveCoupons = async () => {
   try {
-    const now = new Date();
     const couponsSnapshot = await getDocs(collection(db, COUPONS_COLLECTION));
     const coupons = couponsSnapshot.docs
       .map((doc) => ({
@@ -48,8 +48,7 @@ export const getActiveCoupons = async () => {
         createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt,
       }))
       .filter((coupon) => {
-        const expiryDate = new Date(coupon.expiryDate);
-        return expiryDate > now && coupon.active !== false;
+        return !isExpiredInPalestine(coupon.expiryDate) && coupon.active !== false;
       });
     return coupons;
   } catch (error) {
@@ -102,10 +101,8 @@ export const validateCoupon = async (code, type, categoryIds = []) => {
       return { valid: false, error: "الكوبون غير نشط" };
     }
 
-    // Check expiry date
-    const now = new Date();
-    const expiryDate = new Date(coupon.expiryDate);
-    if (expiryDate < now) {
+    // Check expiry date using Palestine timezone
+    if (isExpiredInPalestine(coupon.expiryDate)) {
       return { valid: false, error: "انتهت صلاحية الكوبون" };
     }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./HomePage.css";
 import { getAllProducts } from "../services/productsService";
 import { getPopularServices } from "../services/servicesService";
@@ -11,6 +11,7 @@ import ProductCard from "../components/customer/ProductCard";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import FeedbackModal from "../components/common/FeedbackModal";
 import CartOverlay from "../components/common/CartOverlay";
+import PromoWelcomeModal from "../components/common/PromoWelcomeModal";
 import { useNavigationLoading } from "../hooks/useNavigationLoading";
 import { useLoading } from "../hooks/useLoading";
 import { useAuth } from "../hooks/useAuth";
@@ -26,6 +27,7 @@ const HomePage = () => {
   useSEO(pageSEO.home);
 
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { navigateWithLoading } = useNavigationLoading();
   const { currentUser, userData } = useAuth();
   const {
@@ -55,6 +57,7 @@ const HomePage = () => {
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [cartOpenedFromAdd, setCartOpenedFromAdd] = useState(false);
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
 
   // Load products and services from Firebase with real progress tracking
   const loadData = async () => {
@@ -194,13 +197,22 @@ const HomePage = () => {
     updateCartData();
     loadData();
 
+    // Check for promo parameter in URL
+    const promoParam = searchParams.get("promo");
+    if (promoParam === "open30") {
+      // Show promo modal after a brief delay for better UX
+      setTimeout(() => {
+        setIsPromoModalOpen(true);
+      }, 500);
+    }
+
     const handleCartUpdate = () => {
       updateCartData();
     };
 
     window.addEventListener("cartUpdated", handleCartUpdate);
     return () => window.removeEventListener("cartUpdated", handleCartUpdate);
-  }, []);
+  }, [searchParams]);
 
   // Auto-slide functionality
   useEffect(() => {
@@ -634,6 +646,18 @@ const HomePage = () => {
         type={FEEDBACK_TYPES.GENERAL}
         currentUser={currentUser}
         userData={userData}
+      />
+
+      {/* Promo Welcome Modal */}
+      <PromoWelcomeModal
+        isOpen={isPromoModalOpen}
+        onClose={() => {
+          setIsPromoModalOpen(false);
+          // Remove promo parameter from URL after closing
+          searchParams.delete("promo");
+          setSearchParams(searchParams, { replace: true });
+        }}
+        promoCode="OPEN30"
       />
 
       {/* Call to Action */}

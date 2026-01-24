@@ -350,13 +350,12 @@ const UserModal = ({
 
               <div className="admin-user-form-row">
                 <div className="admin-user-form-group">
-                  <label htmlFor="skinType">نوع البشرة *</label>
+                  <label htmlFor="skinType">نوع البشرة (اختياري)</label>
                   <select
                     id="skinType"
                     name="skinType"
                     value={formData.skinType}
                     onChange={handleChange}
-                    required
                     className="admin-user-form-input"
                   >
                     {skinTypes.map((type) => (

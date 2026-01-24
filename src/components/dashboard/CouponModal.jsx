@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./CouponModal.css";
 import CustomModal from "../common/CustomModal";
 import useModal from "../../hooks/useModal";
+import { toPalestineEndOfDay } from "../../utils/palestineTime";
 
 const CouponModal = ({
   isOpen,
@@ -91,8 +92,8 @@ const CouponModal = ({
         return;
       }
 
-      // Check if expiry date is in the future
-      const expiryDate = new Date(formData.expiryDate);
+      // Check if expiry date is in the future (Palestine timezone)
+      const expiryDate = toPalestineEndOfDay(formData.expiryDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       if (expiryDate < today) {
@@ -100,6 +101,12 @@ const CouponModal = ({
         setLoading(false);
         return;
       }
+      
+      // Set expiry date to end of day in Palestine timezone (11:59:59 PM)
+      const formDataWithPalestineTime = {
+        ...formData,
+        expiryDate: expiryDate
+      };
 
       // For services, at least one category should be selected
       // Skip this requirement for "both" type as it applies to all products and services
@@ -109,7 +116,7 @@ const CouponModal = ({
         return;
       }
 
-      await onSubmit(formData);
+      await onSubmit(formDataWithPalestineTime);
       onClose();
     } catch (error) {
       console.error("Error submitting coupon:", error);
@@ -199,6 +206,9 @@ const CouponModal = ({
                   className="coupon-form-input"
                   min={new Date().toISOString().split("T")[0]}
                 />
+                <small style={{ color: '#666', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>
+                  سينتهي الكوبون عند الساعة 11:59 مساءً (توقيت فلسطين)
+                </small>
               </div>
             </div>
 

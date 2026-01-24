@@ -5,6 +5,7 @@ import "../styles/coupons-tab.css";
 import CustomModal from "../components/common/CustomModal";
 import { useModal } from "../hooks/useModal";
 import { formatFirestoreDate } from "../utils/dateHelpers";
+import { formatPalestineDate, isExpiredInPalestine } from "../utils/palestineTime";
 import {
   getCustomers,
   getStaff,
@@ -3556,7 +3557,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                 coupons.filter(
                                   (c) =>
                                     c.active !== false &&
-                                    new Date(c.expiryDate) > new Date(),
+                                    !isExpiredInPalestine(c.expiryDate),
                                 ).length
                               }
                             </h3>
@@ -3621,7 +3622,6 @@ const AdminDashboardPage = ({ currentUser }) => {
                           </thead>
                           <tbody>
                             {(() => {
-                              const now = new Date();
                               let filtered = coupons.filter((coupon) => {
                                 // Search filter
                                 if (
@@ -3639,10 +3639,9 @@ const AdminDashboardPage = ({ currentUser }) => {
                                 ) {
                                   return false;
                                 }
-                                // Status filter
+                                // Status filter (using Palestine timezone)
                                 if (couponStatusFilter) {
-                                  const isExpired =
-                                    new Date(coupon.expiryDate) < now;
+                                  const isExpired = isExpiredInPalestine(coupon.expiryDate);
                                   const isActive = coupon.active !== false;
                                   if (
                                     couponStatusFilter === "active" &&
@@ -3686,8 +3685,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                               }
 
                               return paginatedCoupons.map((coupon) => {
-                                const expiryDate = new Date(coupon.expiryDate);
-                                const isExpired = expiryDate < now;
+                                const isExpired = isExpiredInPalestine(coupon.expiryDate);
                                 const isActive =
                                   coupon.active !== false && !isExpired;
 
@@ -3728,10 +3726,12 @@ const AdminDashboardPage = ({ currentUser }) => {
                                             : "الخدمات")}
                                     </td>
                                     <td>
-                                      {expiryDate.toLocaleDateString("en-US", {
-                                        year: "numeric",
-                                        month: "long",
-                                        day: "numeric",
+                                      {formatPalestineDate(coupon.expiryDate, 'ar-PS', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
                                       })}
                                     </td>
                                     <td>
@@ -3804,7 +3804,6 @@ const AdminDashboardPage = ({ currentUser }) => {
 
                       {/* Pagination */}
                       {(() => {
-                        const now = new Date();
                         const filtered = coupons.filter((coupon) => {
                           if (
                             couponSearchFilter &&
@@ -3819,7 +3818,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                           )
                             return false;
                           if (couponStatusFilter) {
-                            const isExpired = new Date(coupon.expiryDate) < now;
+                            const isExpired = isExpiredInPalestine(coupon.expiryDate);
                             const isActive = coupon.active !== false;
                             if (
                               couponStatusFilter === "active" &&

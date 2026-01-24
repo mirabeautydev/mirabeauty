@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegisterPage.css";
 import {
@@ -6,7 +6,6 @@ import {
   getFirebaseErrorMessage,
 } from "../services/authService";
 import { useAuth } from "../hooks/useAuth.jsx";
-import { getAllSkinTypes } from "../services/skinTypesService";
 import { useSEO } from "../hooks/useSEO";
 import { pageSEO } from "../utils/seo";
 
@@ -22,32 +21,11 @@ const RegisterPage = () => {
     password: "",
     confirmPassword: "",
     birthDate: "",
-    skinType: "",
     allergies: "",
     agreeToTerms: false,
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [skinTypes, setSkinTypes] = useState([]);
-  const [loadingSkinTypes, setLoadingSkinTypes] = useState(true);
-
-  // Load skin types on component mount
-  useEffect(() => {
-    const loadSkinTypes = async () => {
-      setLoadingSkinTypes(true);
-      try {
-        const types = await getAllSkinTypes();
-        setSkinTypes([{ id: "", name: "اختاري نوع بشرتك" }, ...types]);
-      } catch (error) {
-        console.error("Error loading skin types:", error);
-        // If loading fails, leave empty
-        setSkinTypes([{ id: "", name: "اختاري نوع بشرتك" }]);
-      } finally {
-        setLoadingSkinTypes(false);
-      }
-    };
-    loadSkinTypes();
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -129,10 +107,6 @@ const RegisterPage = () => {
       }
     }
 
-    if (!formData.skinType) {
-      newErrors.skinType = "نوع البشرة مطلوب";
-    }
-
     if (!formData.agreeToTerms) {
       newErrors.agreeToTerms = "يجب الموافقة على الشروط والأحكام";
     }
@@ -159,7 +133,6 @@ const RegisterPage = () => {
         phone: formData.phone,
         password: formData.password,
         birthDate: formData.birthDate,
-        skinType: formData.skinType,
         allergies: formData.allergies || [],
       });
 
@@ -175,12 +148,6 @@ const RegisterPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const getMaxDate = () => {
-    const today = new Date();
-    today.setFullYear(today.getFullYear() - 16);
-    return today.toISOString().split("T")[0];
   };
 
   return (
@@ -343,35 +310,6 @@ const RegisterPage = () => {
                         </span>
                       )}
                     </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="skinType" className="form-label">
-                      نوع البشرة *
-                    </label>
-                    <select
-                      id="skinType"
-                      name="skinType"
-                      value={formData.skinType}
-                      onChange={handleInputChange}
-                      className={`form-select ${
-                        errors.skinType ? "error" : ""
-                      }`}
-                      disabled={loading || loadingSkinTypes}
-                    >
-                      {loadingSkinTypes ? (
-                        <option value="">جاري تحميل الأنواع...</option>
-                      ) : (
-                        skinTypes.map((type) => (
-                          <option key={type.id} value={type.id}>
-                            {type.name}
-                          </option>
-                        ))
-                      )}
-                    </select>
-                    {errors.skinType && (
-                      <span className="field-error">{errors.skinType}</span>
-                    )}
                   </div>
 
                   <div className="form-group">
