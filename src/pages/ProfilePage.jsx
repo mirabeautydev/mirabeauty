@@ -223,7 +223,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
       const avatarImageObject = await uploadSingleImage(
         file,
         "avatars",
-        currentUser.uid
+        currentUser.uid,
       );
       const avatarUrl = avatarImageObject.url;
 
@@ -277,7 +277,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
       "هل أنت متأكدة من إلغاء هذا الموعد؟",
       "تأكيد الإلغاء",
       "إلغاء الموعد",
-      "تراجع"
+      "تراجع",
     );
 
     if (confirmed) {
@@ -300,7 +300,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
       "هل أنت متأكدة من إلغاء هذه الاستشارة؟",
       "تأكيد الإلغاء",
       "إلغاء الاستشارة",
-      "تراجع"
+      "تراجع",
     );
 
     if (confirmed) {
@@ -386,7 +386,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
     try {
       const now = new Date();
       const appointmentDateTime = new Date(
-        `${appointment.date}T${appointment.time}`
+        `${appointment.date}T${appointment.time}`,
       );
       const hoursDifference = (appointmentDateTime - now) / (1000 * 60 * 60);
       return hoursDifference > 12;
@@ -406,7 +406,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
     });
 
   const pastAppointments = userAppointments.filter(
-    (apt) => apt.status === "مكتمل" || apt.status === "ملغي"
+    (apt) => apt.status === "مكتمل" || apt.status === "ملغي",
   );
 
   const totalSpent = pastAppointments
@@ -604,7 +604,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                         .filter(
                           (apt) =>
                             apt.date === upcomingAppointments[0].date &&
-                            apt.time === upcomingAppointments[0].time
+                            apt.time === upcomingAppointments[0].time,
                         )
                         .map((appointment) => (
                           <div
@@ -689,7 +689,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                             <h4>{appointment.serviceName}</h4>
                             <span
                               className={`status ${getAppointmentStatusColor(
-                                appointment.status
+                                appointment.status,
                               )}`}
                             >
                               {appointment.status}
@@ -754,10 +754,12 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                                     fontWeight: "bold",
                                   }}
                                 >
-                                  {appointment.couponCode} (-
-                                  {appointment.discount ||
-                                    appointment.couponValue}{" "}
-                                  شيكل)
+                                  {appointment.couponCode} (
+                                  {appointment.couponDiscountType ===
+                                  "percentage"
+                                    ? `خصم ${appointment.couponValue}%`
+                                    : `-${appointment.discount || appointment.couponValue} شيكل`}
+                                  )
                                 </span>
                               </div>
                             )}
@@ -1048,10 +1050,11 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                                 }}
                               >
                                 <i className="fas fa-tag"></i> كوبون:{" "}
-                                {appointment.couponCode} (-
-                                {appointment.discount ||
-                                  appointment.couponValue}{" "}
-                                شيكل)
+                                {appointment.couponCode} (
+                                {appointment.couponDiscountType === "percentage"
+                                  ? `خصم ${appointment.couponValue}%`
+                                  : `-${appointment.discount || appointment.couponValue} شيكل`}
+                                )
                               </p>
                             )}
                             {appointment.rating && (
@@ -1065,7 +1068,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                                       className="fas fa-star"
                                       style={{ color: "var(--gold)" }}
                                     ></i>
-                                  )
+                                  ),
                                 )}
                               </div>
                             )}
@@ -1170,7 +1173,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                               <h3>طلب رقم: {order.orderNumber}</h3>
                               <p className="order-date">
                                 {new Date(
-                                  order.createdAt.toDate()
+                                  order.createdAt.toDate(),
                                 ).toLocaleDateString("en-GB")}
                               </p>
                             </div>
@@ -1223,7 +1226,11 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                                 >
                                   <span>
                                     <i className="fas fa-tag"></i> خصم (
-                                    {order.couponCode}):
+                                    {order.couponCode}
+                                    {order.couponDiscountType ===
+                                      "percentage" &&
+                                      ` - ${order.couponValue}%`}
+                                    ):
                                   </span>
                                   <span>
                                     -{order.discount || order.couponValue || 0}{" "}

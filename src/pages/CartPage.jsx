@@ -6,7 +6,11 @@ import { useModal } from "../hooks/useModal";
 import { useAuth } from "../hooks/useAuth";
 import { createOrder, DELIVERY_AREAS } from "../services/ordersService";
 import { getProductById } from "../services/productsService";
-import { validateCoupon } from "../services/couponsService";
+import {
+  validateCoupon,
+  calculateDiscount,
+  incrementCouponUsage,
+} from "../services/couponsService";
 import { useSEO } from "../hooks/useSEO";
 import { pageSEO } from "../utils/seo";
 
@@ -65,7 +69,7 @@ const CartPage = () => {
   useEffect(() => {
     if (selectedDeliveryArea) {
       const area = Object.values(DELIVERY_AREAS).find(
-        (area) => area.name === selectedDeliveryArea
+        (area) => area.name === selectedDeliveryArea,
       );
       setDeliveryPrice(area ? area.price : 0);
     } else {
@@ -84,10 +88,10 @@ const CartPage = () => {
         cartItem.stockQuantity !== undefined
           ? cartItem.stockQuantity
           : cartItem.quantity !== undefined
-          ? cartItem.quantity
-          : cartItem.inStock
-          ? 999
-          : 0;
+            ? cartItem.quantity
+            : cartItem.inStock
+              ? 999
+              : 0;
 
       // Prevent increasing beyond available stock
       if (newQuantity > availableQuantity) {
@@ -97,7 +101,7 @@ const CartPage = () => {
     }
 
     const updatedCart = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: newQuantity } : item
+      item.id === id ? { ...item, quantity: newQuantity } : item,
     );
     setCartItems(updatedCart);
     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
@@ -123,14 +127,33 @@ const CartPage = () => {
 
     setIsCouponLoading(true);
     try {
-      const result = await validateCoupon(promoCode, "products");
+      // Calculate subtotal before discount
+      const currentSubtotal = cartItems.reduce(
+        (sum, item) => sum + getPrice(item.price) * item.quantity,
+        0,
+      );
+
+      const result = await validateCoupon(
+        promoCode,
+        "products",
+        [],
+        currentSubtotal,
+      );
 
       if (result.valid) {
         setAppliedCoupon(result.coupon);
-        setDiscount(result.coupon.value);
-        showSuccess(
-          `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value} شيكل`
+        const discountAmount = calculateDiscount(
+          result.coupon,
+          currentSubtotal,
         );
+        setDiscount(discountAmount);
+
+        const discountMessage =
+          result.coupon.discountType === "percentage"
+            ? `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value}% (${discountAmount.toFixed(2)} شيكل)`
+            : `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value} شيكل`;
+
+        showSuccess(discountMessage);
       } else {
         setAppliedCoupon(null);
         setDiscount(0);
@@ -158,7 +181,7 @@ const CartPage = () => {
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + getPrice(item.price) * item.quantity,
-    0
+    0,
   );
   const discountAmount = Number(discount) || 0; // Fixed amount discount in shekels, ensure it's a number
   const total = Math.max(0, subtotal - discountAmount + deliveryPrice); // Ensure total is not negative
@@ -219,21 +242,21 @@ const CartPage = () => {
             // Product doesn't exist (was deleted)
             return { valid: false, item, reason: "deleted" };
           }
-        })
+        }),
       );
 
       // Check for invalid products
       const invalidProducts = validationResults.filter(
-        (result) => !result.valid
+        (result) => !result.valid,
       );
 
       if (invalidProducts.length > 0) {
         // Build error message
         const deletedProducts = invalidProducts.filter(
-          (p) => p.reason === "deleted"
+          (p) => p.reason === "deleted",
         );
         const outOfStockProducts = invalidProducts.filter(
-          (p) => p.reason === "out_of_stock"
+          (p) => p.reason === "out_of_stock",
         );
 
         let errorMessage = "";
@@ -256,7 +279,7 @@ const CartPage = () => {
         // Remove invalid products from cart
         const validItems = cartItems.filter(
           (item) =>
-            !invalidProducts.some((invalid) => invalid.item.id === item.id)
+            !invalidProducts.some((invalid) => invalid.item.id === item.id),
         );
 
         setCartItems(validItems);
@@ -296,7 +319,7 @@ const CartPage = () => {
     const phoneRegex = /^(972|970)[0-9]{9}$/;
     if (!phoneRegex.test(cleanPhone)) {
       showWarning(
-        "رقم الهاتف يجب أن يبدأ بـ 972 أو 970 (مثال: 972501234567 أو 970591234567)"
+        "رقم الهاتف يجب أن يبدأ بـ 972 أو 970 (مثال: 972501234567 أو 970591234567)",
       );
       return;
     }
@@ -327,19 +350,19 @@ const CartPage = () => {
           } catch (error) {
             return { valid: false, item, reason: "deleted" };
           }
-        })
+        }),
       );
 
       const invalidProducts = validationResults.filter(
-        (result) => !result.valid
+        (result) => !result.valid,
       );
 
       if (invalidProducts.length > 0) {
         const deletedProducts = invalidProducts.filter(
-          (p) => p.reason === "deleted"
+          (p) => p.reason === "deleted",
         );
         const outOfStockProducts = invalidProducts.filter(
-          (p) => p.reason === "out_of_stock"
+          (p) => p.reason === "out_of_stock",
         );
 
         let errorMessage = "";
@@ -362,7 +385,7 @@ const CartPage = () => {
         // Remove invalid products from cart
         const validItems = cartItems.filter(
           (item) =>
-            !invalidProducts.some((invalid) => invalid.item.id === item.id)
+            !invalidProducts.some((invalid) => invalid.item.id === item.id),
         );
 
         setCartItems(validItems);
@@ -391,6 +414,7 @@ const CartPage = () => {
         promoCode: promoCode || null,
         couponCode: appliedCoupon?.code || null,
         couponValue: appliedCoupon?.value || 0,
+        couponDiscountType: appliedCoupon?.discountType || "fixed",
         customerInfo: {
           name: userInfo.name.trim(),
           phone: userInfo.phone.trim(),
@@ -403,6 +427,16 @@ const CartPage = () => {
       };
 
       await createOrder(orderData);
+
+      // Increment coupon usage if a coupon was applied
+      if (appliedCoupon) {
+        try {
+          await incrementCouponUsage(appliedCoupon.id);
+        } catch (error) {
+          console.error("Error incrementing coupon usage:", error);
+          // Don't fail the order if coupon increment fails
+        }
+      }
 
       // Close the user info modal first
       setShowUserInfoModal(false);
@@ -422,7 +456,7 @@ const CartPage = () => {
             onExtraAction: () => {
               clearCartAndNavigate("/profile#orders");
             },
-          }
+          },
         );
       } else {
         showSuccess("تم إرسال طلبك بنجاح! سيتم التواصل معك قريباً");
@@ -635,7 +669,9 @@ const CartPage = () => {
                   <div className="applied-coupon">
                     <span className="coupon-info">
                       <strong>{appliedCoupon.code}</strong> - خصم{" "}
-                      {appliedCoupon.value} شيكل
+                      {appliedCoupon.discountType === "percentage"
+                        ? `${appliedCoupon.value}% (${discountAmount.toFixed(2)} شيكل)`
+                        : `${appliedCoupon.value} شيكل`}
                     </span>
                     <button
                       onClick={removeCoupon}

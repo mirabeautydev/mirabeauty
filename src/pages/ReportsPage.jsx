@@ -332,7 +332,7 @@ const ReportsPage = ({ currentUser, userData }) => {
 
     for (let i = 11; i >= 0; i--) {
       const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthName = monthDate.toLocaleDateString("en-US", {
+      const monthName = monthDate.toLocaleDateString("en-GB", {
         month: "short",
         year: "numeric",
       });

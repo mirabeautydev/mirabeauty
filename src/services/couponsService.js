@@ -48,7 +48,9 @@ export const getActiveCoupons = async () => {
         createdAt: doc.data().createdAt?.toDate?.() || doc.data().createdAt,
       }))
       .filter((coupon) => {
-        return !isExpiredInPalestine(coupon.expiryDate) && coupon.active !== false;
+        return (
+          !isExpiredInPalestine(coupon.expiryDate) && coupon.active !== false
+        );
       });
     return coupons;
   } catch (error) {
@@ -64,7 +66,7 @@ export const getCouponByCode = async (code) => {
   try {
     const q = query(
       collection(db, COUPONS_COLLECTION),
-      where("code", "==", code.toUpperCase())
+      where("code", "==", code.toUpperCase()),
     );
     const snapshot = await getDocs(q);
 
@@ -86,9 +88,19 @@ export const getCouponByCode = async (code) => {
 };
 
 /**
- * Validate coupon
+ * Validate coupon - extended to support percentage discounts, minPrice, and usage limits
+ * @param {string} code - Coupon code
+ * @param {string} type - Type: 'products' or 'services'
+ * @param {Array} categoryIds - Category IDs (for services)
+ * @param {number} totalAmount - Total amount before discount (for minPrice check)
+ * @returns {Object} Validation result
  */
-export const validateCoupon = async (code, type, categoryIds = []) => {
+export const validateCoupon = async (
+  code,
+  type,
+  categoryIds = [],
+  totalAmount = 0,
+) => {
   try {
     const coupon = await getCouponByCode(code);
 
@@ -106,16 +118,29 @@ export const validateCoupon = async (code, type, categoryIds = []) => {
       return { valid: false, error: "انتهت صلاحية الكوبون" };
     }
 
+    // Check usage limit
+    if (coupon.usageLimit && coupon.currentUsage >= coupon.usageLimit) {
+      return { valid: false, error: "تم استخدام هذا الكوبون بالكامل" };
+    }
+
+    // Check minimum price
+    if (coupon.minPrice && totalAmount < coupon.minPrice) {
+      return {
+        valid: false,
+        error: `الحد الأدنى لتطبيق هذا الكوبون هو ${coupon.minPrice} شيكل`,
+      };
+    }
+
     // Check type match - allow 'both' type to work for both products and services
     if (coupon.type !== type && coupon.type !== "both") {
       return {
         valid: false,
         error: `هذا الكوبون خاص بـ ${
-          coupon.type === "products" 
-            ? "المنتجات" 
+          coupon.type === "products"
+            ? "المنتجات"
             : coupon.type === "services"
-            ? "الخدمات"
-            : "المنتجات والخدمات"
+              ? "الخدمات"
+              : "المنتجات والخدمات"
         } فقط`,
       };
     }
@@ -128,7 +153,7 @@ export const validateCoupon = async (code, type, categoryIds = []) => {
       coupon.categories.length > 0
     ) {
       const hasMatch = categoryIds.some((catId) =>
-        coupon.categories.includes(catId)
+        coupon.categories.includes(catId),
       );
       if (!hasMatch) {
         return {
@@ -182,7 +207,7 @@ export const updateCoupon = async (couponId, couponData) => {
 
     if (couponData.expiryDate) {
       updateData.expiryDate = Timestamp.fromDate(
-        new Date(couponData.expiryDate)
+        new Date(couponData.expiryDate),
       );
     }
 
@@ -203,6 +228,43 @@ export const toggleCouponStatus = async (couponId, active) => {
   } catch (error) {
     console.error("Error toggling coupon status:", error);
     throw error;
+  }
+};
+
+/**
+ * Increment coupon usage count
+ */
+export const incrementCouponUsage = async (couponId) => {
+  try {
+    const couponRef = doc(db, COUPONS_COLLECTION, couponId);
+    const couponSnap = await getDoc(couponRef);
+
+    if (couponSnap.exists()) {
+      const currentUsage = couponSnap.data().currentUsage || 0;
+      await updateDoc(couponRef, { currentUsage: currentUsage + 1 });
+    }
+  } catch (error) {
+    console.error("Error incrementing coupon usage:", error);
+    throw error;
+  }
+};
+
+/**
+ * Calculate discount amount based on coupon type
+ * @param {Object} coupon - Coupon object
+ * @param {number} totalAmount - Total amount before discount
+ * @returns {number} Discount amount in shekels
+ */
+export const calculateDiscount = (coupon, totalAmount) => {
+  if (!coupon || !coupon.value) return 0;
+
+  if (coupon.discountType === "percentage") {
+    // Calculate percentage discount
+    const percentage = parseFloat(coupon.value) || 0;
+    return (totalAmount * percentage) / 100;
+  } else {
+    // Fixed amount discount
+    return parseFloat(coupon.value) || 0;
   }
 };
 

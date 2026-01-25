@@ -49,7 +49,7 @@ const UserDetailsPage = ({ currentUser, userData }) => {
       if (userDataResult.role === "staff") {
         // For staff: no orders, appointments assigned to them (by staffId)
         const appointmentsResult = await getAppointmentsByStaff(
-          userDataResult.id
+          userDataResult.id,
         );
         setOrders([]);
         setAppointments(appointmentsResult || []);
@@ -166,7 +166,7 @@ const UserDetailsPage = ({ currentUser, userData }) => {
 
   const totalAppointments = appointments.length;
   const completedAppointments = appointments.filter(
-    (a) => a.status === "مكتمل"
+    (a) => a.status === "مكتمل",
   ).length;
   const totalAppointmentsAmount = appointments
     .filter((a) => a.status === "مكتمل")
@@ -179,7 +179,6 @@ const UserDetailsPage = ({ currentUser, userData }) => {
       <div className="user-details-page">
         <div className="user-details-loading">
           <LoadingSpinner />
-          
         </div>
       </div>
     );
@@ -487,6 +486,8 @@ const UserDetailsPage = ({ currentUser, userData }) => {
                                 >
                                   <i className="fas fa-tag"></i>{" "}
                                   {order.couponCode}
+                                  {order.couponDiscountType === "percentage" &&
+                                    ` (${order.couponValue}%)`}
                                 </div>
                               )}
                             </td>
@@ -690,7 +691,10 @@ const UserDetailsPage = ({ currentUser, userData }) => {
                     >
                       <span>
                         <i className="fas fa-tag"></i> خصم (
-                        {selectedOrder.couponCode}):
+                        {selectedOrder.couponCode}
+                        {selectedOrder.couponDiscountType === "percentage" &&
+                          ` - ${selectedOrder.couponValue}%`}
+                        ):
                       </span>
                       <span>
                         -
@@ -800,10 +804,11 @@ const UserDetailsPage = ({ currentUser, userData }) => {
                       <span
                         style={{ color: "var(--gold)", fontWeight: "bold" }}
                       >
-                        {selectedAppointment.couponCode} (-
-                        {selectedAppointment.discount ||
-                          selectedAppointment.couponValue}{" "}
-                        شيكل)
+                        {selectedAppointment.couponCode} (
+                        {selectedAppointment.couponDiscountType === "percentage"
+                          ? `خصم ${selectedAppointment.couponValue}%`
+                          : `-${selectedAppointment.discount || selectedAppointment.couponValue} شيكل`}
+                        )
                       </span>
                     </div>
                   )}

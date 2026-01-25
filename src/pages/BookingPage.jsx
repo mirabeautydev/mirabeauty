@@ -24,7 +24,11 @@ import {
   getAllServiceCategories,
   getServiceCategoryById,
 } from "../services/categoriesService";
-import { validateCoupon } from "../services/couponsService";
+import {
+  validateCoupon,
+  calculateDiscount,
+  incrementCouponUsage,
+} from "../services/couponsService";
 import CustomModal from "../components/common/CustomModal";
 import { useModal } from "../hooks/useModal";
 import { useSEO } from "../hooks/useSEO";
@@ -792,15 +796,32 @@ const BookingPage = ({ currentUser, userData }) => {
 
     setIsCouponLoading(true);
     try {
+      // Calculate the service price
+      const servicePrice = parseFloat(
+        bookingData.selectedOption
+          ? bookingData.selectedOption.price
+          : selectedService.price.replace(/[^\d.]/g, ""),
+      );
+
       const categoryIds = [selectedService.category];
-      const result = await validateCoupon(promoCode, "services", categoryIds);
+      const result = await validateCoupon(
+        promoCode,
+        "services",
+        categoryIds,
+        servicePrice,
+      );
 
       if (result.valid) {
         setAppliedCoupon(result.coupon);
-        setDiscount(Number(result.coupon.value) || 0);
-        showSuccess(
-          `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value} شيكل`,
-        );
+        const discountAmount = calculateDiscount(result.coupon, servicePrice);
+        setDiscount(discountAmount);
+
+        const discountMessage =
+          result.coupon.discountType === "percentage"
+            ? `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value}% (${discountAmount.toFixed(2)} شيكل)`
+            : `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value} شيكل`;
+
+        showSuccess(discountMessage);
       } else {
         setAppliedCoupon(null);
         setDiscount(0);
@@ -1151,10 +1172,21 @@ const BookingPage = ({ currentUser, userData }) => {
         status: "pending",
         couponCode: appliedCoupon?.code || null,
         couponValue: appliedCoupon?.value ? Number(appliedCoupon.value) : 0,
+        couponDiscountType: appliedCoupon?.discountType || "fixed",
         discount: Number(discount) || 0,
       };
 
       await createAppointment(appointmentData);
+
+      // Increment coupon usage if a coupon was applied
+      if (appliedCoupon) {
+        try {
+          await incrementCouponUsage(appliedCoupon.id);
+        } catch (error) {
+          console.error("Error incrementing coupon usage:", error);
+          // Don't fail the appointment if coupon increment fails
+        }
+      }
 
       // Navigate immediately when user closes the modal
       showSuccess(
@@ -1439,37 +1471,37 @@ const BookingPage = ({ currentUser, userData }) => {
               <div className="booking-step" style={{ position: "relative" }}>
                 {/* Sticky Header */}
                 <div
-                style={{
-                  position: "-webkit-sticky",
-                  position: "sticky",
-                  top: "80px",
-                  left: "0",
-                  right: "0",
-                  backgroundColor: "rgba(255, 255, 255, 0.95)",
-                  backdropFilter: "blur(10px)",
-                  zIndex: "100",
-                  padding: "0.75rem 0",
-                  marginBottom: "1.5rem",
-                  borderBottom: "1px solid rgba(212, 175, 55, 0.2)",
-                  WebkitBackfaceVisibility: "hidden",
-                  backfaceVisibility: "hidden",
-                  transition: "all 0.3s ease",
-                }}
-              >
-                <h2
                   style={{
-                    margin: "0",
-                    fontSize: "1.1rem",
-                    color: "#b8921f",
-                    textAlign: "center",
-                    fontWeight: "600",
-                    letterSpacing: "0.3px",
-                    lineHeight: "1.2",
+                    position: "-webkit-sticky",
+                    position: "sticky",
+                    top: "80px",
+                    left: "0",
+                    right: "0",
+                    backgroundColor: "rgba(255, 255, 255, 0.95)",
+                    backdropFilter: "blur(10px)",
+                    zIndex: "100",
+                    padding: "0.75rem 0",
+                    marginBottom: "1.5rem",
+                    borderBottom: "1px solid rgba(212, 175, 55, 0.2)",
+                    WebkitBackfaceVisibility: "hidden",
+                    backfaceVisibility: "hidden",
+                    transition: "all 0.3s ease",
                   }}
                 >
-                  اختاري خدمة
-                </h2>
-              </div>
+                  <h2
+                    style={{
+                      margin: "0",
+                      fontSize: "1.1rem",
+                      color: "#b8921f",
+                      textAlign: "center",
+                      fontWeight: "600",
+                      letterSpacing: "0.3px",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    اختاري خدمة
+                  </h2>
+                </div>
                 <div className="step-header">
                   <button
                     className="back-btn"
@@ -2445,7 +2477,9 @@ const BookingPage = ({ currentUser, userData }) => {
                         <div className="applied-coupon">
                           <span className="coupon-info">
                             <strong>{appliedCoupon.code}</strong> - خصم{" "}
-                            {appliedCoupon.value} شيكل
+                            {appliedCoupon.discountType === "percentage"
+                              ? `${appliedCoupon.value}% (${discount.toFixed(2)} شيكل)`
+                              : `${appliedCoupon.value} شيكل`}
                           </span>
                           <button
                             type="button"
@@ -2491,21 +2525,27 @@ const BookingPage = ({ currentUser, userData }) => {
                         // );
 
                         // Show note for laser services
-                        const selectedService = services.find(s => s.id === bookingData.serviceId);
-                        
+                        const selectedService = services.find(
+                          (s) => s.id === bookingData.serviceId,
+                        );
+
                         // Get category name from multiple possible sources
-                        const categoryName = selectedService?.categoryName || selectedService?.category || "";
-                        
+                        const categoryName =
+                          selectedService?.categoryName ||
+                          selectedService?.category ||
+                          "";
+
                         // Also check if categoryId matches the laser category
                         const categoryId = selectedService?.categoryId || "";
                         const laserCategoryId = "7ZhY0VUvQE7h8NsztTOW"; // قسم الليزر
-                        
+
                         // Check if it's laser category by name or ID
                         const categoryNameLower = categoryName.toLowerCase();
-                        const isLaserByName = categoryNameLower.includes("ليزر");
+                        const isLaserByName =
+                          categoryNameLower.includes("ليزر");
                         const isLaserById = categoryId === laserCategoryId;
                         const isLaser = isLaserByName || isLaserById;
-                        
+
                         return (
                           isLaser && (
                             <p className="summary-note-info">

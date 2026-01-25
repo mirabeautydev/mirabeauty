@@ -5,7 +5,10 @@ import "../styles/coupons-tab.css";
 import CustomModal from "../components/common/CustomModal";
 import { useModal } from "../hooks/useModal";
 import { formatFirestoreDate } from "../utils/dateHelpers";
-import { formatPalestineDate, isExpiredInPalestine } from "../utils/palestineTime";
+import {
+  formatPalestineDate,
+  isExpiredInPalestine,
+} from "../utils/palestineTime";
 import {
   getCustomers,
   getStaff,
@@ -3613,7 +3616,10 @@ const AdminDashboardPage = ({ currentUser }) => {
                             <tr>
                               <th>كود الخصم</th>
                               <th>النوع</th>
+                              <th>نوع الخصم</th>
                               <th>القيمة</th>
+                              <th>الحد الأدنى</th>
+                              <th>الاستخدام</th>
                               <th>الفئات</th>
                               <th>تاريخ الانتهاء</th>
                               <th>الحالة</th>
@@ -3641,7 +3647,9 @@ const AdminDashboardPage = ({ currentUser }) => {
                                 }
                                 // Status filter (using Palestine timezone)
                                 if (couponStatusFilter) {
-                                  const isExpired = isExpiredInPalestine(coupon.expiryDate);
+                                  const isExpired = isExpiredInPalestine(
+                                    coupon.expiryDate,
+                                  );
                                   const isActive = coupon.active !== false;
                                   if (
                                     couponStatusFilter === "active" &&
@@ -3676,7 +3684,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                               if (paginatedCoupons.length === 0) {
                                 return (
                                   <tr>
-                                    <td colSpan="7" className="ct-empty-state">
+                                    <td colSpan="10" className="ct-empty-state">
                                       <i className="fas fa-ticket-alt"></i>
                                       <p>لا توجد كوبونات</p>
                                     </td>
@@ -3685,7 +3693,9 @@ const AdminDashboardPage = ({ currentUser }) => {
                               }
 
                               return paginatedCoupons.map((coupon) => {
-                                const isExpired = isExpiredInPalestine(coupon.expiryDate);
+                                const isExpired = isExpiredInPalestine(
+                                  coupon.expiryDate,
+                                );
                                 const isActive =
                                   coupon.active !== false && !isExpired;
 
@@ -3700,39 +3710,69 @@ const AdminDashboardPage = ({ currentUser }) => {
                                           coupon.type === "products"
                                             ? "ct-badge-warning"
                                             : coupon.type === "services"
-                                            ? "ct-badge-info"
-                                            : "ct-badge-success"
+                                              ? "ct-badge-info"
+                                              : "ct-badge-success"
                                         }`}
                                       >
                                         {coupon.type === "products"
                                           ? "منتجات"
                                           : coupon.type === "services"
-                                          ? "خدمات"
-                                          : "منتجات وخدمات"}
+                                            ? "خدمات"
+                                            : "منتجات وخدمات"}
                                       </span>
                                     </td>
                                     <td>
-                                      <strong>{coupon.value} ₪</strong>
+                                      <span className="ct-badge">
+                                        {coupon.discountType === "percentage"
+                                          ? "نسبة مئوية"
+                                          : "مبلغ ثابت"}
+                                      </span>
+                                    </td>
+                                    <td>
+                                      <strong>
+                                        {coupon.discountType === "percentage"
+                                          ? `${coupon.value}%`
+                                          : `${coupon.value} ₪`}
+                                      </strong>
+                                    </td>
+                                    <td>
+                                      {coupon.minPrice
+                                        ? `${coupon.minPrice} ₪`
+                                        : "-"}
+                                    </td>
+                                    <td>
+                                      {coupon.usageLimit ? (
+                                        <span>
+                                          {coupon.currentUsage || 0} /{" "}
+                                          {coupon.usageLimit}
+                                        </span>
+                                      ) : (
+                                        <span>غير محدود</span>
+                                      )}
                                     </td>
                                     <td>
                                       {coupon.type === "services" &&
                                       coupon.categories?.length > 0
                                         ? `${coupon.categories.length} فئات`
                                         : coupon.type === "both"
-                                        ? "جميع المنتجات والخدمات"
-                                        : "جميع " +
-                                          (coupon.type === "products"
-                                            ? "المنتجات"
-                                            : "الخدمات")}
+                                          ? "جميع المنتجات والخدمات"
+                                          : "جميع " +
+                                            (coupon.type === "products"
+                                              ? "المنتجات"
+                                              : "الخدمات")}
                                     </td>
                                     <td>
-                                      {formatPalestineDate(coupon.expiryDate, 'ar-PS', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                      })}
+                                      {formatPalestineDate(
+                                        coupon.expiryDate,
+                                        "en-GB",
+                                        {
+                                          year: "numeric",
+                                          month: "numeric",
+                                          day: "numeric",
+                                          hour: "2-digit",
+                                          minute: "2-digit",
+                                        },
+                                      )}
                                     </td>
                                     <td>
                                       <span
@@ -3818,7 +3858,9 @@ const AdminDashboardPage = ({ currentUser }) => {
                           )
                             return false;
                           if (couponStatusFilter) {
-                            const isExpired = isExpiredInPalestine(coupon.expiryDate);
+                            const isExpired = isExpiredInPalestine(
+                              coupon.expiryDate,
+                            );
                             const isActive = coupon.active !== false;
                             if (
                               couponStatusFilter === "active" &&

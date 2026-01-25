@@ -265,7 +265,7 @@ const AdminAnalyticsPage = () => {
   const formatDate = (timestamp) => {
     if (!timestamp) return "غير محدد";
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString("en-GB", {
       year: "numeric",
       month: "short",
       day: "numeric",

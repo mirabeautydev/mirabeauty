@@ -6,21 +6,28 @@ import { getTimeRemaining } from "../../utils/palestineTime";
 const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
   const [copied, setCopied] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, expired: false });
-  
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    expired: false,
+  });
+
   // End date for OPEN30 promo: February 10, 2026 at 11:59:59 PM Palestine time
-  const promoEndDate = new Date('2026-02-10T23:59:59');
+  // Create date in UTC then we'll compare with Palestine time in getTimeRemaining
+  const promoEndDate = new Date("2026-02-10T21:59:59Z"); // 11:59:59 PM Palestine time (UTC+2)
 
   // Side cannons confetti effect
   const triggerSideCannons = () => {
     const duration = 3000;
     const animationEnd = Date.now() + duration;
-    const defaults = { 
-      startVelocity: 30, 
-      spread: 360, 
-      ticks: 60, 
+    const defaults = {
+      startVelocity: 30,
+      spread: 360,
+      ticks: 60,
       zIndex: 10001,
-      colors: ['#d4af37', '#ffd700', '#FFD700', '#FFA500', '#FF8C00']
+      colors: ["#d4af37", "#ffd700", "#FFD700", "#FFA500", "#FF8C00"],
     };
 
     const randomInRange = (min, max) => Math.random() * (max - min) + min;
@@ -39,7 +46,7 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
         ...defaults,
         particleCount,
         origin: { x: 0, y: randomInRange(0.1, 0.9) },
-        angle: randomInRange(55, 125)
+        angle: randomInRange(55, 125),
       });
 
       // Right cannon
@@ -47,7 +54,7 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
         ...defaults,
         particleCount,
         origin: { x: 1, y: randomInRange(0.1, 0.9) },
-        angle: randomInRange(55, 125)
+        angle: randomInRange(55, 125),
       });
     }, 250);
   };
@@ -68,15 +75,15 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
   // Countdown timer effect
   useEffect(() => {
     if (!isOpen) return;
-    
+
     // Update timer immediately
     setTimeLeft(getTimeRemaining(promoEndDate));
-    
+
     // Update every second
     const timer = setInterval(() => {
       setTimeLeft(getTimeRemaining(promoEndDate));
     }, 1000);
-    
+
     return () => clearInterval(timer);
   }, [isOpen]);
 
@@ -92,7 +99,11 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
     <div className={`promo-modal-overlay ${isVisible ? "visible" : ""}`}>
       <div className={`promo-modal-content ${isVisible ? "show" : ""}`}>
         {/* Close button */}
-        <button className="promo-close-btn" onClick={onClose} aria-label="إغلاق">
+        <button
+          className="promo-close-btn"
+          onClick={onClose}
+          aria-label="إغلاق"
+        >
           <i className="fas fa-times"></i>
         </button>
 
@@ -107,9 +118,9 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
         <div className="promo-content">
           <h2 className="promo-title">مبروك! 🎉</h2>
           <p className="promo-message">
-            ربحتي معنا كود خصم للمنتجات والحجز بقيمة:
+            ربحتي معنا كود خصم للمنتجات والحجز بنسبة:
           </p>
-          <div className="promo-amount">30 ₪</div>
+          <div className="promo-amount">30 %</div>
 
           {/* Promo Code Card */}
           <div className="promo-code-card">
@@ -146,17 +157,23 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
                 </div>
                 <span className="promo-timer-separator">:</span>
                 <div className="promo-timer-unit">
-                  <span className="promo-timer-value">{String(timeLeft.hours).padStart(2, '0')}</span>
+                  <span className="promo-timer-value">
+                    {String(timeLeft.hours).padStart(2, "0")}
+                  </span>
                   <span className="promo-timer-label-small">ساعة</span>
                 </div>
                 <span className="promo-timer-separator">:</span>
                 <div className="promo-timer-unit">
-                  <span className="promo-timer-value">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                  <span className="promo-timer-value">
+                    {String(timeLeft.minutes).padStart(2, "0")}
+                  </span>
                   <span className="promo-timer-label-small">دقيقة</span>
                 </div>
                 <span className="promo-timer-separator">:</span>
                 <div className="promo-timer-unit">
-                  <span className="promo-timer-value">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                  <span className="promo-timer-value">
+                    {String(timeLeft.seconds).padStart(2, "0")}
+                  </span>
                   <span className="promo-timer-label-small">ثانية</span>
                 </div>
               </div>

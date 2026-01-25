@@ -160,7 +160,10 @@ const OrderDetailsModal = ({
                   <span>كوبون الخصم:</span>
                   <span className="coupon-code-badge">
                     <i className="fas fa-tag"></i> {order.couponCode} (
-                    {order.couponValue} ₪)
+                    {order.couponDiscountType === "percentage"
+                      ? `${order.couponValue}% خصم`
+                      : `${order.couponValue} ₪`}
+                    )
                   </span>
                 </div>
               )}

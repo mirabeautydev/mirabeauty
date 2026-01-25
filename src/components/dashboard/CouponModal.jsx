@@ -15,7 +15,11 @@ const CouponModal = ({
   const [formData, setFormData] = useState({
     code: "",
     type: "products",
+    discountType: "fixed", // 'fixed' or 'percentage'
     value: "",
+    minPrice: "",
+    usageLimit: "",
+    currentUsage: 0,
     categories: [],
     expiryDate: "",
     active: true,
@@ -33,7 +37,11 @@ const CouponModal = ({
       setFormData({
         code: coupon.code || "",
         type: coupon.type || "products",
+        discountType: coupon.discountType || "fixed",
         value: coupon.value || "",
+        minPrice: coupon.minPrice || "",
+        usageLimit: coupon.usageLimit || "",
+        currentUsage: coupon.currentUsage || 0,
         categories: coupon.categories || [],
         expiryDate: expiryDate,
         active: coupon.active !== false,
@@ -43,7 +51,11 @@ const CouponModal = ({
       setFormData({
         code: "",
         type: "products",
+        discountType: "fixed",
         value: "",
+        minPrice: "",
+        usageLimit: "",
+        currentUsage: 0,
         categories: [],
         expiryDate: "",
         active: true,
@@ -101,11 +113,11 @@ const CouponModal = ({
         setLoading(false);
         return;
       }
-      
+
       // Set expiry date to end of day in Palestine timezone (11:59:59 PM)
       const formDataWithPalestineTime = {
         ...formData,
-        expiryDate: expiryDate
+        expiryDate: expiryDate,
       };
 
       // For services, at least one category should be selected
@@ -161,7 +173,28 @@ const CouponModal = ({
               </div>
 
               <div className="coupon-form-group">
-                <label htmlFor="value">قيمة الخصم (بالشيكل) *</label>
+                <label htmlFor="discountType">نوع الخصم *</label>
+                <select
+                  id="discountType"
+                  name="discountType"
+                  value={formData.discountType}
+                  onChange={handleChange}
+                  required
+                  className="coupon-form-input"
+                >
+                  <option value="fixed">مبلغ ثابت (شيكل)</option>
+                  <option value="percentage">نسبة مئوية (%)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="coupon-form-row">
+              <div className="coupon-form-group">
+                <label htmlFor="value">
+                  {formData.discountType === "percentage"
+                    ? "نسبة الخصم (%) *"
+                    : "قيمة الخصم (بالشيكل) *"}
+                </label>
                 <input
                   type="number"
                   id="value"
@@ -170,14 +203,59 @@ const CouponModal = ({
                   onChange={handleChange}
                   required
                   className="coupon-form-input"
-                  placeholder="مثال: 50"
-                  min="1"
+                  placeholder={
+                    formData.discountType === "percentage"
+                      ? "مثال: 20 (للحصول على خصم 20%)"
+                      : "مثال: 50"
+                  }
+                  min={formData.discountType === "percentage" ? "1" : "0.01"}
+                  max={
+                    formData.discountType === "percentage" ? "100" : undefined
+                  }
                   step="0.01"
                 />
+                {formData.discountType === "percentage" && (
+                  <small>أدخل قيمة من 1 إلى 100</small>
+                )}
+              </div>
+
+              <div className="coupon-form-group">
+                <label htmlFor="minPrice">الحد الأدنى للسعر (اختياري)</label>
+                <input
+                  type="number"
+                  id="minPrice"
+                  name="minPrice"
+                  value={formData.minPrice}
+                  onChange={handleChange}
+                  className="coupon-form-input"
+                  placeholder="مثال: 100"
+                  min="0"
+                  step="0.01"
+                />
+                <small>الحد الأدنى للمبلغ لتطبيق الكوبون</small>
               </div>
             </div>
 
             <div className="coupon-form-row">
+              <div className="coupon-form-group">
+                <label htmlFor="usageLimit">حد الاستخدام (اختياري)</label>
+                <input
+                  type="number"
+                  id="usageLimit"
+                  name="usageLimit"
+                  value={formData.usageLimit}
+                  onChange={handleChange}
+                  className="coupon-form-input"
+                  placeholder="مثال: 100"
+                  min="1"
+                  step="1"
+                />
+                <small>
+                  عدد المرات المسموح باستخدام الكوبون (اتركه فارغاً لعدد غير
+                  محدود)
+                </small>
+              </div>
+
               <div className="coupon-form-group">
                 <label htmlFor="type">نوع الكوبون *</label>
                 <select
@@ -193,7 +271,9 @@ const CouponModal = ({
                   <option value="both">منتجات وخدمات معاً</option>
                 </select>
               </div>
+            </div>
 
+            <div className="coupon-form-row">
               <div className="coupon-form-group">
                 <label htmlFor="expiryDate">تاريخ الانتهاء *</label>
                 <input
@@ -206,7 +286,14 @@ const CouponModal = ({
                   className="coupon-form-input"
                   min={new Date().toISOString().split("T")[0]}
                 />
-                <small style={{ color: '#666', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>
+                <small
+                  style={{
+                    color: "#666",
+                    fontSize: "0.85rem",
+                    marginTop: "4px",
+                    display: "block",
+                  }}
+                >
                   سينتهي الكوبون عند الساعة 11:59 مساءً (توقيت فلسطين)
                 </small>
               </div>

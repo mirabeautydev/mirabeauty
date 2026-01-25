@@ -39,9 +39,9 @@ const HomePage = () => {
 
   // Hero carousel images
   const heroImages = [
-    "https://lasermedicalclinic.com/wp-content/uploads/2024/04/laser-hair-removal-time-between-sessions.png",
-    "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero1.jpeg?alt=media&token=a9b1194c-c328-4d17-a2ff-e3f7b2d355ad",
+    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero2.jpeg?alt=media&token=9f43ee54-371b-407f-a14e-52cacd3fb575",
+    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero3.jpeg?alt=media&token=8eaed1fe-6193-4825-a9e2-81d4e109ec82",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -154,8 +154,8 @@ const HomePage = () => {
       product.quantity !== undefined
         ? product.quantity
         : product.inStock
-        ? 999
-        : 0;
+          ? 999
+          : 0;
 
     const existingItem = cartItems.find((item) => item.id === product.id);
     let updatedCart;
@@ -170,7 +170,9 @@ const HomePage = () => {
         return; // Don't add if exceeds stock
       }
       updatedCart = cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item,
       );
     } else {
       // Check if initial quantity exceeds stock
@@ -218,7 +220,7 @@ const HomePage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
-        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
+        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1,
       );
     }, 5000); // Change image every 5 seconds
 
@@ -282,7 +284,7 @@ const HomePage = () => {
             setCurrentImageIndex(
               currentImageIndex === heroImages.length - 1
                 ? 0
-                : currentImageIndex + 1
+                : currentImageIndex + 1,
             )
           }
           aria-label="Previous slide"
@@ -295,7 +297,7 @@ const HomePage = () => {
             setCurrentImageIndex(
               currentImageIndex === 0
                 ? heroImages.length - 1
-                : currentImageIndex - 1
+                : currentImageIndex - 1,
             )
           }
           aria-label="Next slide"
@@ -442,19 +444,20 @@ const HomePage = () => {
               (() => {
                 // Filter out out-of-stock products
                 const inStockProducts = products.filter(
-                  (p) => (p.quantity || 0) > 0
+                  (p) => (p.quantity || 0) > 0,
                 );
 
                 // Get confirmed orders only
                 const confirmedOrders = orders.filter(
                   (order) =>
-                    order.status === "confirmed" || order.status === "delivered"
+                    order.status === "confirmed" ||
+                    order.status === "delivered",
                 );
 
                 // Calculate actual sales for each product
                 const productsWithSales = inStockProducts.map((product) => {
                   const productOrders = confirmedOrders.filter((order) =>
-                    order.items?.some((item) => item.id === product.id)
+                    order.items?.some((item) => item.id === product.id),
                   );
                   const totalSold = productOrders.reduce((sum, order) => {
                     const item = order.items.find((i) => i.id === product.id);
@@ -468,7 +471,7 @@ const HomePage = () => {
 
                 // Get popular products (in stock only) - marked by admin
                 const popularProducts = productsWithSales.filter(
-                  (p) => p.popular
+                  (p) => p.popular,
                 );
 
                 // Get top sales by actual sales count

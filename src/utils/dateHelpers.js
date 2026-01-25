@@ -7,25 +7,28 @@
  * @param {object} options - Intl.DateTimeFormat options
  * @returns {string} Formatted date string
  */
-export const formatFirestoreDate = (timestamp, locale = 'en-US', options = {}) => {
-  if (!timestamp) return 'Invalid Date';
-  
+export const formatFirestoreDate = (timestamp, locale = "en-GB", options = {}) => {
+  if (!timestamp) return "Invalid Date";
+
   try {
     // Handle Firestore Timestamp objects
-    if (timestamp && typeof timestamp.toDate === 'function') {
+    if (timestamp && typeof timestamp.toDate === "function") {
       return timestamp.toDate().toLocaleDateString(locale, options);
     }
-    
+
     // Handle Firestore Timestamp with seconds property
     if (timestamp && timestamp.seconds) {
-      return new Date(timestamp.seconds * 1000).toLocaleDateString(locale, options);
+      return new Date(timestamp.seconds * 1000).toLocaleDateString(
+        locale,
+        options,
+      );
     }
-    
+
     // Handle regular Date objects or date strings
     return new Date(timestamp).toLocaleDateString(locale, options);
   } catch (error) {
-    console.error('Error formatting date:', error);
-    return 'Invalid Date';
+    console.error("Error formatting date:", error);
+    return "Invalid Date";
   }
 };
 
@@ -35,12 +38,12 @@ export const formatFirestoreDate = (timestamp, locale = 'en-US', options = {}) =
  * @param {string} locale - Locale string (default: 'en-US')
  * @returns {string} Formatted date and time string
  */
-export const formatFirestoreDateTime = (timestamp, locale = 'en-US') => {
+export const formatFirestoreDateTime = (timestamp, locale = "en-GB") => {
   return formatFirestoreDate(timestamp, locale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };

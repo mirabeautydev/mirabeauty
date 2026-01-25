@@ -104,7 +104,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
   // Filter services based on search
   const filteredServices = useMemo(() => {
     return services.filter((service) =>
-      service.name.toLowerCase().includes(serviceSearch.toLowerCase())
+      service.name.toLowerCase().includes(serviceSearch.toLowerCase()),
     );
   }, [services, serviceSearch]);
 
@@ -251,9 +251,9 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
           (sum, apt) =>
             sum +
             parsePrice(
-              apt.actualPaidAmount || apt.servicePrice || apt.price || 0
+              apt.actualPaidAmount || apt.servicePrice || apt.price || 0,
             ),
-          0
+          0,
         ),
     };
   };
@@ -364,7 +364,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
         `هل أنت متأكد من إلغاء موعد ${appointment.customerName}؟`,
         "إلغاء الموعد",
         "إلغاء الموعد",
-        "تراجع"
+        "تراجع",
       );
 
       if (confirmed) {
@@ -407,13 +407,13 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
       const category = categories.find(
         (cat) =>
           cat.id === appointmentToConfirm.serviceCategory ||
-          cat.id === appointmentToConfirm.categoryId
+          cat.id === appointmentToConfirm.categoryId,
       );
       const bookingLimit = category?.bookingLimit || 999;
 
       // Get appointments at this time slot for the same category
       const dateAppointments = await getAppointmentsByDate(
-        appointmentToConfirm.date
+        appointmentToConfirm.date,
       );
       const categoryAppointmentsAtTime = dateAppointments.filter(
         (apt) =>
@@ -421,7 +421,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
           apt.time === appointmentToConfirm.time &&
           (apt.status === "مؤكد" || apt.status === "في الانتظار") &&
           (apt.serviceCategory === appointmentToConfirm.serviceCategory ||
-            apt.categoryId === appointmentToConfirm.categoryId)
+            apt.categoryId === appointmentToConfirm.categoryId),
       ).length;
 
       // Check staff availability
@@ -429,12 +429,12 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
         staffId,
         appointmentToConfirm.date,
         appointmentToConfirm.time,
-        appointmentToConfirm.id
+        appointmentToConfirm.id,
       );
 
       if (!isStaffAvailable) {
         showError(
-          `الأخصائية ${staffName} لديها موعد آخر في نفس التاريخ والوقت`
+          `الأخصائية ${staffName} لديها موعد آخر في نفس التاريخ والوقت`,
         );
         return;
       }
@@ -445,7 +445,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
           `تحذير: تم الوصول إلى الحد الأقصى (${bookingLimit}) لحجوزات هذه الفئة في هذا الوقت.\n\nهل تريد المتابعة بالتأكيد؟`,
           "تأكيد الموعد",
           "تأكيد",
-          "إلغاء"
+          "إلغاء",
         );
         if (!confirmed) return;
       }
@@ -504,7 +504,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
         `سيتم إرسال تذكير عبر واتساب لـ ${filteredAppts.length} موعد.\n\nهل تريد المتابعة؟`,
         "إرسال تذكير جماعي",
         "إرسال",
-        "إلغاء"
+        "إلغاء",
       );
 
       if (confirmed) {
@@ -522,7 +522,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
             } catch (err) {
               console.error(
                 `Failed to send reminder for ${appointment.customerName}:`,
-                err
+                err,
               );
               failedCount++;
             }
@@ -533,7 +533,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
 
         showSuccess(
           `تم إرسال ${sentCount} تذكير بنجاح` +
-            (failedCount > 0 ? `\nفشل إرسال ${failedCount} تذكير` : "")
+            (failedCount > 0 ? `\nفشل إرسال ${failedCount} تذكير` : ""),
         );
       }
     } catch (error) {
@@ -553,7 +553,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
     appointmentId,
     staffNoteToCustomer,
     staffInternalNote,
-    actualPaidAmount
+    actualPaidAmount,
   ) => {
     try {
       // Find the appointment
@@ -563,7 +563,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
         appointmentId,
         staffNoteToCustomer,
         staffInternalNote,
-        actualPaidAmount
+        actualPaidAmount,
       );
       await reloadAppointments();
       showSuccess("تم إتمام الموعد بنجاح");
@@ -572,7 +572,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
       if (appointment && appointment.customerPhone) {
         const message = generateCompletionMessage(
           appointment,
-          actualPaidAmount
+          actualPaidAmount,
         );
         openWhatsAppMessageModal(appointment.customerPhone, message);
       }
@@ -594,7 +594,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
       `هل أنت متأكد من حذف موعد ${customerName}؟ لا يمكن التراجع عن هذا الإجراء.`,
       "حذف الموعد",
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
 
     if (confirmed) {
@@ -640,12 +640,12 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
         const isAvailable = await checkStaffAvailability(
           updatedData.staffId,
           updatedData.date,
-          updatedData.time
+          updatedData.time,
         );
 
         if (!isAvailable) {
           showError(
-            `الأخصائية ${updatedData.staffName} لديها موعد آخر في نفس التاريخ والوقت`
+            `الأخصائية ${updatedData.staffName} لديها موعد آخر في نفس التاريخ والوقت`,
           );
           throw new Error("Staff conflict detected");
         }
@@ -656,7 +656,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
         const category = categories.find(
           (cat) =>
             cat.id === appointmentToEdit.serviceCategory ||
-            cat.id === appointmentToEdit.categoryId
+            cat.id === appointmentToEdit.categoryId,
         );
         const bookingLimit = category?.bookingLimit || 999;
 
@@ -668,7 +668,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
             apt.time === updatedData.time &&
             (apt.status === "مؤكد" || apt.status === "في الانتظار") &&
             (apt.serviceCategory === appointmentToEdit.serviceCategory ||
-              apt.categoryId === appointmentToEdit.categoryId)
+              apt.categoryId === appointmentToEdit.categoryId),
         ).length;
 
         // Show warning if limit reached
@@ -677,7 +677,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
             `تحذير: تم الوصول إلى الحد الأقصى (${bookingLimit}) لحجوزات هذه الفئة في هذا الوقت.\n\nهل تريد المتابعة بالتحديث؟`,
             "تحذير تجاوز الحد الأقصى",
             "متابعة",
-            "إلغاء"
+            "إلغاء",
           );
 
           if (!confirmed) {
@@ -826,7 +826,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
               if (e.key === "ArrowDown") {
                 e.preventDefault();
                 setSelectedServiceIndex((prev) =>
-                  prev < filteredServices.length - 1 ? prev + 1 : prev
+                  prev < filteredServices.length - 1 ? prev + 1 : prev,
                 );
               } else if (e.key === "ArrowUp") {
                 e.preventDefault();
@@ -923,8 +923,8 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
                       index === selectedServiceIndex
                         ? "#e3f2fd"
                         : serviceFilter === service.id
-                        ? "#f0f7ff"
-                        : "white",
+                          ? "#f0f7ff"
+                          : "white",
                     transition: "background-color 0.2s",
                   }}
                   onMouseEnter={(e) => {
@@ -935,8 +935,8 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
                       index === selectedServiceIndex
                         ? "#e3f2fd"
                         : serviceFilter === service.id
-                        ? "#f0f7ff"
-                        : "white";
+                          ? "#f0f7ff"
+                          : "white";
                   }}
                 >
                   <div style={{ fontWeight: "500" }}>{service.name}</div>
@@ -1168,6 +1168,13 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
                     {appointment.couponCode ? (
                       <span className="aap-coupon-badge">
                         <i className="fas fa-tag"></i> {appointment.couponCode}
+                        {appointment.couponDiscountType === "percentage" && (
+                          <span
+                            style={{ fontSize: "0.85rem", marginLeft: "4px" }}
+                          >
+                            ({appointment.couponValue}%)
+                          </span>
+                        )}
                       </span>
                     ) : (
                       <span className="aap-no-coupon">-</span>
@@ -1176,7 +1183,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
                   <td>
                     <span
                       className={`aap-status ${getStatusColor(
-                        appointment.status
+                        appointment.status,
                       )}`}
                     >
                       {appointment.status}
@@ -1234,7 +1241,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
                                   generateReminderMessage(appointment);
                                 openWhatsAppMessageModal(
                                   appointment.customerPhone,
-                                  message
+                                  message,
                                 );
                               } else {
                                 showWarning("لا يوجد رقم هاتف لهذا العميل");
@@ -1267,7 +1274,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
                         onClick={() =>
                           handleDeleteAppointment(
                             appointment.id,
-                            appointment.customerName
+                            appointment.customerName,
                           )
                         }
                         title="حذف الموعد"

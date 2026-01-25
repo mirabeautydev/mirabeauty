@@ -53,7 +53,7 @@ const AppointmentDetailsModal = ({
   };
 
   const [internalNote, setInternalNote] = React.useState(
-    appointment?.staffInternalNote || ""
+    appointment?.staffInternalNote || "",
   );
   const [savingInternal, setSavingInternal] = React.useState(false);
 
@@ -72,7 +72,7 @@ const AppointmentDetailsModal = ({
         window.dispatchEvent(
           new CustomEvent("saveInternalNote", {
             detail: { appointmentId: appointment.id, note: internalNote },
-          })
+          }),
         );
       }
     } catch (err) {
@@ -177,8 +177,10 @@ const AppointmentDetailsModal = ({
               <div className="detail-item coupon-info">
                 <span className="detail-label">كوبون الخصم:</span>
                 <span className="detail-value coupon-badge">
-                  <i className="fas fa-tag"></i> {appointment.couponCode} - خصم{" "}
-                  {appointment.couponValue} شيكل
+                  <i className="fas fa-tag"></i> {appointment.couponCode} -
+                  {appointment.couponDiscountType === "percentage"
+                    ? `خصم ${appointment.couponValue}%`
+                    : `خصم ${appointment.couponValue} شيكل`}
                 </span>
               </div>
             )}
@@ -187,7 +189,7 @@ const AppointmentDetailsModal = ({
               <span className="detail-label">الحالة:</span>
               <span
                 className={`detail-value status ${getStatusColor(
-                  appointment.status
+                  appointment.status,
                 )}`}
               >
                 {appointment.status}
