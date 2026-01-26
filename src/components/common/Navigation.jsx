@@ -91,7 +91,7 @@ const Navigation = ({ currentUser, userData }) => {
               احجز الآن
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               to="/gifts"
               className={`nav-link ${isActive("/gifts") ? "active" : ""}`}
@@ -99,7 +99,7 @@ const Navigation = ({ currentUser, userData }) => {
             >
               الهدايا
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               to="/faq"
@@ -214,7 +214,7 @@ const Navigation = ({ currentUser, userData }) => {
                         </span>
                         إدارة الطلبات
                       </Link>
-                      <Link
+                      {/* <Link
                         to="/admin/gifts"
                         className="dropdown-item"
                         onClick={() => setIsMobileMenuOpen(false)}
@@ -223,7 +223,7 @@ const Navigation = ({ currentUser, userData }) => {
                           <i className="fas fa-gift"></i>
                         </span>
                         إدارة الهدايا
-                      </Link>
+                      </Link> */}
                       <Link
                         to="/admin/analytics"
                         className="dropdown-item"
@@ -367,7 +367,7 @@ const Navigation = ({ currentUser, userData }) => {
                       </span>
                       إدارة الطلبات
                     </Link>
-                    <Link
+                    {/* <Link
                       to="/admin/gifts"
                       className="dropdown-item"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -376,7 +376,7 @@ const Navigation = ({ currentUser, userData }) => {
                         <i className="fas fa-gift"></i>
                       </span>
                       إدارة الهدايا
-                    </Link>
+                    </Link> */}
                     <Link
                       to="/admin/analytics"
                       className="dropdown-item"

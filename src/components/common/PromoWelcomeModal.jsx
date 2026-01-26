@@ -117,9 +117,7 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
         {/* Content */}
         <div className="promo-content">
           <h2 className="promo-title">مبروك! 🎉</h2>
-          <p className="promo-message">
-            ربحتي معنا كود خصم للمنتجات والحجز بنسبة:
-          </p>
+          <p className="promo-message">ربحتي معنا كود خصم بقيمة:</p>
           <div className="promo-amount">30 %</div>
 
           {/* Promo Code Card */}

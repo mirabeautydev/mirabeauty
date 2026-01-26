@@ -28,8 +28,8 @@ import UserDetailsPage from "./pages/UserDetailsPage";
 import StaffDashboardPage from "./pages/StaffDashboardPage";
 import CartPage from "./pages/CartPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import GiftsPage from "./pages/GiftsPage";
-import AdminGiftsPage from "./pages/AdminGiftsPage";
+// import GiftsPage from "./pages/GiftsPage";
+// import AdminGiftsPage from "./pages/AdminGiftsPage";
 import AdminAnalyticsPage from "./pages/AdminAnalyticsPage";
 
 // Import Components
@@ -180,17 +180,17 @@ const AppContent = () => {
   };
 
   // Protected route component for admin gifts
-  const ProtectedAdminGifts = () => {
-    if (!currentUser || !userData) {
-      return <Navigate to="/login" replace />;
-    }
+  // const ProtectedAdminGifts = () => {
+  //   if (!currentUser || !userData) {
+  //     return <Navigate to="/login" replace />;
+  //   }
 
-    if (userData.role === "admin") {
-      return <AdminGiftsPage currentUser={currentUser} userData={userData} />;
-    } else {
-      return <Navigate to="/" replace />;
-    }
-  };
+  //   if (userData.role === "admin") {
+  //     return <AdminGiftsPage currentUser={currentUser} userData={userData} />;
+  //   } else {
+  //     return <Navigate to="/" replace />;
+  //   }
+  // };
 
   // Protected route component for admin analytics
   const ProtectedAdminAnalytics = () => {
@@ -287,7 +287,7 @@ const AppContent = () => {
               }
             />
             <Route path="/faq" element={<FAQPage />} />
-            <Route path="/gifts" element={<GiftsPage />} />
+            {/* <Route path="/gifts" element={<GiftsPage />} /> */}
             <Route path="/profile" element={<ProtectedProfile />} />
             <Route
               path="/login"
@@ -326,7 +326,7 @@ const AppContent = () => {
               element={<ProtectedAdminFeedbacks />}
             />
             <Route path="/admin/users" element={<ProtectedAdminUsers />} />
-            <Route path="/admin/gifts" element={<ProtectedAdminGifts />} />
+            {/* <Route path="/admin/gifts" element={<ProtectedAdminGifts />} /> */}
             <Route
               path="/admin/analytics"
               element={<ProtectedAdminAnalytics />}

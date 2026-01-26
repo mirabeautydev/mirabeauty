@@ -246,11 +246,8 @@ const HomePage = () => {
         <div className="container">
           <div className="hero-content">
             <div className="hero-text text-right">
-              <h1>اكتشفي إشراقك الطبيعي</h1>
-              <p className="hero-subtitle">
-                استمتعي بخدمات العناية المتقدمة وعلاجات الليزر في مركز ميرا
-                بيوتي
-              </p>
+              <h1>REVEAL THE BEAUTY IN MIRA CLINIC</h1>
+              <p className="hero-subtitle">ابدأي تجربتك معنا من خلال حجزك</p>
               <div className="text-right">
                 <button
                   className="btn-primary hero-btn"
