@@ -719,7 +719,7 @@
     overscroll-behavior-y: contain;
   }
 
-  .nav-menu::before {
+  /* .nav-menu::before {
     content: "";
     position: absolute;
     top: 0;
@@ -743,7 +743,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 1px;
-  }
+  } */
 
   .nav-menu.active {
     right: 0;
@@ -771,7 +771,7 @@
       rgba(201, 162, 39, 0.15) 0%,
       rgba(201, 162, 39, 0.05) 100%
     );
-    border-right: 3px solid var(--nav-gold);
+    /* border-right: 3px solid var(--nav-gold); */
   }
 
   /* Mobile Nav Actions */
