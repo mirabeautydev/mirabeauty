@@ -176,13 +176,15 @@
   color: var(--navy-blue);
 }
 
-
 /* Dashboard Main */
 .dashboard-main {
   background-color: var(--white);
   border: 2px solid var(--border-color);
   min-height: 600px;
   margin-bottom: 1rem;
+  /* Fix overflow on medium screens */
+  min-width: 0;
+  overflow: hidden;
 }
 
 .tab-content {

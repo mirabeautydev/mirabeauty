@@ -97,7 +97,7 @@ const ServicesPage = () => {
 
   const addToBookmarks = (service) => {
     const existingItem = bookmarkedServices.find(
-      (item) => item.id === service.id
+      (item) => item.id === service.id,
     );
     if (!existingItem) {
       setBookmarkedServices([...bookmarkedServices, service]);
@@ -106,7 +106,7 @@ const ServicesPage = () => {
 
   const removeFromBookmarks = (serviceId) => {
     setBookmarkedServices(
-      bookmarkedServices.filter((item) => item.id !== serviceId)
+      bookmarkedServices.filter((item) => item.id !== serviceId),
     );
   };
 
@@ -379,7 +379,7 @@ const ServicesPage = () => {
                                 (1 -
                                   parseInt(service.price) /
                                     parseInt(service.originalPrice)) *
-                                  100
+                                  100,
                               )}
                               %
                             </div>
@@ -560,16 +560,17 @@ const ServicesPage = () => {
             <div className="services-page-why-heading text-right">
               <h2>لماذا خدماتنا؟</h2>
               <p>
-                خدماتنا تمنحك نتائج فعالة بأمان وجودة عالية، مع اهتمام كامل
-                بصحتك وجمالك.
+                مركز مرخص من وزارة الصحة بإشراف كادر طبي مميز أجهزة ليزر متطورة
+                وآمنة بنتائج سريعة.
               </p>
             </div>
             <div className="services-page-why-points">
               <ul>
-                <li>أجهزة حديثة ومعتمدة عالمياً</li>
-                <li>فريق متخصص بخبرة تزيد عن 10 سنوات</li>
-                <li>استشارة مجانية قبل البدء بالعلاج</li>
-                <li>ضمان النتائج مع المتابعة المستمرة</li>
+                <li>خبرة عالية في علاج البشرة والعناية الفائقة.</li>
+                <li>خدمات شاملة: نحت، تشقير، بيديكير وشعر وSpa بمكان واحد.</li>
+                <li>تعقيم والتزام كامل بمعايير النظافة.</li>
+                <li>جلسات مريحة ومتابعة دقيقة لكل زبونة.</li>
+                <li>أسعار عادلة وحجوزات سهلة وسريعة.</li>
               </ul>
             </div>
           </div>

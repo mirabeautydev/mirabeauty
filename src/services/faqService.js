@@ -23,8 +23,8 @@ const FAQ_TYPES_COLLECTION = "faqTypes";
 export const getAllFAQs = async () => {
   try {
     const faqsRef = collection(db, FAQ_COLLECTION);
-    // Order by faqId instead of id
-    const q = query(faqsRef, orderBy("faqId"));
+    // Order by createdAt to include all FAQs (faqId field is optional/legacy)
+    const q = query(faqsRef, orderBy("createdAt", "asc"));
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -43,7 +43,7 @@ export const getFAQsByCategory = async (category) => {
     const q = query(
       faqsRef,
       where("category", "==", category),
-      orderBy("faqId")
+      orderBy("createdAt", "asc"),
     );
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => ({
@@ -91,7 +91,7 @@ export const searchFAQs = async (searchTerm) => {
     return allFAQs.filter(
       (faq) =>
         faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+        faq.answer.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   } catch (error) {
     console.error("Error searching FAQs:", error);
@@ -226,6 +226,38 @@ export const deleteFAQType = async (typeId) => {
   }
 };
 
+// Delete all FAQs by category/type (admin only)
+export const deleteFAQsByCategory = async (categoryId) => {
+  try {
+    const faqsRef = collection(db, FAQ_COLLECTION);
+    const q = query(faqsRef, where("category", "==", categoryId));
+    const snapshot = await getDocs(q);
+
+    const deletePromises = snapshot.docs.map((docSnap) =>
+      deleteDoc(doc(db, FAQ_COLLECTION, docSnap.id)),
+    );
+
+    await Promise.all(deletePromises);
+    return snapshot.docs.length; // Return count of deleted FAQs
+  } catch (error) {
+    console.error("Error deleting FAQs by category:", error);
+    throw error;
+  }
+};
+
+// Get FAQs count by category
+export const getFAQsCountByCategory = async (categoryId) => {
+  try {
+    const faqsRef = collection(db, FAQ_COLLECTION);
+    const q = query(faqsRef, where("category", "==", categoryId));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.length;
+  } catch (error) {
+    console.error("Error getting FAQs count by category:", error);
+    throw error;
+  }
+};
+
 // Reorder FAQ types
 export const reorderFAQTypes = async (faqTypes) => {
   try {
@@ -236,7 +268,7 @@ export const reorderFAQTypes = async (faqTypes) => {
         updateDoc(typeRef, {
           order: i,
           updatedAt: serverTimestamp(),
-        })
+        }),
       );
     }
     await Promise.all(batch);

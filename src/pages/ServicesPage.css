@@ -980,6 +980,7 @@
     order: 1;
   }
 
+
   .services-main {
     order: 2;
   }
@@ -1019,6 +1020,11 @@
     font-size: 2rem;
   }
 
+  .services-page-why-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
   .services-page .page-header p {
     font-size: 1.125rem;
   }
@@ -1080,6 +1086,11 @@
     gap: 1rem;
   }
 
+  .services-page-why-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
   .services-page-sidebar {
     position: static;
     order: -1;

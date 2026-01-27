@@ -129,8 +129,8 @@ const ProductsPage = ({ setCurrentPage }) => {
       product.quantity !== undefined
         ? product.quantity
         : product.inStock
-        ? 999
-        : 0;
+          ? 999
+          : 0;
 
     const existingItem = cartItems.find((item) => item.id === product.id);
     let updatedCart;
@@ -143,7 +143,9 @@ const ProductsPage = ({ setCurrentPage }) => {
         return; // Don't add if exceeds stock
       }
       updatedCart = cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item,
       );
       showToast(`تم زيادة كمية ${product.name} في السلة`, "success");
     } else {
@@ -364,7 +366,7 @@ const ProductsPage = ({ setCurrentPage }) => {
                               (1 -
                                 parseInt(product.price) /
                                   parseInt(product.originalPrice)) *
-                                100
+                                100,
                             )}
                             %
                           </div>
@@ -374,8 +376,8 @@ const ProductsPage = ({ setCurrentPage }) => {
                             product.quantity !== undefined
                               ? product.quantity
                               : product.inStock
-                              ? 999
-                              : 0;
+                                ? 999
+                                : 0;
                           return quantity <= 0 ? (
                             <div className="out-of-stock-badge">
                               نفذ من المخزن
@@ -387,8 +389,8 @@ const ProductsPage = ({ setCurrentPage }) => {
                             product.quantity !== undefined
                               ? product.quantity
                               : product.inStock
-                              ? 999
-                              : 0;
+                                ? 999
+                                : 0;
                           return quantity > 0 ? (
                             <button
                               className="product-add-to-cart-icon"
@@ -519,19 +521,19 @@ const ProductsPage = ({ setCurrentPage }) => {
         <div className="container">
           <div className="why-grid">
             <div className="why-heading text-right">
-              <h2>لماذا منتجاتنا؟</h2>
-              <p>
-                منتجاتنا تمنحك نتائج فعالة بأمان وجودة عالية، مع اهتمام كامل
-                بصحتك وجمالك.
-              </p>
+              <h2>لماذا منتجاتنا</h2>
+              <p>مكونات آمنة وفعّالة تناسب مختلف أنواع البشرة</p>
             </div>
             <div className="why-points">
               <ul>
-                <li>مكونات طبيعية وآمنة على البشرة</li>
-                <li>مختبرة علمياً ومعتمدة من الجهات المختصة</li>
-                <li>توصيل مجاني للطلبات فوق 100 شيكل</li>
-                <li>ضمان استرداد المبلغ في حالة عدم الرضا</li>
+                <li>نتائج ملموسة من أول فترة استخدام</li>
+                <li>مختبرة ومعتمدة لضمان أعلى معايير الجودة</li>
+                <li>عناية حقيقية تركز على صحة البشرة قبل الجمال</li>
               </ul>
+              <p className="why-footer-note">
+                حرصاً على أفضل نتيجة، عند استلام المنتج يُرجى التواصل معنا لنقوم
+                بإرشادك إلى طريقة الاستخدام الصحيحة
+              </p>
             </div>
           </div>
         </div>

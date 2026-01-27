@@ -70,6 +70,8 @@ import {
   updateFAQType,
   deleteFAQType,
   reorderFAQTypes,
+  deleteFAQsByCategory,
+  getFAQsCountByCategory,
 } from "../services/faqService";
 import {
   getAllSkinTypes,
@@ -1447,22 +1449,45 @@ const AdminDashboardPage = ({ currentUser }) => {
   };
 
   const handleDeleteFaqType = async (typeId, label) => {
-    showConfirm(
-      `هل أنت متأكد من حذف نوع "${label}"؟\n\nسيتم حذف النوع بشكل نهائي.`,
-      async () => {
-        try {
-          await deleteFAQType(typeId);
-          await loadFAQTypes();
-          showSuccess("تم حذف نوع الأسئلة بنجاح");
-        } catch (error) {
-          console.error("Error deleting FAQ type:", error);
-          showError("حدث خطأ أثناء حذف نوع الأسئلة");
-        }
-      },
-      "تأكيد حذف نوع الأسئلة",
-      "حذف",
-      "إلغاء",
-    );
+    try {
+      // Get count of FAQs related to this type
+      const faqsCount = await getFAQsCountByCategory(typeId);
+
+      const warningMessage =
+        faqsCount > 0
+          ? `هل أنت متأكد من حذف نوع "${label}"؟\n\n⚠️ تحذير: سيتم حذف ${faqsCount} سؤال مرتبط بهذا النوع بشكل نهائي!`
+          : `هل أنت متأكد من حذف نوع "${label}"؟\n\nسيتم حذف النوع بشكل نهائي.`;
+
+      showConfirm(
+        warningMessage,
+        async () => {
+          try {
+            // First delete all related FAQs
+            if (faqsCount > 0) {
+              await deleteFAQsByCategory(typeId);
+            }
+            // Then delete the FAQ type
+            await deleteFAQType(typeId);
+            await loadFAQTypes();
+            await loadFAQs(); // Reload FAQs to update the list
+            showSuccess(
+              faqsCount > 0
+                ? `تم حذف نوع الأسئلة و ${faqsCount} سؤال مرتبط به بنجاح`
+                : "تم حذف نوع الأسئلة بنجاح",
+            );
+          } catch (error) {
+            console.error("Error deleting FAQ type:", error);
+            showError("حدث خطأ أثناء حذف نوع الأسئلة");
+          }
+        },
+        "تأكيد حذف نوع الأسئلة",
+        "حذف",
+        "إلغاء",
+      );
+    } catch (error) {
+      console.error("Error getting FAQs count:", error);
+      showError("حدث خطأ أثناء التحقق من الأسئلة المرتبطة");
+    }
   };
 
   // Skin Type management functions

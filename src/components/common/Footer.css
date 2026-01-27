@@ -247,6 +247,7 @@
   .footer-content {
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    margin-right: 0rem;
   }
 }
 
@@ -289,6 +290,7 @@
     grid-template-columns: 1fr;
     gap: 2rem;
     text-align: center;
+    margin-right: 0rem;
   }
 
   .footer-column h4::after {
