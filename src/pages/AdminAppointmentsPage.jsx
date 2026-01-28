@@ -7,7 +7,7 @@ import {
   deleteAppointment,
   confirmAppointment,
   completeAppointment,
-  checkStaffAvailability,
+  checkStaffAvailabilityWithDuration,
   getAppointmentsByDate,
 } from "../services/appointmentsService";
 import { getStaff } from "../services/usersService";
@@ -425,14 +425,19 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
       ).length;
 
       // Check staff availability
-      const isStaffAvailable = await checkStaffAvailability(
+      const duration =
+        appointmentToConfirm?.serviceDuration ||
+        appointmentToConfirm?.duration ||
+        60;
+      const availabilityCheck = await checkStaffAvailabilityWithDuration(
         staffId,
         appointmentToConfirm.date,
         appointmentToConfirm.time,
-        appointmentToConfirm.id,
+        duration,
+        appointmentToConfirm.id, // Exclude current appointment
       );
 
-      if (!isStaffAvailable) {
+      if (!availabilityCheck.available) {
         showError(
           `الأخصائية ${staffName} لديها موعد آخر في نفس التاريخ والوقت`,
         );

@@ -59,7 +59,7 @@ const ResetPasswordPage = () => {
       await sendPasswordResetEmail(auth, email, actionCodeSettings);
 
       setSuccessMessage(
-        "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد الخاص بك."
+        "في حال وجود حساب مرتبط بهذا البريد الإلكتروني، سيتم إرسال رابط إعادة تعيين كلمة المرور إليه.",
       );
       setEmail("");
     } catch (error) {

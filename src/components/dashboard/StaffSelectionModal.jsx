@@ -18,24 +18,52 @@ const StaffSelectionModal = ({
     conflicts: [],
   });
 
+  // Initialize selected staff when modal opens or appointment changes
+  useEffect(() => {
+    if (isOpen && appointment) {
+      // Pre-select staff if already assigned
+      setSelectedStaffId(appointment.staffId || "");
+      setAdminNote("");
+      setStaffAvailability({
+        isChecking: false,
+        available: true,
+        conflicts: [],
+      });
+    } else if (!isOpen) {
+      // Reset when modal closes
+      setSelectedStaffId("");
+      setAdminNote("");
+      setStaffAvailability({
+        isChecking: false,
+        available: true,
+        conflicts: [],
+      });
+    }
+  }, [isOpen, appointment]);
+
   // Check staff availability when selected
   const checkStaffAvailability = async (staffId) => {
     if (!staffId || !appointment) {
-      setStaffAvailability({ isChecking: false, available: true, conflicts: [] });
+      setStaffAvailability({
+        isChecking: false,
+        available: true,
+        conflicts: [],
+      });
       return;
     }
 
     setStaffAvailability({ isChecking: true, available: true, conflicts: [] });
 
     try {
-      const duration = appointment?.serviceDuration || appointment?.duration || 60;
+      const duration =
+        appointment?.serviceDuration || appointment?.duration || 60;
 
       const availabilityCheck = await checkStaffAvailabilityWithDuration(
         staffId,
         appointment.date,
         appointment.time,
         duration,
-        appointment?.id // Exclude current appointment if editing
+        appointment?.id, // Exclude current appointment if editing
       );
 
       setStaffAvailability({
@@ -45,18 +73,26 @@ const StaffSelectionModal = ({
       });
     } catch (error) {
       console.error("Error checking staff availability:", error);
-      setStaffAvailability({ isChecking: false, available: true, conflicts: [] });
+      setStaffAvailability({
+        isChecking: false,
+        available: true,
+        conflicts: [],
+      });
     }
   };
 
   // Monitor staff selection
   useEffect(() => {
-    if (selectedStaffId) {
+    if (selectedStaffId && appointment) {
       checkStaffAvailability(selectedStaffId);
     } else {
-      setStaffAvailability({ isChecking: false, available: true, conflicts: [] });
+      setStaffAvailability({
+        isChecking: false,
+        available: true,
+        conflicts: [],
+      });
     }
-  }, [selectedStaffId]);
+  }, [selectedStaffId, appointment]);
 
   if (!isOpen) return null;
 
@@ -64,7 +100,7 @@ const StaffSelectionModal = ({
   const getSpecializationName = (specializationId) => {
     if (!specializationId) return "";
     const specialization = specializations.find(
-      (s) => s.id === specializationId
+      (s) => s.id === specializationId,
     );
     return specialization ? specialization.name : "";
   };
@@ -131,35 +167,40 @@ const StaffSelectionModal = ({
                   </option>
                 ))}
               </select>
-              
+
               {/* Staff Availability Warning */}
               {staffAvailability.isChecking && (
                 <div className="staff-availability-checking">
-                  <i className="fas fa-spinner fa-spin"></i> جاري التحقق من توفر الأخصائية...
+                  <i className="fas fa-spinner fa-spin"></i> جاري التحقق من توفر
+                  الأخصائية...
                 </div>
               )}
-              
-              {!staffAvailability.isChecking && !staffAvailability.available && staffAvailability.conflicts.length > 0 && (
-                <div className="staff-availability-warning">
-                  <div className="warning-header">
-                    <i className="fas fa-exclamation-triangle"></i>
-                    <strong>تحذير: الأخصائية مشغولة</strong>
+
+              {!staffAvailability.isChecking &&
+                !staffAvailability.available &&
+                staffAvailability.conflicts.length > 0 && (
+                  <div className="staff-availability-warning">
+                    <div className="warning-header">
+                      <i className="fas fa-exclamation-triangle"></i>
+                      <strong>تحذير: الأخصائية مشغولة</strong>
+                    </div>
+                    <div className="warning-content">
+                      <p>الأخصائية لديها تعارض في المواعيد التالية:</p>
+                      <ul className="conflict-list">
+                        {staffAvailability.conflicts.map((conflict, index) => (
+                          <li key={index}>
+                            {conflict.customerName} ({conflict.serviceName}) في{" "}
+                            {conflict.time}
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="warning-note">
+                        <i className="fas fa-info-circle"></i> يمكنك المتابعة
+                        بالتأكيد إذا كنت متأكداً من التعيين
+                      </p>
+                    </div>
                   </div>
-                  <div className="warning-content">
-                    <p>الأخصائية لديها تعارض في المواعيد التالية:</p>
-                    <ul className="conflict-list">
-                      {staffAvailability.conflicts.map((conflict, index) => (
-                        <li key={index}>
-                          {conflict.customerName} ({conflict.serviceName}) في {conflict.time}
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="warning-note">
-                      <i className="fas fa-info-circle"></i> يمكنك المتابعة بالتأكيد إذا كنت متأكداً من التعيين
-                    </p>
-                  </div>
-                </div>
-              )}
+                )}
             </div>
 
             <div className="ssm-form-group">

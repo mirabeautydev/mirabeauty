@@ -8,6 +8,7 @@ import {
   checkStaffAvailabilityWithDuration,
 } from "../../services/appointmentsService";
 import { getAllServiceCategories } from "../../services/categoriesService";
+import { getAllSpecializations } from "../../services/specializationsService";
 import { useModal } from "../../hooks/useModal";
 import CustomModal from "../common/CustomModal";
 
@@ -49,6 +50,7 @@ const AdminCreateAppointmentModal = ({
   const [services, setServices] = useState([]);
   const [categories, setCategories] = useState([]);
   const [staffMembers, setStaffMembers] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [staffAvailability, setStaffAvailability] = useState({
@@ -108,14 +110,17 @@ const AdminCreateAppointmentModal = ({
 
   const loadData = async () => {
     try {
-      const [servicesData, staffData, categoriesData] = await Promise.all([
-        getAllServices(),
-        getUsersByRole("staff"),
-        getAllServiceCategories(),
-      ]);
+      const [servicesData, staffData, categoriesData, specializationsData] =
+        await Promise.all([
+          getAllServices(),
+          getUsersByRole("staff"),
+          getAllServiceCategories(),
+          getAllSpecializations(),
+        ]);
       setServices(servicesData.filter((s) => !s.hidden));
       setStaffMembers(staffData);
       setCategories(categoriesData);
+      setSpecializations(specializationsData);
     } catch (err) {
       setError("فشل في تحميل البيانات");
     }
@@ -123,7 +128,7 @@ const AdminCreateAppointmentModal = ({
 
   // Filter services based on search
   const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(serviceSearch.toLowerCase())
+    service.name.toLowerCase().includes(serviceSearch.toLowerCase()),
   );
 
   // Reset selected index when filtered services change
@@ -324,7 +329,7 @@ const AdminCreateAppointmentModal = ({
         formData.date,
         formData.time,
         duration,
-        null // No appointment to exclude (new appointment)
+        null, // No appointment to exclude (new appointment)
       );
 
       setStaffAvailability({
@@ -390,14 +395,14 @@ const AdminCreateAppointmentModal = ({
         appointmentDuration = parseInt(selectedService.duration, 10) || 60;
         appointmentEndTime = calculateLaserEndTime(
           formData.time,
-          appointmentDuration
+          appointmentDuration,
         );
 
         // Validate flexible time
         const validation = validateFlexibleTime(
           formData.time,
           appointmentDuration,
-          formData.serviceId
+          formData.serviceId,
         );
         if (!validation.valid) {
           setError(validation.message);
@@ -418,7 +423,7 @@ const AdminCreateAppointmentModal = ({
                   selectedService,
                   appointmentDuration,
                   appointmentEndTime,
-                  validation
+                  validation,
                 );
               } catch (err) {
                 console.error("Error creating appointment:", err);
@@ -428,7 +433,7 @@ const AdminCreateAppointmentModal = ({
             },
             "تحذير",
             "متابعة",
-            "إلغاء"
+            "إلغاء",
           );
           return;
         }
@@ -438,7 +443,7 @@ const AdminCreateAppointmentModal = ({
           selectedService,
           appointmentDuration,
           appointmentEndTime,
-          validation
+          validation,
         );
       } else {
         // For non-flexible services
@@ -457,7 +462,7 @@ const AdminCreateAppointmentModal = ({
           selectedService,
           appointmentDuration,
           appointmentEndTime,
-          null
+          null,
         );
       }
     } catch (err) {
@@ -471,14 +476,14 @@ const AdminCreateAppointmentModal = ({
     selectedService,
     appointmentDuration,
     appointmentEndTime,
-    validation
+    validation,
   ) => {
     try {
       // Get booking limit from category
       const serviceCategory = categories.find(
         (cat) =>
           cat.id === selectedService?.categoryId ||
-          cat.id === selectedService?.category
+          cat.id === selectedService?.category,
       );
       const bookingLimit = serviceCategory?.bookingLimit || 999;
       const serviceCategoryId =
@@ -518,14 +523,14 @@ const AdminCreateAppointmentModal = ({
         const start = timeToMinutes(apt.time);
         const aptDuration = toNumberDuration(
           apt.serviceDuration ?? apt.duration,
-          60
+          60,
         );
         return { start, end: start + aptDuration };
       });
 
       // Keep only intervals that overlap with the NEW interval window
       const relevant = intervals.filter(
-        (x) => x.start < newEnd && newStart < x.end
+        (x) => x.start < newEnd && newStart < x.end,
       );
 
       // Sweep ONLY within [newStart, newEnd)
@@ -571,7 +576,7 @@ const AdminCreateAppointmentModal = ({
           `تحذير: تم الوصول للحد الأقصى من الحجوزات في هذا الوقت (${currentLoadAtPeak}/${bookingLimit}). هل تريد المتابعة؟`,
           "تأكيد الحجز",
           "نعم، متابعة",
-          "إلغاء"
+          "إلغاء",
         );
 
         if (!confirmed) {
@@ -726,7 +731,7 @@ const AdminCreateAppointmentModal = ({
                   if (e.key === "ArrowDown") {
                     e.preventDefault();
                     setSelectedIndex((prev) =>
-                      prev < filteredServices.length - 1 ? prev + 1 : prev
+                      prev < filteredServices.length - 1 ? prev + 1 : prev,
                     );
                   } else if (e.key === "ArrowUp") {
                     e.preventDefault();
@@ -853,8 +858,8 @@ const AdminCreateAppointmentModal = ({
                           index === selectedIndex
                             ? "#e3f2fd"
                             : formData.serviceId === service.id
-                            ? "#f0f7ff"
-                            : "white",
+                              ? "#f0f7ff"
+                              : "white",
                         transition: "background-color 0.2s",
                       }}
                       onMouseEnter={(e) => {
@@ -866,8 +871,8 @@ const AdminCreateAppointmentModal = ({
                           index === selectedIndex
                             ? "#e3f2fd"
                             : formData.serviceId === service.id
-                            ? "#f0f7ff"
-                            : "white")
+                              ? "#f0f7ff"
+                              : "white")
                       }
                     >
                       <div style={{ fontWeight: "500" }}>{service.name}</div>
@@ -924,7 +929,7 @@ const AdminCreateAppointmentModal = ({
             {formData.serviceId &&
               (() => {
                 const selectedService = services.find(
-                  (s) => s.id === formData.serviceId
+                  (s) => s.id === formData.serviceId,
                 );
                 return (
                   selectedService?.options &&
@@ -1065,9 +1070,9 @@ const AdminCreateAppointmentModal = ({
                               time: useCustom
                                 ? formData.time
                                 : formData.laserStartHour &&
-                                  formData.laserStartMinute
-                                ? `${formData.laserStartHour}:${formData.laserStartMinute}`
-                                : "",
+                                    formData.laserStartMinute
+                                  ? `${formData.laserStartHour}:${formData.laserStartMinute}`
+                                  : "",
                             });
                           }}
                           style={{ margin: 0, width: "auto", height: "auto" }}
@@ -1169,7 +1174,7 @@ const AdminCreateAppointmentModal = ({
                           const duration =
                             parseInt(
                               services.find((s) => s.id === formData.serviceId)
-                                ?.duration
+                                ?.duration,
                             ) || 60;
                           return calculateLaserEndTime(startTime, duration);
                         })()}
@@ -1199,7 +1204,7 @@ const AdminCreateAppointmentModal = ({
                             <option key={time} value={time}>
                               {time}
                             </option>
-                          )
+                          ),
                         )}
                       </select>
                     </div>
@@ -1249,12 +1254,12 @@ const AdminCreateAppointmentModal = ({
                                 const duration =
                                   parseInt(
                                     services.find(
-                                      (s) => s.id === formData.serviceId
-                                    )?.duration
+                                      (s) => s.id === formData.serviceId,
+                                    )?.duration,
                                   ) || 60;
                                 const endTime = calculateLaserEndTime(
                                   startTime,
-                                  duration
+                                  duration,
                                 );
                                 setFormData({
                                   ...formData,
@@ -1306,11 +1311,17 @@ const AdminCreateAppointmentModal = ({
                 }
               >
                 <option value="">لم يتم التعيين بعد</option>
-                {staffMembers.map((staff) => (
-                  <option key={staff.id} value={staff.id}>
-                    {staff.name}
-                  </option>
-                ))}
+                {staffMembers.map((staff) => {
+                  const specialization = specializations.find(
+                    (s) => s.id === staff.specialization,
+                  );
+                  return (
+                    <option key={staff.id} value={staff.id}>
+                      {staff.name}
+                      {specialization && ` - ${specialization.name}`}
+                    </option>
+                  );
+                })}
               </select>
 
               {/* Staff Availability Warning */}
