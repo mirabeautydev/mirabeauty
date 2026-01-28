@@ -45,8 +45,8 @@ const ProductDetailsPage = () => {
             fetchedProduct.images && fetchedProduct.images.length > 0
               ? fetchedProduct.images.map((img) => img?.url || img)
               : fetchedProduct.image
-              ? [fetchedProduct.image]
-              : [],
+                ? [fetchedProduct.image]
+                : [],
           fullDescription:
             fetchedProduct.description ||
             "هذا المنتج مصنوع من أفضل المواد الطبيعية والآمنة على البشرة. يحتوي على مكونات فعالة تساعد في تحسين ملمس البشرة ونعومتها. مناسب لجميع أنواع البشرة ومختبر علمياً للصول على أفضل النتائج.",
@@ -98,7 +98,7 @@ const ProductDetailsPage = () => {
         // If no products in same category, get random different products
         if (filteredRelated.length === 0) {
           filteredRelated = allProducts.filter(
-            (p) => p.id !== fetchedProduct.id
+            (p) => p.id !== fetchedProduct.id,
           );
         }
 
@@ -154,8 +154,8 @@ const ProductDetailsPage = () => {
       product.quantity !== undefined
         ? product.quantity
         : product.inStock
-        ? 999
-        : 0;
+          ? 999
+          : 0;
 
     if (product && availableQuantity > 0 && !isAddingToCart) {
       setIsAddingToCart(true);
@@ -177,7 +177,7 @@ const ProductDetailsPage = () => {
         updatedCart = cartItems.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
-            : item
+            : item,
         );
       } else {
         // Store stock quantity separately so cart can validate against it
@@ -192,7 +192,7 @@ const ProductDetailsPage = () => {
 
       showToast(
         `تم إضافة ${quantity} من ${product.name} للسلة بنجاح`,
-        "success"
+        "success",
       );
 
       // Reset button state and open cart with smooth transition
@@ -209,8 +209,8 @@ const ProductDetailsPage = () => {
       product?.quantity !== undefined
         ? product.quantity
         : product?.inStock
-        ? 999
-        : 0;
+          ? 999
+          : 0;
     if (newQuantity >= 1 && newQuantity <= availableQuantity) {
       setQuantity(newQuantity);
     }
@@ -327,7 +327,7 @@ const ProductDetailsPage = () => {
                       (1 -
                         parseInt(product.price) /
                           parseInt(product.originalPrice)) *
-                        100
+                        100,
                     )}
                     %
                   </div>
@@ -337,8 +337,8 @@ const ProductDetailsPage = () => {
                     product.quantity !== undefined
                       ? product.quantity
                       : product.inStock
-                      ? 999
-                      : 0;
+                        ? 999
+                        : 0;
                   return quantity <= 0 ? (
                     <div className="product-details-out-of-stock-overlay">
                       <span>نفذ من المخزن</span>
@@ -420,8 +420,8 @@ const ProductDetailsPage = () => {
                           product?.quantity !== undefined
                             ? product.quantity
                             : product?.inStock
-                            ? 999
-                            : 0;
+                              ? 999
+                              : 0;
                         return quantity >= availableQuantity;
                       })()}
                     >
@@ -436,8 +436,8 @@ const ProductDetailsPage = () => {
                       product.quantity !== undefined
                         ? product.quantity
                         : product.inStock
-                        ? 999
-                        : 0;
+                          ? 999
+                          : 0;
                     return quantity <= 0 ? "disabled" : "";
                   })()} ${isAddingToCart ? "adding" : ""}`}
                   onClick={handleAddToCart}
@@ -446,8 +446,8 @@ const ProductDetailsPage = () => {
                       product.quantity !== undefined
                         ? product.quantity
                         : product.inStock
-                        ? 999
-                        : 0;
+                          ? 999
+                          : 0;
                     return quantity <= 0 || isAddingToCart;
                   })()}
                 >
@@ -462,8 +462,8 @@ const ProductDetailsPage = () => {
                         product.quantity !== undefined
                           ? product.quantity
                           : product.inStock
-                          ? 999
-                          : 0;
+                            ? 999
+                            : 0;
                       return quantity > 0 ? `أضف للسلة` : "غير متوفر";
                     })()
                   )}
@@ -473,16 +473,20 @@ const ProductDetailsPage = () => {
               {/* Product Features */}
               <div className="product-details-features">
                 <div className="product-details-feature">
-                  <i className="fas fa-shipping-fast product-details-feature-icon"></i>
-                  <span>توصيل مجاني فوق 100 شيكل</span>
-                </div>
-                <div className="product-details-feature">
-                  <i className="fas fa-undo product-details-feature-icon"></i>
-                  <span>إمكانية الاسترداد خلال 30 يوم</span>
-                </div>
-                <div className="product-details-feature">
                   <i className="fas fa-certificate product-details-feature-icon"></i>
-                  <span>منتج أصلي ومضمون</span>
+                  <span>منتجاتنا آمنة ، أصلية ومرخصة من وزارة الصحة</span>
+                </div>
+                <div className="product-details-feature">
+                  <i className="fas fa-heart product-details-feature-icon"></i>
+                  <span>جميع المنتجات مختارة بعناية لتناسب بشرتك</span>
+                </div>
+                <div className="product-details-feature">
+                  <i className="fas fa-shipping-fast product-details-feature-icon"></i>
+                  <span>توصيل خلال وقت سريع وبطريقة آمنة</span>
+                </div>
+                <div className="product-details-feature">
+                  <i className="fas fa-headset product-details-feature-icon"></i>
+                  <span>لمزيد من التفاصيل تواصلي معنا عند وصول المنتج</span>
                 </div>
               </div>
             </div>
@@ -539,7 +543,6 @@ const ProductDetailsPage = () => {
                     ) : (
                       <li>لا يوجد فوائد</li>
                     )}
-                    
                   </ul>
                 </div>
               )}
@@ -555,7 +558,6 @@ const ProductDetailsPage = () => {
                     ) : (
                       <li>لا يوجد مكونات</li>
                     )}
-                      
                   </ul>
                 </div>
               )}
@@ -692,7 +694,7 @@ const ProductDetailsPage = () => {
                   const cartItems = savedCart ? JSON.parse(savedCart) : [];
 
                   const existingItem = cartItems.find(
-                    (item) => item.id === product.id
+                    (item) => item.id === product.id,
                   );
                   let updatedCart;
 
@@ -700,23 +702,23 @@ const ProductDetailsPage = () => {
                     updatedCart = cartItems.map((item) =>
                       item.id === product.id
                         ? { ...item, quantity: item.quantity + 1 }
-                        : item
+                        : item,
                     );
                     showToast(
                       `تم زيادة كمية ${product.name} في السلة`,
-                      "success"
+                      "success",
                     );
                   } else {
                     updatedCart = [...cartItems, { ...product, quantity: 1 }];
                     showToast(
                       `تم إضافة ${product.name} للسلة بنجاح`,
-                      "success"
+                      "success",
                     );
                   }
 
                   localStorage.setItem(
                     "cartItems",
-                    JSON.stringify(updatedCart)
+                    JSON.stringify(updatedCart),
                   );
                   window.dispatchEvent(new Event("cartUpdated"));
                 }}

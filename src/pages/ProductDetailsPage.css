@@ -517,7 +517,7 @@
 /* Product Features */
 .product-details-features {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1rem;
   padding: 1.5rem;
   background: rgba(184, 146, 31, 0.05);
@@ -559,7 +559,9 @@
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: color 0.3s ease, background 0.3s ease;
+  transition:
+    color 0.3s ease,
+    background 0.3s ease;
   position: relative;
   flex: 1;
 }
