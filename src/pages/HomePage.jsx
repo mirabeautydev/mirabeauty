@@ -356,29 +356,34 @@ const HomePage = () => {
 
                 return (
                   <div key={service.id} className="service-card card">
-                    <div className="service-icon">
-                      <img
-                        src={primaryImage}
-                        alt={service.name}
-                        loading="lazy"
-                      />
-                    </div>
-                    <h3>{service.name}</h3>
-                    <p>{service.description}</p>
-                    <button
-                      className="btn-secondary service-btn"
-                      onClick={() =>
-                        navigateWithLoading("/book", {
-                          state: {
-                            selectedService: service,
-                            fromHomePage: true,
-                          },
-                        })
-                      }
-                    >
-                      احجزي الآن
-                    </button>
-                  </div>
+  <div className="service-icon">
+    <img
+      src={primaryImage}
+      alt={service.name}
+      loading="lazy"
+    />
+  </div>
+
+  <div className="service-content">
+    <h3 className="service-title">{service.name}</h3>
+    <p className="service-description">{service.description}</p>
+
+    <button
+      className="btn-secondary service-btn"
+      onClick={() =>
+        navigateWithLoading("/book", {
+          state: {
+            selectedService: service,
+            fromHomePage: true,
+          },
+        })
+      }
+    >
+      احجزي الآن
+    </button>
+  </div>
+</div>
+
                 );
               })
             )}

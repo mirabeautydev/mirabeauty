@@ -438,17 +438,17 @@ const ServicesPage = () => {
                             </div>
                           )}
 
-                          {
+                            {
                             /* <div className="services-page-rating">
-                        <div className="services-page-stars">
-                          {"⭐".repeat(Math.floor(service.rating || 5))}
-                        </div>
-                        <span className="services-page-rating-text">
-                          {service.rating || 5} ({service.reviewsCount || 25}{" "}
-                          تقييم)
-                        </span>
-                      </div>
- */
+                            <div className="services-page-stars">
+                              {"⭐".repeat(Math.floor(service.rating || 5))}
+                              </div>
+                              <span className="services-page-rating-text">
+                                {service.rating || 5} ({service.reviewsCount || 25}{" "}
+                                تقييم)
+                              </span>
+                             </div>
+                                */
                             <div className="services-page-price">
                               <span className="services-page-current-price">
                                 {service.price

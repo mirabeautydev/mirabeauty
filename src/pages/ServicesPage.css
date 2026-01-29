@@ -534,6 +534,9 @@
   margin-bottom: 0.75rem;
   font-size: 1.125rem;
   line-height: 1.4;
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .services-page-description {
@@ -544,9 +547,11 @@
   line-height: 1.5;
   flex: 1;
   /* Truncate to one line with ellipsis */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
 }
 
 .services-page-rating {
@@ -1109,6 +1114,12 @@
     padding: 1rem;
   }
 
+  .services-page-category {
+    font-size: 0.85rem;
+    padding: 2px 6px;
+    margin-bottom: 0.5rem;
+  }
+
   .services-page-info h3 {
     font-size: 0.95rem;
     line-height: 1.3;
@@ -1117,6 +1128,7 @@
   .services-page-description {
     font-size: 0.8rem;
     line-height: 1.4;
+    
   }
 
   .services-page-current-price {

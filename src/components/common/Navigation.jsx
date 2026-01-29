@@ -55,6 +55,22 @@ const Navigation = ({ currentUser, userData }) => {
 
         {/* Desktop Menu */}
         <ul className={`nav-menu ${isMobileMenuOpen ? "active" : ""}`}>
+          {/* Mobile Menu Header */}
+          <li className="mobile-nav-header">
+            <Link
+              to="/"
+              className="mobile-logo-wrapper"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <div className="logo-icon">
+                <img src="/assets/logo.png" alt="ميرا بيوتي" />
+              </div>
+              <div className="logo-text">
+                <h2>Mira Beauty Clinic</h2>
+              </div>
+            </Link>
+          </li>
+
           <li>
             <Link
               to="/"

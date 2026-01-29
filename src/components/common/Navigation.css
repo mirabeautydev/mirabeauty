@@ -133,7 +133,7 @@
 .nav-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 0.5rem;
   height: 100%;
   display: flex;
   align-items: center;
@@ -209,6 +209,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.mobile-nav-header {
+  display: none;
 }
 
 .nav-menu li {
@@ -655,9 +659,7 @@
    Tablet & Small Desktop (max-width: 1024px)
 ───────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .nav-container {
-    padding: 0 1.5rem;
-  }
+
 
   .nav-link {
     padding: 0.65rem 1rem;
@@ -701,7 +703,7 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    padding: calc(var(--nav-height) + var(--safe-area-top, 0px) + 1.5rem) 1.5rem
+    padding: calc(var(--safe-area-top, 0px) + 1.5rem) 1.5rem
       calc(2rem + var(--safe-area-bottom, 0px));
     padding-left: calc(1.5rem + var(--safe-area-left, 0px));
     gap: 0.5rem;
@@ -772,6 +774,39 @@
       rgba(201, 162, 39, 0.05) 100%
     );
     /* border-right: 3px solid var(--nav-gold); */
+  }
+
+  /* Mobile Nav Header (Logo) */
+  .mobile-nav-header {
+    display: block;
+    width: 100%;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--nav-border);
+    text-align: center;
+  }
+
+  .mobile-logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  .mobile-nav-header .logo-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 15px rgba(10, 31, 68, 0.05);
+  }
+
+  .mobile-nav-header .logo-text h2 {
+    font-size: 1.25rem;
+    color: var(--nav-navy);
+    margin: 0;
   }
 
   /* Mobile Nav Actions */
@@ -864,14 +899,12 @@
     --nav-height: 65px;
   } */
 
-  .nav-container {
-    padding: 0 1rem;
-  }
+
 
   .nav-menu {
     width: 100%;
     max-width: none;
-    padding: calc(var(--nav-height) + var(--safe-area-top, 0px) + 1rem) 1rem
+    padding: calc(var(--safe-area-top, 0px) + 1rem) 1rem
       calc(2rem + var(--safe-area-bottom, 0px));
   }
 
@@ -977,7 +1010,7 @@
   }
 
   .nav-menu {
-    padding-top: calc(var(--nav-height) + var(--safe-area-top, 20px) + 1.5rem);
+    padding-top: calc( var(--safe-area-top, 20px) + 1.5rem);
   }
 }
 
@@ -989,10 +1022,7 @@
     padding-right: max(0px, env(safe-area-inset-right));
   }
 
-  .nav-container {
-    padding-left: max(2rem, calc(2rem + env(safe-area-inset-left)));
-    padding-right: max(2rem, calc(2rem + env(safe-area-inset-right)));
-  }
+
 
   @media (max-width: 900px) {
     .nav-menu {

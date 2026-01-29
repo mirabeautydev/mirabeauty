@@ -304,13 +304,30 @@
 .featured-services {
   background-color: var(--white);
 }
-
-/* Top Sales Section */
+.service-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.service-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.service-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.service-btn {
+  margin-top: auto;
+}
 .top-sales {
   background-color: var(--bg);
   position: relative;
 }
-
 .top-sales::before {
   content: "";
   position: absolute;
