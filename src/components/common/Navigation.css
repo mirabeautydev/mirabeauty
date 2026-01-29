@@ -788,16 +788,14 @@
 
   .mobile-logo-wrapper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0.5rem;
     text-decoration: none;
   }
 
   .mobile-nav-header .logo-icon {
     width: 70px;
     height: 70px;
-    margin: 0 auto;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
     box-shadow: 0 4px 15px rgba(10, 31, 68, 0.05);
