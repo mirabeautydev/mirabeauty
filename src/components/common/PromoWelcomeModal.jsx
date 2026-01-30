@@ -14,7 +14,7 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
     expired: false,
   });
 
-  const promoEndDate = new Date("2026-02-01T12:59:59Z"); // 11:59:59 PM Palestine time (UTC+2)
+  const promoEndDate = new Date("2026-02-01T11:00:00Z"); // 11:59:59 PM Palestine time (UTC+2)
 
   // Side cannons confetti effect
   const triggerSideCannons = () => {
