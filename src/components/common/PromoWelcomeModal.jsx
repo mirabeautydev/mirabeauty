@@ -14,9 +14,7 @@ const PromoWelcomeModal = ({ isOpen, onClose, promoCode = "OPEN30" }) => {
     expired: false,
   });
 
-  // End date for OPEN30 promo: February 10, 2026 at 11:59:59 PM Palestine time
-  // Create date in UTC then we'll compare with Palestine time in getTimeRemaining
-  const promoEndDate = new Date("2026-02-10T21:59:59Z"); // 11:59:59 PM Palestine time (UTC+2)
+  const promoEndDate = new Date("2026-02-01T12:59:59Z"); // 11:59:59 PM Palestine time (UTC+2)
 
   // Side cannons confetti effect
   const triggerSideCannons = () => {
