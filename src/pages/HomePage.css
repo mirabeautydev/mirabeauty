@@ -37,8 +37,30 @@
   transition: opacity 1s ease-in-out;
 }
 
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* يمنع أي gap */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* خلف النص */
+}
+
 .hero-slide.active {
   opacity: 1;
+}
+
+.slide-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Hero overlay for better text readability */

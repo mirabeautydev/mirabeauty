@@ -231,77 +231,97 @@ const HomePage = () => {
     <div className="homepage">
       {/* Hero Section */}
       <section className="hero-section">
-        <div className="hero-carousel">
-          {heroImages.map((image, index) => (
-            <div
-              key={index}
-              className={`hero-slide ${
-                index === currentImageIndex ? "active" : ""
-              }`}
-              style={{ backgroundImage: `url(${image})` }}
-            />
-          ))}
-        </div>
-        <div className="hero-overlay"></div>
-        <div className="container">
-          <div className="hero-content">
-            <div className="hero-text text-right">
-              <h1>REVEAL THE BEAUTY IN MIRA CLINIC</h1>
-              <p className="hero-subtitle">ابدأي تجربتك معنا من خلال حجزك</p>
-              <div className="text-right">
-                <button
-                  className="btn-primary hero-btn"
-                  onClick={() => navigateWithLoading("/book")}
-                >
-                  احجزي موعدك الآن
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div className="hero-carousel">
+    {heroImages.map((image, index) => (
+      <div
+        key={index}
+        className={`hero-slide ${index === currentImageIndex ? "active" : ""}`}
+      >
+        {/* أول صورة فقط لتسريع LCP */}
+        {index === 0 && (
+          <img
+            src={image}
+            alt={`Hero Slide ${index + 1}`}
+            width={1440}  // أو حجم مناسب حسب تصميمك
+            height={600}  // نسبة الارتفاع للعرض الصحيح
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            decoding="async"
+          />
+        )}
 
-        {/* Carousel Indicators */}
-        <div className="hero-indicators">
-          {heroImages.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${
-                index === currentImageIndex ? "active" : ""
-              }`}
-              onClick={() => setCurrentImageIndex(index)}
-              aria-label={`Slide ${index + 1}`}
-            />
-          ))}
-        </div>
+        {/* باقي الصور تبقى background */}
+        {index !== 0 && (
+          <div
+            className="slide-bg"
+            style={{ backgroundImage: `url(${image})` }}
+          />
+        )}
+      </div>
+    ))}
+  </div>
 
-        {/* Navigation Arrows */}
-        <button
-          className="hero-nav prev"
-          onClick={() =>
-            setCurrentImageIndex(
-              currentImageIndex === heroImages.length - 1
-                ? 0
-                : currentImageIndex + 1,
-            )
-          }
-          aria-label="Previous slide"
-        >
-          &#8250;
-        </button>
-        <button
-          className="hero-nav next"
-          onClick={() =>
-            setCurrentImageIndex(
-              currentImageIndex === 0
-                ? heroImages.length - 1
-                : currentImageIndex - 1,
-            )
-          }
-          aria-label="Next slide"
-        >
-          &#8249;
-        </button>
-      </section>
+  {/* Overlay للنصوص */}
+  <div className="hero-overlay"></div>
+
+  {/* محتوى الهيرو */}
+  <div className="container">
+    <div className="hero-content">
+      <div className="hero-text text-right">
+        <h1>REVEAL THE BEAUTY IN MIRA CLINIC</h1>
+        <p className="hero-subtitle">ابدأي تجربتك معنا من خلال حجزك</p>
+        <div className="text-right">
+          <button
+            className="btn-primary hero-btn"
+            onClick={() => navigateWithLoading("/book")}
+          >
+            احجزي موعدك الآن
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Carousel Indicators */}
+  <div className="hero-indicators">
+    {heroImages.map((_, index) => (
+      <button
+        key={index}
+        className={`indicator ${index === currentImageIndex ? "active" : ""}`}
+        onClick={() => setCurrentImageIndex(index)}
+        aria-label={`Slide ${index + 1}`}
+      />
+    ))}
+  </div>
+
+  {/* Navigation Arrows */}
+  <button
+    className="hero-nav prev"
+    onClick={() =>
+      setCurrentImageIndex(
+        currentImageIndex === heroImages.length - 1
+          ? 0
+          : currentImageIndex + 1
+      )
+    }
+    aria-label="Previous slide"
+  >
+    &#8250;
+  </button>
+  <button
+    className="hero-nav next"
+    onClick={() =>
+      setCurrentImageIndex(
+        currentImageIndex === 0
+          ? heroImages.length - 1
+          : currentImageIndex - 1
+      )
+    }
+    aria-label="Next slide"
+  >
+    &#8249;
+  </button>
+</section>
+
 
       {/* Featured Services */}
       <section className="featured-services section">
