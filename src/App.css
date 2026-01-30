@@ -35,6 +35,14 @@ body {
   color: var(--charcoal);
   line-height: 1.6;
   direction: rtl;
+  /* Prevent rubber-band scrolling on mobile */
+  overscroll-behavior-y: none;
+  height: 100%;
+}
+
+html {
+  height: 100%;
+  overscroll-behavior-y: none;
 }
 
 .App {
