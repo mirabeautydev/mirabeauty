@@ -39,9 +39,9 @@ const HomePage = () => {
 
   // Hero carousel images
   const heroImages = [
-    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero1.jpeg?alt=media&token=a9b1194c-c328-4d17-a2ff-e3f7b2d355ad",
-    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero2.jpeg?alt=media&token=9f43ee54-371b-407f-a14e-52cacd3fb575",
-    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero3.jpeg?alt=media&token=8eaed1fe-6193-4825-a9e2-81d4e109ec82",
+    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero1.webp?alt=media&token=2b8a561f-c34d-4d8d-b36c-b775623252af",
+    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero2.webp?alt=media&token=7f59f31c-3754-467d-aa5c-a1da616102a0",
+    "https://firebasestorage.googleapis.com/v0/b/mirabeauty-f648b.firebasestorage.app/o/hero3.webp?alt=media&token=bcf18e10-c9ce-4ce8-a5ca-a5c868016d35",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
