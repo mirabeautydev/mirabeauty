@@ -404,7 +404,7 @@ const RegisterPage = () => {
       </section>
 
       {/* Register Benefits Section */}
-      <section className="register-benefits section">
+      {/* <section className="register-benefits section">
         <div className="container">
           <div className="why-grid">
             <div className="why-heading text-right">
@@ -424,7 +424,7 @@ const RegisterPage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
