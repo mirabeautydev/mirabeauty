@@ -34,7 +34,7 @@ export const registerCustomer = async (userData) => {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     const user = userCredential.user;
 
@@ -60,7 +60,6 @@ export const registerCustomer = async (userData) => {
       displayName: name,
       phone,
       birthDate,
-      skinType,
       allergies: allergies || ["لا توجد"],
       role: "customer",
       active: true,
@@ -82,7 +81,6 @@ export const registerCustomer = async (userData) => {
         name,
         phone,
         birthDate,
-        skinType,
         allergies: allergies || ["لا توجد"],
         role: "customer",
         active: true,
@@ -103,7 +101,7 @@ export const loginUser = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     const user = userCredential.user;
 
@@ -176,7 +174,7 @@ export const createStaffUser = async (staffData, createdByUid) => {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     const user = userCredential.user;
 
@@ -233,7 +231,7 @@ export const createAdminUser = async (adminData, createdByUid) => {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     const user = userCredential.user;
 
@@ -294,7 +292,7 @@ export const adminRegisterCustomer = async (customerData) => {
     const userCredential = await createUserWithEmailAndPassword(
       secondaryAuth,
       email,
-      password // Use the custom password provided by admin
+      password, // Use the custom password provided by admin
     );
     const user = userCredential.user;
 
@@ -368,7 +366,7 @@ export const adminRegisterStaff = async (staffData) => {
     const userCredential = await createUserWithEmailAndPassword(
       secondaryAuth,
       email,
-      password // Use the custom password provided by admin
+      password, // Use the custom password provided by admin
     );
     const user = userCredential.user;
 
