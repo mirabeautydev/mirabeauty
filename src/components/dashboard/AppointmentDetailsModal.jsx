@@ -167,9 +167,15 @@ const AppointmentDetailsModal = ({
             </div>
 
             <div className="detail-item">
-              <span className="detail-label">السعر:</span>
+              <span className="detail-label">
+                {appointment.actualPaidAmount
+                  ? "السعر المدفوع:"
+                  : "سعر الخدمة:"}
+              </span>
               <span className="detail-value">
-                {formatPrice(appointment.actualPaidAmount)}
+                {appointment.actualPaidAmount
+                  ? formatPrice(appointment.actualPaidAmount)
+                  : formatPrice(appointment.servicePrice)}
               </span>
             </div>
 
