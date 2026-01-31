@@ -28,7 +28,7 @@ export const getAllAppointments = async () => {
     const appointmentsCollection = collection(db, APPOINTMENTS_COLLECTION);
     const appointmentsQuery = query(
       appointmentsCollection,
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const snapshot = await getDocs(appointmentsQuery);
 
@@ -54,7 +54,7 @@ export const getAppointmentsByCustomer = async (customerId) => {
     const appointmentsQuery = query(
       appointmentsCollection,
       where("customerId", "==", customerId),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const snapshot = await getDocs(appointmentsQuery);
 
@@ -80,7 +80,7 @@ export const getAppointmentsByStaff = async (staffId) => {
     const appointmentsQuery = query(
       appointmentsCollection,
       where("staffId", "==", staffId),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const snapshot = await getDocs(appointmentsQuery);
 
@@ -106,7 +106,7 @@ export const getAppointmentsByStatus = async (status) => {
     const appointmentsQuery = query(
       appointmentsCollection,
       where("status", "==", status),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const snapshot = await getDocs(appointmentsQuery);
 
@@ -154,6 +154,7 @@ export const createAppointment = async (appointmentData) => {
       paymentStatus: "في الانتظار", // pending payment
       couponCode: appointmentData.couponCode || null,
       couponValue: appointmentData.couponValue || 0,
+      couponDiscountType: appointmentData.couponDiscountType || "unknown",
       discount: appointmentData.discount || 0,
       createdBy: appointmentData.createdBy || null, // Admin who created it
       createdByAdmin: appointmentData.createdByAdmin || false, // Flag for admin-created
@@ -244,7 +245,7 @@ export const completeAppointment = async (
   appointmentId,
   staffNoteToCustomer = "",
   staffInternalNote = "",
-  actualPaidAmount = null
+  actualPaidAmount = null,
 ) => {
   try {
     const appointmentDoc = doc(db, APPOINTMENTS_COLLECTION, appointmentId);
@@ -314,7 +315,7 @@ export const checkStaffAvailability = async (staffId, date, time) => {
       where("staffId", "==", staffId),
       where("date", "==", date),
       where("time", "==", time),
-      where("status", "in", ["في الانتظار", "مؤكد"]) // pending or confirmed
+      where("status", "in", ["في الانتظار", "مؤكد"]), // pending or confirmed
     );
     const snapshot = await getDocs(appointmentsQuery);
 
@@ -337,7 +338,7 @@ export const checkStaffAvailabilityWithDuration = async (
   date,
   startTime,
   durationMinutes,
-  excludeAppointmentId = null
+  excludeAppointmentId = null,
 ) => {
   try {
     // Get all appointments for this staff on this date
@@ -346,7 +347,7 @@ export const checkStaffAvailabilityWithDuration = async (
       appointmentsCollection,
       where("staffId", "==", staffId),
       where("date", "==", date),
-      where("status", "in", ["في الانتظار", "مؤكد"])
+      where("status", "in", ["في الانتظار", "مؤكد"]),
     );
     const snapshot = await getDocs(appointmentsQuery);
 
@@ -403,7 +404,7 @@ export const getAppointmentsByDate = async (date) => {
     const appointmentsQuery = query(
       appointmentsCollection,
       where("date", "==", date),
-      orderBy("time", "asc")
+      orderBy("time", "asc"),
     );
     const snapshot = await getDocs(appointmentsQuery);
 
@@ -429,7 +430,7 @@ export const getUserAppointments = async (userId) => {
     const appointmentsQuery = query(
       appointmentsCollection,
       where("customerId", "==", userId),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const snapshot = await getDocs(appointmentsQuery);
 
