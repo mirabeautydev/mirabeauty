@@ -106,7 +106,7 @@ const ReportsPage = ({ currentUser, userData }) => {
         const weekStart = new Date(now);
         weekStart.setDate(now.getDate() - 7);
         return `آخر 7 أيام (من ${formatDate(weekStart)} إلى ${formatDate(
-          now
+          now,
         )})`;
       case "month":
         const monthStart = new Date(now);
@@ -119,7 +119,7 @@ const ReportsPage = ({ currentUser, userData }) => {
       case "custom":
         if (customStartDate && customEndDate) {
           return `من ${formatDate(new Date(customStartDate))} إلى ${formatDate(
-            new Date(customEndDate)
+            new Date(customEndDate),
           )}`;
         }
         return "فترة مخصصة";
@@ -183,44 +183,44 @@ const ReportsPage = ({ currentUser, userData }) => {
 
   const totalAppointments = filteredAppointments.length;
   const completedAppointments = filteredAppointments.filter(
-    (apt) => apt.status === "مكتمل"
+    (apt) => apt.status === "مكتمل",
   ).length;
   const cancelledAppointments = filteredAppointments.filter(
-    (apt) => apt.status === "ملغي"
+    (apt) => apt.status === "ملغي",
   ).length;
   const pendingAppointments = filteredAppointments.filter(
-    (apt) => apt.status === "في الانتظار"
+    (apt) => apt.status === "في الانتظار",
   ).length;
   const confirmedAppointments = filteredAppointments.filter(
-    (apt) => apt.status === "مؤكد"
+    (apt) => apt.status === "مؤكد",
   ).length;
 
   const appointmentRevenue = filteredAppointments
     .filter((apt) => apt.status === "مكتمل")
     .reduce((sum, apt) => {
       const price = parsePrice(
-        apt.actualPaidAmount || apt.servicePrice || apt.price
+        apt.actualPaidAmount || apt.servicePrice || apt.price,
       );
       return sum + price;
     }, 0);
 
   // Count only confirmed orders
   const confirmedOrdersList = filteredOrders.filter(
-    (order) => order.status === "confirmed"
+    (order) => order.status === "confirmed",
   );
   const totalOrders = confirmedOrdersList.length;
   const confirmedOrders = confirmedOrdersList.length;
   const pendingOrders = filteredOrders.filter(
-    (order) => order.status === "pending"
+    (order) => order.status === "pending",
   ).length;
   const cancelledOrders = filteredOrders.filter(
-    (order) => order.status === "cancelled"
+    (order) => order.status === "cancelled",
   ).length;
 
   // Calculate revenue only from confirmed orders
   const ordersRevenue = confirmedOrdersList.reduce(
     (sum, order) => sum + parsePrice(order.total),
-    0
+    0,
   );
 
   const totalRevenue = appointmentRevenue + ordersRevenue;
@@ -230,11 +230,11 @@ const ReportsPage = ({ currentUser, userData }) => {
   const serviceStats = services
     .map((service) => {
       const completedAppts = filteredAppointments.filter(
-        (apt) => apt.serviceId === service.id && apt.status === "مكتمل"
+        (apt) => apt.serviceId === service.id && apt.status === "مكتمل",
       );
       const revenue = completedAppts.reduce((sum, apt) => {
         const price = parsePrice(
-          apt.actualPaidAmount || apt.servicePrice || apt.price
+          apt.actualPaidAmount || apt.servicePrice || apt.price,
         );
         return sum + price;
       }, 0);
@@ -245,13 +245,13 @@ const ReportsPage = ({ currentUser, userData }) => {
         revenue: revenue,
       };
     })
-    .sort((a, b) => b.revenue - a.revenue);
+    .sort((a, b) => b.appointmentCount - a.appointmentCount);
 
   // Product statistics - count only confirmed orders
   const productStats = products
     .map((product) => {
       const confirmedProductOrders = confirmedOrdersList.filter((order) =>
-        order.items?.some((item) => item.id === product.id)
+        order.items?.some((item) => item.id === product.id),
       );
       const totalSold = confirmedProductOrders.reduce((sum, order) => {
         const item = order.items.find((i) => i.id === product.id);
@@ -273,14 +273,14 @@ const ReportsPage = ({ currentUser, userData }) => {
   const staffStats = staff
     .map((staffMember) => {
       const staffAppointments = filteredAppointments.filter(
-        (apt) => apt.staffId === staffMember.id
+        (apt) => apt.staffId === staffMember.id,
       );
       const completedAppts = staffAppointments.filter(
-        (apt) => apt.status === "مكتمل"
+        (apt) => apt.status === "مكتمل",
       );
       const revenue = completedAppts.reduce((sum, apt) => {
         const price = parsePrice(
-          apt.actualPaidAmount || apt.servicePrice || apt.price
+          apt.actualPaidAmount || apt.servicePrice || apt.price,
         );
         return sum + price;
       }, 0);
@@ -298,17 +298,17 @@ const ReportsPage = ({ currentUser, userData }) => {
     .filter((customer) => customer.role === "customer")
     .map((customer) => {
       const customerAppointments = filteredAppointments.filter(
-        (apt) => apt.customerId === customer.id
+        (apt) => apt.customerId === customer.id,
       );
       const customerOrders = filteredOrders.filter(
-        (order) => order.userId === customer.id
+        (order) => order.userId === customer.id,
       );
       const totalSpent =
         customerAppointments
           .filter((apt) => apt.status === "مكتمل")
           .reduce((sum, apt) => {
             const price = parsePrice(
-              apt.actualPaidAmount || apt.servicePrice || apt.price
+              apt.actualPaidAmount || apt.servicePrice || apt.price,
             );
             return sum + price;
           }, 0) +
@@ -340,12 +340,12 @@ const ReportsPage = ({ currentUser, userData }) => {
       const monthStart = new Date(
         monthDate.getFullYear(),
         monthDate.getMonth(),
-        1
+        1,
       );
       const monthEnd = new Date(
         monthDate.getFullYear(),
         monthDate.getMonth() + 1,
-        0
+        0,
       );
 
       const monthAppointments = appointments.filter((apt) => {
@@ -369,7 +369,7 @@ const ReportsPage = ({ currentUser, userData }) => {
           (sum, apt) =>
             sum +
             parsePrice(apt.actualPaidAmount || apt.servicePrice || apt.price),
-          0
+          0,
         ) +
         monthOrders.reduce((sum, order) => sum + parsePrice(order.total), 0);
 
@@ -526,7 +526,7 @@ const ReportsPage = ({ currentUser, userData }) => {
               <h3>إجمالي الإيرادات</h3>
               <div class="value">${formatCurrency(totalRevenue)}</div>
               <div class="sub-value">مواعيد: ${formatCurrency(
-                appointmentRevenue
+                appointmentRevenue,
               )} | طلبات: ${formatCurrency(ordersRevenue)}</div>
             </div>
             <div class="stat-box">
@@ -596,7 +596,7 @@ const ReportsPage = ({ currentUser, userData }) => {
                   }%</td>
                   <td>${formatCurrency(service.revenue)}</td>
                 </tr>
-              `
+              `,
                 )
                 .join("")}
             </tbody>
@@ -630,7 +630,7 @@ const ReportsPage = ({ currentUser, userData }) => {
                   <td>${product.price} شيكل</td>
                   <td>${product.stock || 0}</td>
                 </tr>
-              `
+              `,
                 )
                 .join("")}
             </tbody>
@@ -671,7 +671,7 @@ const ReportsPage = ({ currentUser, userData }) => {
                   }%</td>
                   <td>${formatCurrency(member.revenue)}</td>
                 </tr>
-              `
+              `,
                 )
                 .join("")}
             </tbody>
@@ -691,14 +691,14 @@ const ReportsPage = ({ currentUser, userData }) => {
               <h3>عملاء نشطين</h3>
               <div class="value">${
                 customerStats.filter(
-                  (c) => c.appointmentCount > 0 || c.orderCount > 0
+                  (c) => c.appointmentCount > 0 || c.orderCount > 0,
                 ).length
               }</div>
             </div>
             <div class="stat-box">
               <h3>إجمالي الإنفاق</h3>
               <div class="value">${formatCurrency(
-                customerStats.reduce((sum, c) => sum + c.totalSpent, 0)
+                customerStats.reduce((sum, c) => sum + c.totalSpent, 0),
               )}</div>
             </div>
           </div>
@@ -727,7 +727,7 @@ const ReportsPage = ({ currentUser, userData }) => {
                   <td>${customer.orderCount}</td>
                   <td>${formatCurrency(customer.totalSpent)}</td>
                 </tr>
-              `
+              `,
                 )
                 .join("")}
             </tbody>
@@ -1126,7 +1126,7 @@ const ReportsPage = ({ currentUser, userData }) => {
               <div className="monthly-revenue-chart">
                 {monthlyRevenue.map((month, index) => {
                   const maxRevenue = Math.max(
-                    ...monthlyRevenue.map((m) => m.revenue)
+                    ...monthlyRevenue.map((m) => m.revenue),
                   );
                   const height =
                     maxRevenue > 0 ? (month.revenue / maxRevenue) * 100 : 0;
@@ -1307,8 +1307,8 @@ const ReportsPage = ({ currentUser, userData }) => {
                               (product.quantity !== undefined
                                 ? product.quantity
                                 : product.inStock
-                                ? 999
-                                : 0) > 0
+                                  ? 999
+                                  : 0) > 0
                                 ? "in-stock"
                                 : "out-stock"
                             }`}
@@ -1316,8 +1316,8 @@ const ReportsPage = ({ currentUser, userData }) => {
                             {(product.quantity !== undefined
                               ? product.quantity
                               : product.inStock
-                              ? 999
-                              : 0) > 0
+                                ? 999
+                                : 0) > 0
                               ? `متوفر (${
                                   product.quantity !== undefined
                                     ? product.quantity
@@ -1463,7 +1463,7 @@ const ReportsPage = ({ currentUser, userData }) => {
                 <p>
                   {
                     customerStats.filter(
-                      (c) => c.appointmentCount > 0 || c.orderCount > 0
+                      (c) => c.appointmentCount > 0 || c.orderCount > 0,
                     ).length
                   }
                 </p>
@@ -1475,7 +1475,7 @@ const ReportsPage = ({ currentUser, userData }) => {
                     ? (
                         customerStats.reduce(
                           (sum, c) => sum + c.totalSpent,
-                          0
+                          0,
                         ) / customerStats.filter((c) => c.totalSpent > 0).length
                       ).toFixed(2)
                     : 0}{" "}

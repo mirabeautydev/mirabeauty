@@ -1124,7 +1124,7 @@ const BookingPage = ({ currentUser, userData }) => {
 
         if (overlapping >= bookingLimit) {
           showError(
-            `عذراً، تم الوصول للحد الأقصى من الحجوزات المتداخلة في هذا الوقت (${overlapping}/${bookingLimit}). يرجى اختيار وقت آخر.`,
+            `عذراً، تم الوصول للحد الأقصى من الحجوزات المتداخلة في هذا الوقت . يرجى اختيار وقت آخر.`,
           );
           setSubmitting(false);
           return;
@@ -1140,7 +1140,7 @@ const BookingPage = ({ currentUser, userData }) => {
 
         if (!availability.available) {
           showError(
-            `عذراً، تم الوصول للحد الأقصى من الحجوزات في هذا الوقت (${availability.current}/${availability.limit}). يرجى اختيار وقت آخر.`,
+            `عذراً، تم الوصول للحد الأقصى من الحجوزات في هذا الوقت . يرجى اختيار وقت آخر.`,
           );
           setSubmitting(false);
           return;
@@ -1956,7 +1956,7 @@ const BookingPage = ({ currentUser, userData }) => {
 
                                       if (overlapping >= bookingLimit) {
                                         showError(
-                                          `تم الوصول للحد الأقصى من الحجوزات المتداخلة في هذا الوقت (${overlapping}/${bookingLimit})`,
+                                          `تم الوصول للحد الأقصى من الحجوزات المتداخلة في هذا الوقت `,
                                         );
                                         return;
                                       }
@@ -2109,7 +2109,7 @@ const BookingPage = ({ currentUser, userData }) => {
 
                                       if (!availability.available) {
                                         showError(
-                                          `تم الوصول للحد الأقصى من الحجوزات في هذا الوقت (${availability.current}/${availability.limit})`,
+                                          `تم الوصول للحد الأقصى من الحجوزات في هذا الوقت`,
                                         );
                                         setSelectedFixedTime("");
                                         return;
