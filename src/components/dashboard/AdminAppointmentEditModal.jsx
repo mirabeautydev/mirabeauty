@@ -5,6 +5,10 @@ import CustomModal from "../common/CustomModal";
 import { getAllServices } from "../../services/servicesService";
 import { getAllServiceCategories } from "../../services/categoriesService";
 import { checkStaffAvailabilityWithDuration } from "../../services/appointmentsService";
+import {
+  validateCoupon,
+  calculateDiscount,
+} from "../../services/couponsService";
 
 const AdminAppointmentEditModal = ({
   isOpen,
@@ -14,7 +18,8 @@ const AdminAppointmentEditModal = ({
   staff = [],
   specializations = [],
 }) => {
-  const { modalState, closeModal, showError, showConfirm } = useModal();
+  const { modalState, closeModal, showError, showConfirm, showSuccess } =
+    useModal();
   const [services, setServices] = useState([]);
   const [staffAvailability, setStaffAvailability] = useState({
     isChecking: false,
@@ -27,7 +32,7 @@ const AdminAppointmentEditModal = ({
   const getSpecializationName = (specializationId) => {
     if (!specializationId) return "غير محدد";
     const specialization = specializations.find(
-      (s) => s.id === specializationId
+      (s) => s.id === specializationId,
     );
     return specialization ? specialization.name : "غير محدد";
   };
@@ -53,7 +58,16 @@ const AdminAppointmentEditModal = ({
     flexibleStartHour: "",
     flexibleStartMinute: "",
     useTimeInput: false, // Toggle between hour/minute dropdowns and time input
+    couponCode: appointment?.couponCode || "",
+    couponValue: appointment?.couponValue || 0,
+    couponDiscountType: appointment?.couponDiscountType || null,
+    discount: appointment?.discount || 0,
   });
+
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [isCouponLoading, setIsCouponLoading] = useState(false);
+  const [couponMessage, setCouponMessage] = useState(null); // { type: 'success' | 'error', text: '...' }
 
   const [loading, setLoading] = useState(false);
 
@@ -101,7 +115,24 @@ const AdminAppointmentEditModal = ({
           : "",
         flexibleStartMinute: minute || "",
         useTimeInput: false,
+        couponCode: appointment.couponCode || "",
+        couponValue: appointment.couponValue || 0,
+        couponDiscountType: appointment.couponDiscountType || null,
+        discount: appointment.discount || 0,
       });
+
+      // Set promo code if coupon already exists
+      if (appointment.couponCode) {
+        setPromoCode(appointment.couponCode);
+        setAppliedCoupon({
+          code: appointment.couponCode,
+          value: appointment.couponValue,
+          discountType: appointment.couponDiscountType,
+        });
+      } else {
+        setPromoCode("");
+        setAppliedCoupon(null);
+      }
     }
   }, [appointment]);
 
@@ -172,6 +203,83 @@ const AdminAppointmentEditModal = ({
     return today.toISOString().split("T")[0];
   };
 
+  // Handle coupon validation
+  const handleApplyCoupon = async () => {
+    if (!promoCode.trim()) {
+      setCouponMessage({ type: "error", text: "الرجاء إدخال كود الخصم" });
+      return;
+    }
+
+    setIsCouponLoading(true);
+    setCouponMessage(null);
+    try {
+      const service = services.find((s) => s.id === appointment.serviceId);
+      if (!service) {
+        setCouponMessage({ type: "error", text: "لم يتم العثور على الخدمة" });
+        setIsCouponLoading(false);
+        return;
+      }
+
+      const servicePrice = parseFloat(
+        appointment.servicePrice?.toString().replace(/[^\d.]/g, "") || 0,
+      );
+      const categoryIds = [service.category || service.categoryId];
+
+      const result = await validateCoupon(
+        promoCode,
+        "services",
+        categoryIds,
+        servicePrice,
+      );
+
+      if (result.valid) {
+        setAppliedCoupon(result.coupon);
+        const discountAmount = calculateDiscount(result.coupon, servicePrice);
+
+        setFormData((prev) => ({
+          ...prev,
+          couponCode: result.coupon.code,
+          couponValue: result.coupon.value,
+          couponDiscountType: result.coupon.discountType,
+          discount: discountAmount,
+        }));
+
+        const discountMessage =
+          result.coupon.discountType === "percentage"
+            ? `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value}% (${discountAmount.toFixed(2)} شيكل)`
+            : `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value} شيكل`;
+
+        setCouponMessage({ type: "success", text: discountMessage });
+      } else {
+        setCouponMessage({
+          type: "error",
+          text: result.error || "كود الخصم غير صحيح",
+        });
+      }
+    } catch (error) {
+      console.error("Error validating coupon:", error);
+      setCouponMessage({
+        type: "error",
+        text: "حدث خطأ في التحقق من كود الخصم",
+      });
+    } finally {
+      setIsCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setPromoCode("");
+    setCouponMessage(null);
+    setFormData((prev) => ({
+      ...prev,
+      couponCode: "",
+      couponValue: 0,
+      couponDiscountType: null,
+      discount: 0,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -190,9 +298,8 @@ const AdminAppointmentEditModal = ({
         const serviceCategoryId = category?.id;
 
         // Import getAppointmentsByDate
-        const { getAppointmentsByDate } = await import(
-          "../../services/appointmentsService"
-        );
+        const { getAppointmentsByDate } =
+          await import("../../services/appointmentsService");
         const dateAppointments = await getAppointmentsByDate(formData.date);
 
         // Parse duration safely
@@ -205,7 +312,7 @@ const AdminAppointmentEditModal = ({
 
         const newDuration = toNumberDuration(
           appointment?.serviceDuration || appointment?.duration,
-          60
+          60,
         );
 
         // Convert HH:mm to minutes
@@ -230,14 +337,14 @@ const AdminAppointmentEditModal = ({
           const start = timeToMinutes(apt.time);
           const aptDuration = toNumberDuration(
             apt.serviceDuration ?? apt.duration,
-            60
+            60,
           );
           return { start, end: start + aptDuration };
         });
 
         // Keep only overlapping intervals
         const relevant = intervals.filter(
-          (x) => x.start < newEnd && newStart < x.end
+          (x) => x.start < newEnd && newStart < x.end,
         );
 
         // Sweep within [newStart, newEnd)
@@ -278,7 +385,7 @@ const AdminAppointmentEditModal = ({
             `تحذير: تم الوصول للحد الأقصى من الحجوزات في هذا الوقت (${currentLoadAtPeak}/${bookingLimit}). هل تريد المتابعة؟`,
             "تأكيد التعديل",
             "نعم، متابعة",
-            "إلغاء"
+            "إلغاء",
           );
 
           if (!confirmed) {
@@ -304,7 +411,7 @@ const AdminAppointmentEditModal = ({
           formData.date,
           formData.time,
           duration,
-          appointment?.id // Exclude current appointment
+          appointment?.id, // Exclude current appointment
         );
 
         if (!availabilityCheck.available) {
@@ -315,7 +422,7 @@ const AdminAppointmentEditModal = ({
           showError(
             `الأخصائية ${
               selectedStaff?.name || "المحددة"
-            } لديها تعارض في المواعيد:\n\n${conflictDetails}\n\nالرجاء اختيار وقت آخر أو أخصائية أخرى.`
+            } لديها تعارض في المواعيد:\n\n${conflictDetails}\n\nالرجاء اختيار وقت آخر أو أخصائية أخرى.`,
           );
           setLoading(false);
           return;
@@ -325,6 +432,10 @@ const AdminAppointmentEditModal = ({
       const updatedData = {
         ...formData,
         staffName: selectedStaff ? selectedStaff.name : formData.staffName,
+        couponCode: formData.couponCode || null,
+        couponValue: formData.couponValue || 0,
+        couponDiscountType: formData.couponDiscountType || null,
+        discount: formData.discount || 0,
       };
 
       await onSubmit(updatedData);
@@ -383,7 +494,7 @@ const AdminAppointmentEditModal = ({
         formData.date,
         formData.time,
         duration,
-        appointment?.id
+        appointment?.id,
       );
 
       setStaffAvailability({
@@ -750,6 +861,118 @@ const AdminAppointmentEditModal = ({
           )}
 
           {/* Status field removed - status changes are now handled via table actions (confirm, complete, cancel buttons) */}
+
+          {/* Coupon Section */}
+          <div className="admin-appointment-edit-form-row">
+            <div className="admin-appointment-edit-form-group">
+              <label htmlFor="couponCode">كود الخصم (اختياري)</label>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem",
+                  alignItems: "flex-start",
+                }}
+              >
+                <input
+                  type="text"
+                  id="couponCode"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  placeholder="أدخل كود الخصم"
+                  className="admin-appointment-edit-form-input"
+                  style={{ flex: 1 }}
+                  disabled={appliedCoupon !== null}
+                />
+                {!appliedCoupon ? (
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    disabled={isCouponLoading || !promoCode.trim()}
+                    style={{
+                      padding: "0.75rem 1.5rem",
+                      backgroundColor: "#0f2a5a",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      cursor: promoCode.trim() ? "pointer" : "not-allowed",
+                      opacity: promoCode.trim() ? 1 : 0.5,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {isCouponLoading ? "جاري التحقق..." : "تطبيق"}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleRemoveCoupon}
+                    style={{
+                      padding: "0.75rem 1.5rem",
+                      backgroundColor: "#dc3545",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    إزالة
+                  </button>
+                )}
+              </div>
+
+              {/* Inline coupon message */}
+              {couponMessage && !appliedCoupon && (
+                <div
+                  style={{
+                    marginTop: "0.75rem",
+                    padding: "0.75rem",
+                    backgroundColor:
+                      couponMessage.type === "success" ? "#d4edda" : "#f8d7da",
+                    borderRadius: "8px",
+                    border: `1px solid ${couponMessage.type === "success" ? "#c3e6cb" : "#f5c6cb"}`,
+                    color:
+                      couponMessage.type === "success" ? "#155724" : "#721c24",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <i
+                    className={`fas fa-${couponMessage.type === "success" ? "check-circle" : "exclamation-circle"}`}
+                  ></i>
+                  <span>{couponMessage.text}</span>
+                </div>
+              )}
+
+              {appliedCoupon && (
+                <div
+                  style={{
+                    marginTop: "0.75rem",
+                    padding: "0.75rem",
+                    backgroundColor: "#d4edda",
+                    borderRadius: "8px",
+                    border: "1px solid #c3e6cb",
+                  }}
+                >
+                  <div style={{ color: "#155724", fontWeight: "600" }}>
+                    ✓ تم تطبيق الكوبون: <strong>{appliedCoupon.code}</strong>
+                  </div>
+                  <div
+                    style={{
+                      color: "#155724",
+                      fontSize: "0.9rem",
+                      marginTop: "0.25rem",
+                    }}
+                  >
+                    خصم:{" "}
+                    {appliedCoupon.discountType === "percentage"
+                      ? `${appliedCoupon.value}% (${formData.discount.toFixed(2)} شيكل)`
+                      : `${appliedCoupon.value} شيكل`}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Customer Note - Read Only */}
           {appointment?.notes && (
