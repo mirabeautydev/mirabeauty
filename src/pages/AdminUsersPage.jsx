@@ -26,6 +26,8 @@ const AdminUsersPage = ({ currentUser, userData }) => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [userModalType, setUserModalType] = useState("customer"); // customer or staff
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const { modalState, closeModal, showSuccess, showError, showConfirm } =
     useModal();
@@ -96,7 +98,7 @@ const AdminUsersPage = ({ currentUser, userData }) => {
       },
       `تأكيد حذف ${userType === "customer" ? "العميل" : "الموظف"}`,
       "حذف",
-      "إلغاء"
+      "إلغاء",
     );
   };
 
@@ -174,6 +176,26 @@ const AdminUsersPage = ({ currentUser, userData }) => {
 
     return true;
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, roleFilter]);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleItemsPerPageChange = (value) => {
+    setItemsPerPage(value);
+    setCurrentPage(1);
+  };
 
   const handleViewUser = (user) => {
     navigate(`/admin/users/${user.slug || user.id}`);
@@ -341,62 +363,147 @@ const AdminUsersPage = ({ currentUser, userData }) => {
               <p>لا يوجد مستخدمين</p>
             </div>
           ) : (
-            <div className="users-table-card">
-              <table className="users-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>الصورة</th>
-                    <th>الاسم</th>
-                    <th>البريد الإلكتروني</th>
-                    <th>الهاتف</th>
-                    <th>الدور</th>
-                    <th>تاريخ التسجيل</th>
-                    <th>الإجراءات</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.map((user, index) => (
-                    <tr key={user.id}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <div className="user-avatar">
-                          <img
-                            src={user.avatar || "/assets/default-avatar.jpg"}
-                            alt={user.name}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <strong>{user.name || "غير متوفر"}</strong>
-                      </td>
-                      <td>{user.email}</td>
-                      <td>{user.phone || "غير متوفر"}</td>
-                      <td>{getRoleBadge(user.role)}</td>
-                      <td>{formatDate(user.createdAt)}</td>
-                      <td>
-                        <div className="action-buttons-group">
-                          <button
-                            className="users-action-btn edit"
-                            onClick={() => handleEditUser(user)}
-                            title="تعديل المستخدم"
-                          >
-                            <i className="fas fa-edit"></i>
-                          </button>
-                          <button
-                            className="users-action-btn view"
-                            onClick={() => handleViewUser(user)}
-                            title="عرض التفاصيل"
-                          >
-                            <i className="fas fa-eye"></i>
-                          </button>
-                        </div>
-                      </td>
+            <>
+              <div className="pagination-info">
+                <div className="items-per-page">
+                  <label>عدد العناصر في الصفحة:</label>
+                  <select
+                    value={itemsPerPage}
+                    onChange={(e) =>
+                      handleItemsPerPageChange(Number(e.target.value))
+                    }
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                  </select>
+                </div>
+                <div className="showing-info">
+                  عرض {indexOfFirstUser + 1} -{" "}
+                  {Math.min(indexOfLastUser, filteredUsers.length)} من{" "}
+                  {filteredUsers.length} مستخدم
+                </div>
+              </div>
+
+              <div className="users-table-card">
+                <table className="users-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>الصورة</th>
+                      <th>الاسم</th>
+                      <th>البريد الإلكتروني</th>
+                      <th>الهاتف</th>
+                      <th>الدور</th>
+                      <th>تاريخ التسجيل</th>
+                      <th>الإجراءات</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {currentUsers.map((user, index) => (
+                      <tr key={user.id}>
+                        <td>{indexOfFirstUser + index + 1}</td>
+                        <td>
+                          <div className="user-avatar">
+                            <img
+                              src={user.avatar || "/assets/default-avatar.jpg"}
+                              alt={user.name}
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <strong>{user.name || "غير متوفر"}</strong>
+                        </td>
+                        <td>{user.email}</td>
+                        <td>{user.phone || "غير متوفر"}</td>
+                        <td>{getRoleBadge(user.role)}</td>
+                        <td>{formatDate(user.createdAt)}</td>
+                        <td>
+                          <div className="action-buttons-group">
+                            <button
+                              className="users-action-btn edit"
+                              onClick={() => handleEditUser(user)}
+                              title="تعديل المستخدم"
+                            >
+                              <i className="fas fa-edit"></i>
+                            </button>
+                            <button
+                              className="users-action-btn view"
+                              onClick={() => handleViewUser(user)}
+                              title="عرض التفاصيل"
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="pagination-controls">
+                  <button
+                    className="pagination-btn"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    <i className="fas fa-chevron-right"></i>
+                    السابق
+                  </button>
+
+                  <div className="pagination-numbers">
+                    {[...Array(totalPages)].map((_, index) => {
+                      const pageNumber = index + 1;
+                      // Show first page, last page, current page, and pages around current
+                      if (
+                        pageNumber === 1 ||
+                        pageNumber === totalPages ||
+                        (pageNumber >= currentPage - 1 &&
+                          pageNumber <= currentPage + 1)
+                      ) {
+                        return (
+                          <button
+                            key={pageNumber}
+                            className={`pagination-number ${
+                              currentPage === pageNumber ? "active" : ""
+                            }`}
+                            onClick={() => handlePageChange(pageNumber)}
+                          >
+                            {pageNumber}
+                          </button>
+                        );
+                      } else if (
+                        pageNumber === currentPage - 2 ||
+                        pageNumber === currentPage + 2
+                      ) {
+                        return (
+                          <span
+                            key={pageNumber}
+                            className="pagination-ellipsis"
+                          >
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
+
+                  <button
+                    className="pagination-btn"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    التالي
+                    <i className="fas fa-chevron-left"></i>
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

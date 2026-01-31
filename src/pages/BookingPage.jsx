@@ -1172,7 +1172,7 @@ const BookingPage = ({ currentUser, userData }) => {
         status: "pending",
         couponCode: appliedCoupon?.code || null,
         couponValue: appliedCoupon?.value ? Number(appliedCoupon.value) : 0,
-        couponDiscountType: appliedCoupon?.discountType || "fixed",
+        couponDiscountType: appliedCoupon?.discountType || null,
         discount: Number(discount) || 0,
       };
 

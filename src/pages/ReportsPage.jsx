@@ -157,6 +157,7 @@ const ReportsPage = ({ currentUser, userData }) => {
           const endDate = new Date(customEndDate);
           endDate.setHours(23, 59, 59, 999); // End of day
           return data.filter((item) => {
+            if (!item[dateField]) return true; // Include items without date
             const itemDate = item[dateField]?.seconds
               ? new Date(item[dateField].seconds * 1000)
               : new Date(item[dateField]);
@@ -169,6 +170,7 @@ const ReportsPage = ({ currentUser, userData }) => {
     }
 
     return data.filter((item) => {
+      if (!item[dateField]) return true; // Include items without date
       const itemDate = item[dateField]?.seconds
         ? new Date(item[dateField].seconds * 1000)
         : new Date(item[dateField]);
@@ -226,9 +228,14 @@ const ReportsPage = ({ currentUser, userData }) => {
   const totalRevenue = appointmentRevenue + ordersRevenue;
   const totalConsultations = filteredConsultations.length;
 
-  // Service statistics - count only completed appointments
+  // Service statistics - count all appointments and track completed ones
   const serviceStats = services
     .map((service) => {
+      // Count ALL appointments for this service
+      const allServiceAppts = filteredAppointments.filter(
+        (apt) => apt.serviceId === service.id,
+      );
+      // Count only completed appointments
       const completedAppts = filteredAppointments.filter(
         (apt) => apt.serviceId === service.id && apt.status === "مكتمل",
       );
@@ -240,8 +247,8 @@ const ReportsPage = ({ currentUser, userData }) => {
       }, 0);
       return {
         ...service,
-        appointmentCount: completedAppts.length,
-        completedCount: completedAppts.length,
+        appointmentCount: allServiceAppts.length, // Total appointments
+        completedCount: completedAppts.length, // Only completed
         revenue: revenue,
       };
     })
@@ -297,11 +304,29 @@ const ReportsPage = ({ currentUser, userData }) => {
   const customerStats = customers
     .filter((customer) => customer.role === "customer")
     .map((customer) => {
+      // Match appointments by customerId, email, or phone to handle potential ID mismatches
       const customerAppointments = filteredAppointments.filter(
-        (apt) => apt.customerId === customer.id,
+        (apt) =>
+          apt.customerId === customer.id ||
+          (apt.customerEmail &&
+            apt.customerEmail.toLowerCase() ===
+              customer.email?.toLowerCase()) ||
+          (apt.customerPhone &&
+            apt.customerPhone
+              .replace(/[\s\-\+]/g, "")
+              .includes(customer.phone?.replace(/[\s\-\+]/g, ""))) ||
+          (customer.phone &&
+            apt.customerPhone &&
+            customer.phone
+              .replace(/[\s\-\+]/g, "")
+              .includes(apt.customerPhone.replace(/[\s\-\+]/g, ""))),
       );
+
       const customerOrders = filteredOrders.filter(
-        (order) => order.userId === customer.id,
+        (order) =>
+          order.userId === customer.id ||
+          (order.userEmail &&
+            order.userEmail.toLowerCase() === customer.email?.toLowerCase()),
       );
       const totalSpent =
         customerAppointments
@@ -887,7 +912,7 @@ const ReportsPage = ({ currentUser, userData }) => {
               <i className="fas fa-users"></i>
               الموظفين
             </button>
-            <button
+            {/* <button
               className={`report-tab ${
                 activeReport === "customers" ? "active" : ""
               }`}
@@ -895,7 +920,7 @@ const ReportsPage = ({ currentUser, userData }) => {
             >
               <i className="fas fa-user-friends"></i>
               العملاء
-            </button>
+            </button> */}
           </div>
         </div>
       </section>
@@ -1442,7 +1467,7 @@ const ReportsPage = ({ currentUser, userData }) => {
       )}
 
       {/* Customers Report */}
-      {activeReport === "customers" && (
+      {/* {activeReport === "customers" && (
         <section className="report-content">
           <div className="container">
             <div className="report-header-with-actions">
@@ -1513,7 +1538,7 @@ const ReportsPage = ({ currentUser, userData }) => {
             </div>
           </div>
         </section>
-      )}
+      )} */}
     </div>
   );
 };

@@ -154,7 +154,7 @@ export const createAppointment = async (appointmentData) => {
       paymentStatus: "في الانتظار", // pending payment
       couponCode: appointmentData.couponCode || null,
       couponValue: appointmentData.couponValue || 0,
-      couponDiscountType: appointmentData.couponDiscountType || "unknown",
+      couponDiscountType: appointmentData.couponDiscountType || null,
       discount: appointmentData.discount || 0,
       createdBy: appointmentData.createdBy || null, // Admin who created it
       createdByAdmin: appointmentData.createdByAdmin || false, // Flag for admin-created
