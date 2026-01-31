@@ -223,7 +223,7 @@ const RegisterPage = () => {
                           });
                         }}
                         className={`form-input ${errors.phone ? "error" : ""}`}
-                        placeholder="+972501234567"
+                        placeholder="+972XXXXXXXXX"
                         maxLength="18"
                         disabled={loading}
                       />

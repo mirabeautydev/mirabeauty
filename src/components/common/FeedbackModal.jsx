@@ -210,7 +210,7 @@ const FeedbackModal = ({
                   }
                 }}
                 required
-                placeholder="+972501234567"
+                placeholder="+972XXXXXXXXX"
                 maxLength="18"
                 disabled={!!currentUser && !!userData?.phone}
                 style={
@@ -236,7 +236,7 @@ const FeedbackModal = ({
                     }}
                   >
                     <i className="fas fa-exclamation-circle"></i> رقم الهاتف يجب
-                    أن يبدأ بـ 972 أو 970 (مثال: +972501234567)
+                    أن يبدأ بـ 972 أو 970 (مثال: +972XXXXXXXXX)
                   </small>
                 )}
             </div>

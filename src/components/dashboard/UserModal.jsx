@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./UserModal.css";
 import useModal from "../../hooks/useModal";
 import CustomModal from "../common/CustomModal";
-import { getAllSkinTypes } from "../../services/skinTypesService";
+
 import { getAllSpecializations } from "../../services/specializationsService";
 
 const UserModal = ({
@@ -23,7 +23,7 @@ const UserModal = ({
     active: user?.active !== undefined ? user.active : true,
     // Customer specific fields
     birthDate: user?.birthDate || "",
-    skinType: user?.skinType || "",
+
     allergies: user?.allergies
       ? Array.isArray(user.allergies)
         ? user.allergies.join(", ")
@@ -32,10 +32,10 @@ const UserModal = ({
     ...user,
   });
 
-  const [skinTypes, setSkinTypes] = useState([]);
+
   const [specializations, setSpecializations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingSkinTypes, setLoadingSkinTypes] = useState(false);
+
   const [loadingSpecializations, setLoadingSpecializations] = useState(false);
 
   // Reset form data when user or modal opens
@@ -50,7 +50,7 @@ const UserModal = ({
       active: user?.active !== undefined ? user.active : true,
       // Customer specific fields
       birthDate: user?.birthDate || "",
-      skinType: user?.skinType || "",
+
       allergies: user?.allergies
         ? Array.isArray(user.allergies)
           ? user.allergies.join(", ")
@@ -61,24 +61,7 @@ const UserModal = ({
   }, [user, isOpen]);
 
   // Load skin types when modal opens for customers
-  useEffect(() => {
-    const loadSkinTypes = async () => {
-      if (isOpen && userType === "customer") {
-        setLoadingSkinTypes(true);
-        try {
-          const types = await getAllSkinTypes();
-          setSkinTypes([{ id: "", name: "اختاري نوع البشرة" }, ...types]);
-        } catch (error) {
-          console.error("Error loading skin types:", error);
-          // If loading fails, leave empty
-          setSkinTypes([{ id: "", name: "اختاري نوع البشرة" }]);
-        } finally {
-          setLoadingSkinTypes(false);
-        }
-      }
-    };
-    loadSkinTypes();
-  }, [isOpen, userType]);
+
 
   // Load specializations when modal opens for staff
   useEffect(() => {
@@ -270,7 +253,7 @@ const UserModal = ({
                 required
                 maxLength="18"
                 className="admin-user-form-input"
-                placeholder="+972501234567"
+                placeholder="+972XXXXXXXXX"
               />
               {formData.phone &&
                 formData.phone.length > 0 &&
@@ -285,7 +268,7 @@ const UserModal = ({
                     }}
                   >
                     <i className="fas fa-exclamation-circle"></i> رقم الهاتف يجب
-                    أن يبدأ بـ 972 أو 970 (مثال: +972501234567)
+                    أن يبدأ بـ 972 أو 970 (مثال: +972XXXXXXXXX)
                   </small>
                 )}
             </div>
@@ -348,24 +331,7 @@ const UserModal = ({
                 </div>
               </div>
 
-              <div className="admin-user-form-row">
-                <div className="admin-user-form-group">
-                  <label htmlFor="skinType">نوع البشرة (اختياري)</label>
-                  <select
-                    id="skinType"
-                    name="skinType"
-                    value={formData.skinType}
-                    onChange={handleChange}
-                    className="admin-user-form-input"
-                  >
-                    {skinTypes.map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+
 
               <div className="admin-user-form-row">
                 <div className="admin-user-form-group">

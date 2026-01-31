@@ -1325,7 +1325,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                                 });
                               }}
                               className="form-input"
-                              placeholder="+972501234567"
+                              placeholder="+972XXXXXXXXX"
                               maxLength="18"
                             />
                             <small className="field-hint">
@@ -1356,7 +1356,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                         )}
                       </div>
 
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label className="form-label">نوع البشرة</label>
                         {editMode ? (
                           <select
@@ -1377,7 +1377,7 @@ const ProfilePage = ({ currentUser, userData, setCurrentUser = () => {} }) => {
                             {completeUserData?.skinType || "غير محدد"}
                           </p>
                         )}
-                      </div>
+                      </div> */}
 
                       <div className="form-group">
                         <label className="form-label">الحساسية</label>

@@ -4063,7 +4063,7 @@ const AdminDashboardPage = ({ currentUser }) => {
                                     });
                                   }}
                                   className="form-input"
-                                  placeholder="+972501234567"
+                                  placeholder="+972XXXXXXXXX"
                                   maxLength="18"
                                 />
                                 <small className="form-note">
