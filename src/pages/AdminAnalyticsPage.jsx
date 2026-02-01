@@ -437,7 +437,7 @@ const AdminAnalyticsPage = () => {
               <i className="fas fa-user-check"></i>
             </div>
             <div className="analytics-period-stat-content">
-              <h3>زوار فريدون</h3>
+              <h3>الزوار</h3>
               <p className="analytics-period-stat-number">
                 {periodStats.visitors.uniqueVisitors}
               </p>
