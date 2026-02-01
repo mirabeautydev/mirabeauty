@@ -170,12 +170,12 @@ const AppointmentsTimeline = ({
                           getAppointmentPosition(a.time) -
                           getAppointmentPosition(b.time)
                         );
-                      }
+                      },
                     );
 
                     sortedAppointments.forEach((appointment) => {
                       const startPosition = getAppointmentPosition(
-                        appointment.time
+                        appointment.time,
                       );
                       const duration =
                         appointment.serviceDuration ||
@@ -193,8 +193,13 @@ const AppointmentsTimeline = ({
                             apt.serviceDuration || apt.duration || 30;
                           const aptEnd =
                             aptStart + getAppointmentWidth(aptDuration);
+
+                          // Add small tolerance (0.1%) to handle floating point precision
+                          const tolerance = 0.1;
+
                           return (
-                            startPosition < aptEnd && endPosition > aptStart
+                            startPosition + tolerance < aptEnd &&
+                            endPosition - tolerance > aptStart
                           );
                         });
 
@@ -212,7 +217,7 @@ const AppointmentsTimeline = ({
 
                     return rows.length * 85 + 20; // 85px per row (68px card + 17px gap) + 20px padding
                   })()
-                : 150
+                : 150,
             )}px`,
           }}
         >
@@ -225,7 +230,7 @@ const AppointmentsTimeline = ({
                   getAppointmentPosition(a.time) -
                   getAppointmentPosition(b.time)
                 );
-              }
+              },
             );
 
             sortedAppointments.forEach((appointment) => {
@@ -243,8 +248,17 @@ const AppointmentsTimeline = ({
                   const aptStart = getAppointmentPosition(apt.time);
                   const aptDuration = apt.serviceDuration || apt.duration || 30;
                   const aptEnd = aptStart + getAppointmentWidth(aptDuration);
-                  // Check if appointments overlap
-                  return startPosition < aptEnd && endPosition > aptStart;
+
+                  // Add small tolerance (0.1%) to handle floating point precision
+                  // Appointments that are touching (one ends when other starts) should NOT overlap
+                  const tolerance = 0.1;
+
+                  // Check if appointments overlap with tolerance
+                  // Only overlap if there's actual time conflict (not just touching)
+                  return (
+                    startPosition + tolerance < aptEnd &&
+                    endPosition - tolerance > aptStart
+                  );
                 });
 
                 if (!hasOverlap) {
@@ -272,7 +286,7 @@ const AppointmentsTimeline = ({
                   <div
                     key={appointment.id}
                     className={`timeline-appointment ${getStatusColor(
-                      appointment.status
+                      appointment.status,
                     )}`}
                     onClick={() =>
                       onAppointmentClick && onAppointmentClick(appointment)
@@ -293,7 +307,7 @@ const AppointmentsTimeline = ({
                       </div>
                       <div
                         className={`appointment-status-compact ${getStatusColor(
-                          appointment.status
+                          appointment.status,
                         )}`}
                       >
                         {appointment.status}
@@ -301,7 +315,7 @@ const AppointmentsTimeline = ({
                     </div>
                   </div>
                 );
-              })
+              }),
             );
           })()}
         </div>
