@@ -81,11 +81,12 @@ export const getAppointmentsStats = async () => {
     snapshot.forEach((doc) => {
       const appointment = doc.data();
 
-      if (appointment.status === "confirmed") {
+      // Status values are stored in Arabic
+      if (appointment.status === "مؤكد") {
         confirmedAppointments++;
-      } else if (appointment.status === "pending") {
+      } else if (appointment.status === "في الانتظار") {
         pendingAppointments++;
-      } else if (appointment.status === "completed") {
+      } else if (appointment.status === "مكتمل") {
         completedAppointments++;
       }
     });
@@ -382,7 +383,7 @@ export const getRecentActivities = async (limitCount = 10) => {
     const ordersQuery = query(
       ordersRef,
       orderBy("createdAt", "desc"),
-      limit(5)
+      limit(5),
     );
     const ordersSnapshot = await getDocs(ordersQuery);
 
@@ -402,7 +403,7 @@ export const getRecentActivities = async (limitCount = 10) => {
     const appointmentsQuery = query(
       appointmentsRef,
       orderBy("createdAt", "desc"),
-      limit(5)
+      limit(5),
     );
     const appointmentsSnapshot = await getDocs(appointmentsQuery);
 
@@ -560,13 +561,14 @@ export const getAppointmentsStatsByPeriod = async (startDate, endDate) => {
     snapshot.forEach((doc) => {
       const appointment = doc.data();
 
-      if (appointment.status === "confirmed") {
+      // Status values are stored in Arabic
+      if (appointment.status === "مؤكد") {
         confirmedAppointments++;
-      } else if (appointment.status === "pending") {
+      } else if (appointment.status === "في الانتظار") {
         pendingAppointments++;
-      } else if (appointment.status === "completed") {
+      } else if (appointment.status === "مكتمل") {
         completedAppointments++;
-      } else if (appointment.status === "cancelled") {
+      } else if (appointment.status === "ملغي") {
         cancelledAppointments++;
       }
     });
@@ -599,47 +601,67 @@ export const getVisitorsStatsByPeriod = async (startDate, endDate) => {
     const startDateStr = start.toISOString().split("T")[0];
     const endDateStr = end.toISOString().split("T")[0];
 
-    // Use a single query to get all visitors data in the date range
+    // Query visitors data for unique visitors
     const visitorsRef = ref(database, "visitors");
-    const rangeQuery = dbQuery(
+    const visitorsQuery = dbQuery(
       visitorsRef,
       orderByKey(),
       startAt(startDateStr),
-      endAt(endDateStr)
+      endAt(endDateStr),
     );
 
-    const snapshot = await get(rangeQuery);
+    // Query visits data for total visits count
+    const visitsRef = ref(database, "visits");
+    const visitsQuery = dbQuery(
+      visitsRef,
+      orderByKey(),
+      startAt(startDateStr),
+      endAt(endDateStr),
+    );
 
-    if (!snapshot.exists()) {
-      return {
-        totalVisitors: 0,
-        uniqueVisitors: 0,
-        avgDailyVisitors: 0,
-      };
+    const [visitorsSnapshot, visitsSnapshot] = await Promise.all([
+      get(visitorsQuery),
+      get(visitsQuery),
+    ]);
+
+    const uniqueSessions = new Set();
+    let totalVisits = 0;
+
+    // Count unique visitors from visitors collection
+    if (visitorsSnapshot.exists()) {
+      const visitorsData = visitorsSnapshot.val();
+      Object.entries(visitorsData).forEach(([date, dayData]) => {
+        if (dayData && typeof dayData === "object") {
+          Object.keys(dayData).forEach((sessionId) => {
+            uniqueSessions.add(sessionId);
+          });
+        }
+      });
     }
 
-    const data = snapshot.val();
-    const uniqueSessions = new Set();
-    let totalVisitors = 0;
-
-    // Process all visitors data at once
-    Object.entries(data).forEach(([date, dayData]) => {
-      if (dayData && typeof dayData === "object") {
-        const sessionIds = Object.keys(dayData);
-        totalVisitors += sessionIds.length;
-        sessionIds.forEach((id) => uniqueSessions.add(id));
-      }
-    });
+    // Count total visits from visits collection
+    if (visitsSnapshot.exists()) {
+      const visitsData = visitsSnapshot.val();
+      Object.entries(visitsData).forEach(([date, dayData]) => {
+        if (dayData && typeof dayData === "object") {
+          Object.values(dayData).forEach((sessionVisits) => {
+            if (sessionVisits && typeof sessionVisits === "object") {
+              totalVisits += Object.keys(sessionVisits).length;
+            }
+          });
+        }
+      });
+    }
 
     const uniqueVisitors = uniqueSessions.size;
 
     // Calculate days in range
     const daysInRange = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
     const avgDailyVisitors =
-      daysInRange > 0 ? Math.round(totalVisitors / daysInRange) : 0;
+      daysInRange > 0 ? Math.round(totalVisits / daysInRange) : 0;
 
     return {
-      totalVisitors,
+      totalVisitors: totalVisits,
       uniqueVisitors,
       avgDailyVisitors,
     };

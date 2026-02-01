@@ -97,7 +97,7 @@ class PresenceTracking {
       database,
       `pageViews/${
         new Date().toISOString().split("T")[0]
-      }/${userId}/${Date.now()}`
+      }/${userId}/${Date.now()}`,
     );
     set(pageViewRef, {
       page: pageName,
@@ -141,22 +141,34 @@ class PresenceTracking {
         JSON.stringify({
           id: sessionId,
           timestamp: now,
-        })
+        }),
       );
 
       const dateKey = new Date().toISOString().split("T")[0];
 
-      // Track new visitor
+      // Track new visitor with initial visit count
       const visitorRef = ref(database, `visitors/${dateKey}/${sessionId}`);
 
       set(visitorRef, {
         timestamp: serverTimestamp(),
         sessionId: sessionId,
         userAgent: navigator.userAgent,
+        visitCount: 1,
       })
         .then(() => {})
         .catch((error) => {});
     }
+
+    // Track this page load as a visit
+    const dateKey = new Date().toISOString().split("T")[0];
+    const visitRef = ref(
+      database,
+      `visits/${dateKey}/${sessionId}/${Date.now()}`,
+    );
+    set(visitRef, {
+      timestamp: serverTimestamp(),
+      sessionId: sessionId,
+    }).catch((error) => {});
 
     // Track anonymous user presence in real-time
     this.initializeAnonymousPresence(sessionId);

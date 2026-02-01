@@ -42,6 +42,7 @@ const AdminAnalyticsPage = () => {
       totalAppointments: 0,
       confirmedAppointments: 0,
       pendingAppointments: 0,
+      completedAppointments: 0,
     },
     popularProducts: [],
     popularServices: [],
@@ -415,7 +416,7 @@ const AdminAnalyticsPage = () => {
           </div>
 
           {/* Total Visitors */}
-          <div className="analytics-period-stat-card">
+          {/* <div className="analytics-period-stat-card">
             <div className="analytics-period-stat-icon">
               <i className="fas fa-eye"></i>
             </div>
@@ -428,7 +429,7 @@ const AdminAnalyticsPage = () => {
                 جميع الزيارات (تشمل المتكررة)
               </span>
             </div>
-          </div>
+          </div> */}
 
           {/* Unique Visitors */}
           <div className="analytics-period-stat-card">

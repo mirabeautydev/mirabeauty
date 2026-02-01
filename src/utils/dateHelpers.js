@@ -41,7 +41,7 @@ export const formatFirestoreDate = (timestamp, locale = "en-GB", options = {}) =
 export const formatFirestoreDateTime = (timestamp, locale = "en-GB") => {
   return formatFirestoreDate(timestamp, locale, {
     year: "numeric",
-    month: "short",
+    month: "2-digit",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",

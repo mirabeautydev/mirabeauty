@@ -9,6 +9,10 @@ import {
 } from "../../services/appointmentsService";
 import { getAllServiceCategories } from "../../services/categoriesService";
 import { getAllSpecializations } from "../../services/specializationsService";
+import {
+  validateCoupon,
+  calculateDiscount,
+} from "../../services/couponsService";
 import { useModal } from "../../hooks/useModal";
 import CustomModal from "../common/CustomModal";
 
@@ -45,6 +49,11 @@ const AdminCreateAppointmentModal = ({
     useCustomTime: false,
     customStartTime: "",
     customEndTime: "",
+    // Coupon data
+    couponCode: "",
+    couponValue: 0,
+    couponDiscountType: null,
+    discount: 0,
   });
 
   const [services, setServices] = useState([]);
@@ -61,6 +70,10 @@ const AdminCreateAppointmentModal = ({
   const [serviceSearch, setServiceSearch] = useState("");
   const [showServiceDropdown, setShowServiceDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [isCouponLoading, setIsCouponLoading] = useState(false);
+  const [couponMessage, setCouponMessage] = useState(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -83,11 +96,18 @@ const AdminCreateAppointmentModal = ({
         useCustomTime: false,
         customStartTime: "",
         customEndTime: "",
+        couponCode: "",
+        couponValue: 0,
+        couponDiscountType: null,
+        discount: 0,
       });
       setServiceSearch("");
       setShowServiceDropdown(false);
       setSelectedIndex(-1);
       setError("");
+      setPromoCode("");
+      setAppliedCoupon(null);
+      setCouponMessage(null);
       setStaffAvailability({
         isChecking: false,
         available: true,
@@ -365,6 +385,90 @@ const AdminCreateAppointmentModal = ({
     }
   }, [formData.staffId, formData.date, formData.time, formData.serviceId]);
 
+  // Handle coupon validation
+  const handleApplyCoupon = async () => {
+    if (!promoCode.trim()) {
+      setCouponMessage({ type: "error", text: "الرجاء إدخال كود الخصم" });
+      return;
+    }
+
+    if (!formData.serviceId) {
+      setCouponMessage({ type: "error", text: "الرجاء اختيار الخدمة أولاً" });
+      return;
+    }
+
+    setIsCouponLoading(true);
+    setCouponMessage(null);
+    try {
+      const service = services.find((s) => s.id === formData.serviceId);
+      if (!service) {
+        setCouponMessage({ type: "error", text: "لم يتم العثور على الخدمة" });
+        setIsCouponLoading(false);
+        return;
+      }
+
+      const servicePrice = parseFloat(
+        (formData.selectedOption?.price || service.price)
+          ?.toString()
+          .replace(/[^\d.]/g, "") || 0,
+      );
+      const categoryIds = [service.category || service.categoryId];
+
+      const result = await validateCoupon(
+        promoCode,
+        "services",
+        categoryIds,
+        servicePrice,
+      );
+
+      if (result.valid) {
+        setAppliedCoupon(result.coupon);
+        const discountAmount = calculateDiscount(result.coupon, servicePrice);
+
+        setFormData((prev) => ({
+          ...prev,
+          couponCode: result.coupon.code,
+          couponValue: result.coupon.value,
+          couponDiscountType: result.coupon.discountType,
+          discount: discountAmount,
+        }));
+
+        const discountMessage =
+          result.coupon.discountType === "percentage"
+            ? `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value}% (${discountAmount.toFixed(2)} شيكل)`
+            : `تم تطبيق كوبون الخصم بنجاح! خصم ${result.coupon.value} شيكل`;
+
+        setCouponMessage({ type: "success", text: discountMessage });
+      } else {
+        setCouponMessage({
+          type: "error",
+          text: result.error || "كود الخصم غير صحيح",
+        });
+      }
+    } catch (error) {
+      console.error("Error validating coupon:", error);
+      setCouponMessage({
+        type: "error",
+        text: "حدث خطأ في التحقق من كود الخصم",
+      });
+    } finally {
+      setIsCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setPromoCode("");
+    setCouponMessage(null);
+    setFormData((prev) => ({
+      ...prev,
+      couponCode: "",
+      couponValue: 0,
+      couponDiscountType: null,
+      discount: 0,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -618,6 +722,11 @@ const AdminCreateAppointmentModal = ({
         status: "مؤكد", // Admin-created appointments are confirmed by default
         createdByAdmin: true, // Flag to indicate admin creation
         createdBy: currentUser?.uid || null, // Store admin ID who created this
+        // Add coupon data if applied
+        couponCode: formData.couponCode || null,
+        couponValue: formData.couponValue || 0,
+        couponDiscountType: formData.couponDiscountType || null,
+        discount: formData.discount || 0,
       };
 
       await createAppointment(appointmentData);
@@ -638,7 +747,14 @@ const AdminCreateAppointmentModal = ({
         useCustomTime: false,
         customStartTime: "",
         customEndTime: "",
+        couponCode: "",
+        couponValue: 0,
+        couponDiscountType: null,
+        discount: 0,
       });
+      setPromoCode("");
+      setAppliedCoupon(null);
+      setCouponMessage(null);
 
       setLoading(false);
       onSuccess();
@@ -1357,6 +1473,141 @@ const AdminCreateAppointmentModal = ({
                     </div>
                   </div>
                 )}
+            </div>
+
+            {/* Coupon Section */}
+            <div className="form-group">
+              <label htmlFor="couponCode">كود الخصم (اختياري)</label>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem",
+                  alignItems: "flex-start",
+                }}
+              >
+                <input
+                  type="text"
+                  id="couponCode"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  placeholder="أدخل كود الخصم"
+                  className="form-input"
+                  style={{ flex: 1 }}
+                  disabled={appliedCoupon !== null || !formData.serviceId}
+                />
+                {!appliedCoupon ? (
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    disabled={
+                      isCouponLoading ||
+                      !promoCode.trim() ||
+                      !formData.serviceId
+                    }
+                    style={{
+                      padding: "0.75rem 1.5rem",
+                      backgroundColor: "#0f2a5a",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      cursor:
+                        promoCode.trim() && formData.serviceId
+                          ? "pointer"
+                          : "not-allowed",
+                      opacity: promoCode.trim() && formData.serviceId ? 1 : 0.5,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {isCouponLoading ? "جاري التحقق..." : "تطبيق"}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleRemoveCoupon}
+                    style={{
+                      padding: "0.75rem 1.5rem",
+                      backgroundColor: "#dc3545",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    إزالة
+                  </button>
+                )}
+              </div>
+
+              {/* Inline coupon message */}
+              {couponMessage && !appliedCoupon && (
+                <div
+                  style={{
+                    marginTop: "0.75rem",
+                    padding: "0.75rem",
+                    backgroundColor:
+                      couponMessage.type === "success" ? "#d4edda" : "#f8d7da",
+                    borderRadius: "8px",
+                    border: `1px solid ${couponMessage.type === "success" ? "#c3e6cb" : "#f5c6cb"}`,
+                    color:
+                      couponMessage.type === "success" ? "#155724" : "#721c24",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <i
+                    className={`fas fa-${couponMessage.type === "success" ? "check-circle" : "exclamation-circle"}`}
+                  ></i>
+                  <span>{couponMessage.text}</span>
+                </div>
+              )}
+
+              {appliedCoupon && (
+                <div
+                  style={{
+                    marginTop: "0.75rem",
+                    padding: "1rem",
+                    backgroundColor: "#d4edda",
+                    borderRadius: "8px",
+                    border: "1px solid #c3e6cb",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    <i
+                      className="fas fa-check-circle"
+                      style={{ color: "#155724" }}
+                    ></i>
+                    <span style={{ color: "#155724", fontWeight: "bold" }}>
+                      تم تطبيق كوبون الخصم
+                    </span>
+                  </div>
+                  <div style={{ color: "#155724", fontSize: "0.9rem" }}>
+                    <div>
+                      <strong>الكود:</strong> {appliedCoupon.code}
+                    </div>
+                    <div>
+                      <strong>الخصم:</strong>{" "}
+                      {appliedCoupon.discountType === "percentage"
+                        ? `${appliedCoupon.value}%`
+                        : `${appliedCoupon.value} شيكل`}
+                    </div>
+                    {formData.discount > 0 && (
+                      <div>
+                        <strong>قيمة الخصم:</strong>{" "}
+                        {formData.discount.toFixed(2)} شيكل
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="form-group">
