@@ -281,13 +281,29 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
 
   // Generate appointment confirmation message
   const generateConfirmationMessage = (appointment) => {
+    // Format the date with Arabic day name and date
+    const appointmentDate = new Date(appointment.date);
+    const arabicDayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+    
+    const dayName = arabicDayNames[appointmentDate.getDay()];
+    const dayOfMonth = appointmentDate.getDate();
+    const month = appointmentDate.getMonth() + 1; // Month as number (1-12)
+    
+    const formattedDate = `${dayName} ${dayOfMonth}/${month}`;
+    
+    // Convert time to 12-hour format with مساءً/صباحاً
+    const [hours, minutes] = appointment.time.split(':').map(Number);
+    let hours12 = hours % 12 || 12;
+    const period = hours >= 12 ? 'مساءً' : 'صباحاً';
+    const formattedTime = `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    
     return `☆ تم تأكيد موعدك بنجاح
 
 تفاصيل الموعد:
 ━━━━━━━━━━━━━━━
 ▪ الخدمة: ${appointment.serviceName}
-▪ التاريخ: ${appointment.date}
-▪ الوقت: ${appointment.time}
+▪ التاريخ: ${formattedDate}
+▪ الوقت: ${formattedTime}
 
 ⚠ تعليمات هامة:
 • نرجو الحضور قبل الموعد بـ 10 دقائق
@@ -295,17 +311,40 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
 • لا يمكن إلغاء أو تعديل الموعد إذا تبقى أقل من 12 ساعة
 • يتم الإلغاء أو التعديل حصريًا عبر التواصل مع إدارة المركز
 
+📍 العنوان:
+رام الله - شارع مستشفى رام الله - عمارة الويفز تاور (تاج مول) - الطابق 8
+
 يسعدنا استقبالكم، ونتطلع لتجربة مميزة تليق بكم ♥`;
   };
 
   // Generate reminder message
   const generateReminderMessage = (appointment) => {
+    // Format the date with Arabic day name and date
+    const appointmentDate = new Date(appointment.date);
+    const arabicDayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+    
+    const dayName = arabicDayNames[appointmentDate.getDay()];
+    const dayOfMonth = appointmentDate.getDate();
+    const month = appointmentDate.getMonth() + 1; // Month as number (1-12)
+    
+    const formattedDate = `${dayName} ${dayOfMonth}/${month}`;
+    
+    // Convert time to 12-hour format with مساءً/صباحاً
+    const [hours, minutes] = appointment.time.split(':').map(Number);
+    let hours12 = hours % 12 || 12;
+    const period = hours >= 12 ? 'مساءً' : 'صباحاً';
+    const formattedTime = `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    
     return `مرحبًا، يسعد صباحك.✿
-نودّ تأكيد موعدك غدًا الساعة ${appointment.time}
+نودّ تأكيد موعدك يوم ${formattedDate} الساعة ${formattedTime}
 • نرجو منك قراءة التعليمات الخاصة بالخدمة قبل الجلسة للضرورة
 • والحضور قبل الموعد بعشر دقائق
 • ونلفت عنايتك إلى ضرورة الاعتذار أو التعديل قبل 12 ساعة على الأقل
 • كما يرجى إحضار كرت الزيارة ♥
+
+📍 العنوان:
+رام الله - شارع مستشفى رام الله - عمارة الويفز تاور (تاج مول) - الطابق 8
+
 بانتظارك ✓`;
   };
 
@@ -483,57 +522,7 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
     }
   };
 
-  // Handle sending reminder for filtered appointments
-  const handleSendBulkReminders = async () => {
-    try {
-      const filteredAppts = getFilteredAppointments();
 
-      if (filteredAppts.length === 0) {
-        showWarning("لا توجد مواعيد مفلترة لإرسال تذكير لها");
-        return;
-      }
-
-      const confirmed = await showConfirm(
-        `سيتم إرسال تذكير عبر واتساب لـ ${filteredAppts.length} موعد.\n\nهل تريد المتابعة؟`,
-        "إرسال تذكير جماعي",
-        "إرسال",
-        "إلغاء",
-      );
-
-      if (confirmed) {
-        let sentCount = 0;
-        let failedCount = 0;
-
-        for (const appointment of filteredAppts) {
-          if (appointment.customerPhone) {
-            try {
-              const message = generateReminderMessage(appointment);
-              openWhatsAppMessageModal(appointment.customerPhone, message);
-              sentCount++;
-              // Add delay between messages to avoid rate limiting
-              await new Promise((resolve) => setTimeout(resolve, 1000));
-            } catch (err) {
-              console.error(
-                `Failed to send reminder for ${appointment.customerName}:`,
-                err,
-              );
-              failedCount++;
-            }
-          } else {
-            failedCount++;
-          }
-        }
-
-        showSuccess(
-          `تم إرسال ${sentCount} تذكير بنجاح` +
-            (failedCount > 0 ? `\nفشل إرسال ${failedCount} تذكير` : ""),
-        );
-      }
-    } catch (error) {
-      console.error("Error sending bulk reminders:", error);
-      showError("فشل في إرسال التذكيرات");
-    }
-  };
 
   // Handle complete appointment - open completion modal
   const handleCompleteAppointment = (appointment) => {
@@ -959,17 +948,6 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
             setCurrentPage(1);
           }}
         />
-        {statusFilter === "مؤكد" && (
-          <button
-            className="aap-btn-reminder"
-            onClick={handleSendBulkReminders}
-            title="إرسال تذكير واتساب للمواعيد المؤكدة"
-            disabled={getFilteredAppointments().length === 0}
-          >
-            <i className="fab fa-whatsapp"></i>
-            إرسال تذكير ({getFilteredAppointments().length})
-          </button>
-        )}
       </div>
 
       {/* Statistics */}
