@@ -283,20 +283,28 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
   const generateConfirmationMessage = (appointment) => {
     // Format the date with Arabic day name and date
     const appointmentDate = new Date(appointment.date);
-    const arabicDayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-    
+    const arabicDayNames = [
+      "الأحد",
+      "الاثنين",
+      "الثلاثاء",
+      "الأربعاء",
+      "الخميس",
+      "الجمعة",
+      "السبت",
+    ];
+
     const dayName = arabicDayNames[appointmentDate.getDay()];
     const dayOfMonth = appointmentDate.getDate();
     const month = appointmentDate.getMonth() + 1; // Month as number (1-12)
-    
+
     const formattedDate = `${dayName} ${dayOfMonth}/${month}`;
-    
+
     // Convert time to 12-hour format with مساءً/صباحاً
-    const [hours, minutes] = appointment.time.split(':').map(Number);
+    const [hours, minutes] = appointment.time.split(":").map(Number);
     let hours12 = hours % 12 || 12;
-    const period = hours >= 12 ? 'مساءً' : 'صباحاً';
-    const formattedTime = `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
-    
+    const period = hours >= 12 ? "مساءً" : "صباحاً";
+    const formattedTime = `${hours12}:${minutes.toString().padStart(2, "0")} ${period}`;
+
     return `☆ تم تأكيد موعدك بنجاح
 
 تفاصيل الموعد:
@@ -321,20 +329,28 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
   const generateReminderMessage = (appointment) => {
     // Format the date with Arabic day name and date
     const appointmentDate = new Date(appointment.date);
-    const arabicDayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-    
+    const arabicDayNames = [
+      "الأحد",
+      "الاثنين",
+      "الثلاثاء",
+      "الأربعاء",
+      "الخميس",
+      "الجمعة",
+      "السبت",
+    ];
+
     const dayName = arabicDayNames[appointmentDate.getDay()];
     const dayOfMonth = appointmentDate.getDate();
     const month = appointmentDate.getMonth() + 1; // Month as number (1-12)
-    
+
     const formattedDate = `${dayName} ${dayOfMonth}/${month}`;
-    
+
     // Convert time to 12-hour format with مساءً/صباحاً
-    const [hours, minutes] = appointment.time.split(':').map(Number);
+    const [hours, minutes] = appointment.time.split(":").map(Number);
     let hours12 = hours % 12 || 12;
-    const period = hours >= 12 ? 'مساءً' : 'صباحاً';
-    const formattedTime = `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
-    
+    const period = hours >= 12 ? "مساءً" : "صباحاً";
+    const formattedTime = `${hours12}:${minutes.toString().padStart(2, "0")} ${period}`;
+
     return `مرحبًا، يسعد صباحك.✿
 نودّ تأكيد موعدك يوم ${formattedDate} الساعة ${formattedTime}
 • نرجو منك قراءة التعليمات الخاصة بالخدمة قبل الجلسة للضرورة
@@ -522,8 +538,6 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
     }
   };
 
-
-
   // Handle complete appointment - open completion modal
   const handleCompleteAppointment = (appointment) => {
     setAppointmentToComplete(appointment);
@@ -619,11 +633,14 @@ const AdminAppointmentsPage = ({ currentUser, userData }) => {
 
       // If staff is assigned and date/time changed, check for conflicts
       if (updatedData.staffId && (staffChanged || dateChanged || timeChanged)) {
-        const isAvailable = await checkStaffAvailability(
+        const availabilityResult = await checkStaffAvailabilityWithDuration(
           updatedData.staffId,
           updatedData.date,
           updatedData.time,
+          appointmentToEdit.serviceDuration || appointmentToEdit.duration || 60,
+          appointmentToEdit.id,
         );
+        const isAvailable = availabilityResult.available;
 
         if (!isAvailable) {
           showError(
