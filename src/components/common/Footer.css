@@ -176,7 +176,7 @@
 }
 
 .contact-link.address {
-  cursor: default;
+  cursor: pointer;
 }
 
 .contact-icon {
