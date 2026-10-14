@@ -322,126 +322,6 @@ const HomePage = () => {
   </button>
 </section>
 
-
-      {/* Featured Services */}
-      <section className="featured-services section">
-        <div className="container">
-          <div className="section-header text-center mb-3">
-            <h2>خدماتنا المميزة</h2>
-          </div>
-          <div className="services-grid grid-3">
-            {loading ? (
-              <div style={{ gridColumn: "1/-1" }}>
-                <LoadingSpinner />
-              </div>
-            ) : error ? (
-              <div style={{ gridColumn: "1/-1", textAlign: "center" }}>
-                <p style={{ color: "#721c24", marginBottom: "1rem" }}>
-                  {error}
-                </p>
-                <button className="btn-primary" onClick={loadData}>
-                  إعادة المحاولة
-                </button>
-              </div>
-            ) : services.length === 0 ? (
-              <div
-                style={{
-                  gridColumn: "1/-1",
-                  textAlign: "center",
-                  padding: "3rem 1rem",
-                }}
-              >
-                <i
-                  className="fas fa-spa"
-                  style={{
-                    fontSize: "3rem",
-                    color: "var(--gold)",
-                    marginBottom: "1rem",
-                  }}
-                ></i>
-                <h3
-                  style={{ color: "var(--charcoal)", marginBottom: "0.5rem" }}
-                >
-                  غير متوفر حالياً تصفح باقي الخدمات
-                </h3>
-              </div>
-            ) : (
-              services.map((service) => {
-                // Get primary image or first image - handle object-based images
-                const primaryImage =
-                  service.images && service.images.length > 0
-                    ? service.images[service.primaryImageIndex || 0]?.url ||
-                      service.images[service.primaryImageIndex || 0]
-                    : service.icon || "/assets/default-service.png";
-
-                return (
-                  <div key={service.id} className="service-card card">
-  <div className="service-icon">
-    <img
-      src={primaryImage}
-      alt={service.name}
-      loading="lazy"
-    />
-  </div>
-
-  <div className="service-content">
-    <h3 className="service-title">{service.name}</h3>
-    <p className="service-description">{service.description}</p>
-
-    <button
-      className="btn-secondary service-btn"
-      onClick={() =>
-        navigateWithLoading("/book", {
-          state: {
-            selectedService: service,
-            fromHomePage: true,
-          },
-        })
-      }
-    >
-      احجزي الآن
-    </button>
-  </div>
-</div>
-
-                );
-              })
-            )}
-          </div>
-          <div className="text-center" style={{ marginTop: "2rem" }}>
-            <button
-              className="btn-primary"
-              onClick={() => navigateWithLoading("/services")}
-            >
-              عرض جميع الخدمات
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Promotional Banner */}
-      {banner &&
-        banner.isActive &&
-        (banner.imageUrl || banner.imageUrl?.url) && (
-          <section className="promotional-banner-section">
-            <div className="promo-container">
-              <PromotionalBanner
-                backgroundImage={
-                  typeof banner.imageUrl === "object"
-                    ? banner.imageUrl?.url
-                    : banner.imageUrl
-                }
-                headline={banner.title || "عروض حصرية"}
-                subheading={banner.description || ""}
-                primaryButtonText={banner.buttonText || "اكتشف المزيد"}
-                primaryButtonAction={banner.link || "/products"}
-                secondaryButtonText=""
-                secondaryButtonAction=""
-              />
-            </div>
-          </section>
-        )}
-
       {/* Top Sales */}
       <section className="top-sales section">
         <div className="container">
@@ -573,6 +453,125 @@ const HomePage = () => {
               onClick={() => navigateWithLoading("/products")}
             >
               عرض جميع المنتجات
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Promotional Banner */}
+      {banner &&
+        banner.isActive &&
+        (banner.imageUrl || banner.imageUrl?.url) && (
+          <section className="promotional-banner-section">
+            <div className="promo-container">
+              <PromotionalBanner
+                backgroundImage={
+                  typeof banner.imageUrl === "object"
+                    ? banner.imageUrl?.url
+                    : banner.imageUrl
+                }
+                headline={banner.title || "عروض حصرية"}
+                subheading={banner.description || ""}
+                primaryButtonText={banner.buttonText || "اكتشف المزيد"}
+                primaryButtonAction={banner.link || "/products"}
+                secondaryButtonText=""
+                secondaryButtonAction=""
+              />
+            </div>
+          </section>
+        )}
+
+      {/* Featured Services */}
+      <section className="featured-services section">
+        <div className="container">
+          <div className="section-header text-center mb-3">
+            <h2>خدماتنا المميزة</h2>
+          </div>
+          <div className="services-grid grid-3">
+            {loading ? (
+              <div style={{ gridColumn: "1/-1" }}>
+                <LoadingSpinner />
+              </div>
+            ) : error ? (
+              <div style={{ gridColumn: "1/-1", textAlign: "center" }}>
+                <p style={{ color: "#721c24", marginBottom: "1rem" }}>
+                  {error}
+                </p>
+                <button className="btn-primary" onClick={loadData}>
+                  إعادة المحاولة
+                </button>
+              </div>
+            ) : services.length === 0 ? (
+              <div
+                style={{
+                  gridColumn: "1/-1",
+                  textAlign: "center",
+                  padding: "3rem 1rem",
+                }}
+              >
+                <i
+                  className="fas fa-spa"
+                  style={{
+                    fontSize: "3rem",
+                    color: "var(--gold)",
+                    marginBottom: "1rem",
+                  }}
+                ></i>
+                <h3
+                  style={{ color: "var(--charcoal)", marginBottom: "0.5rem" }}
+                >
+                  غير متوفر حالياً تصفح باقي الخدمات
+                </h3>
+              </div>
+            ) : (
+              services.map((service) => {
+                // Get primary image or first image - handle object-based images
+                const primaryImage =
+                  service.images && service.images.length > 0
+                    ? service.images[service.primaryImageIndex || 0]?.url ||
+                      service.images[service.primaryImageIndex || 0]
+                    : service.icon || "/assets/default-service.png";
+
+                return (
+                  <div key={service.id} className="service-card card">
+  <div className="service-icon">
+    <img
+      src={primaryImage}
+      alt={service.name}
+      loading="lazy"
+    />
+  </div>
+
+  <div className="service-content">
+    <h3 className="service-title">{service.name}</h3>
+    <p className="service-description">{service.description}</p>
+
+    <button
+      className="btn-secondary service-btn"
+      onClick={() =>
+        navigateWithLoading("/book", {
+          state: {
+            selectedService: service,
+            fromHomePage: true,
+          },
+        })
+      }
+    >
+      احجزي الآن
+    </button>
+  </div>
+</div>
+
+                );
+              })
+            )}
+          </div>
+          <div className="text-center" style={{ marginTop: "2rem" }}>
+            <button
+              className="btn-primary"
+              onClick={() => navigateWithLoading("/services")}
+            >
+              عرض جميع الخدمات
             </button>
           </div>
         </div>
